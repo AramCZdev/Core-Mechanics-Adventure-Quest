@@ -1,0 +1,68 @@
+{
+  "start_node": "narrator_intro",
+  "nodes": {
+	"narrator_intro": {
+	  "speaker": "Narrator",
+	  "portrait": "",
+	  "text": "The fog parts around a crooked stone lantern. Someone is waiting beneath it.",
+	  "next": "mira_greeting",
+	  "typing_speed": 24
+	},
+	"mira_greeting": {
+	  "speaker": "Mira",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "You made it through the fog. Most travelers turn back before the lantern comes into view.",
+	  "next": "mira_offer",
+	  "event": "met_mira",
+	  "typing_speed": 40
+	},
+	"mira_offer": {
+	  "speaker": "Mira",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "The old signal lantern has gone dark. If you relight it, the path ahead will open. Will you help?",
+	  "choices": [
+		{
+		  "text": "I will relight the lantern.",
+		  "next": "mira_accept",
+		  "event": {
+			"name": "quest_started",
+			"data": {
+			  "quest_id": "relight_the_lantern"
+			}
+		  }
+		},
+		{
+		  "text": "What is in it for me?",
+		  "next": "mira_bargain"
+		},
+		{
+		  "text": "Not right now.",
+		  "next": "mira_decline"
+		}
+	  ]
+	},
+	"mira_accept": {
+	  "speaker": "Mira",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "Then take this spark. The lantern is north of here, past the broken bridge.",
+	  "next": "mira_farewell"
+	},
+	"mira_bargain": {
+	  "speaker": "Mira",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "A warm meal, a dry bed, and first pick from the supply chest. Fair enough?",
+	  "next": "mira_offer"
+	},
+	"mira_decline": {
+	  "speaker": "Mira",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "I understand. The fog is patient. I will be here if you change your mind.",
+	  "next": ""
+	},
+	"mira_farewell": {
+	  "speaker": "Mira",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "Keep the spark close. The dark does not like being interrupted."
+	}
+  }
+}

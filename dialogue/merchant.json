@@ -1,0 +1,38 @@
+{
+  "start_node": "tobin_greeting",
+  "nodes": {
+	"tobin_greeting": {
+	  "speaker": "Tobin",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "Maps, rope, and a few suspiciously useful rocks. What catches your eye?",
+	  "choices": [
+		{
+		  "text": "Show me the maps.",
+		  "next": "tobin_maps",
+		  "event": {
+			"name": "shop_opened",
+			"data": {
+			  "shop_id": "tobin_cart",
+			  "category": "maps"
+			}
+		  }
+		},
+		{
+		  "text": "Maybe later.",
+		  "next": "tobin_goodbye"
+		}
+	  ]
+	},
+	"tobin_maps": {
+	  "speaker": "Tobin",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "This one marks the old road. Half of it is washed out, but the other half still gets you there.",
+	  "next": "tobin_goodbye"
+	},
+	"tobin_goodbye": {
+	  "speaker": "Tobin",
+	  "portrait": "res://assets/icon.svg",
+	  "text": "Mind the puddles. They are deeper than they look."
+	}
+  }
+}

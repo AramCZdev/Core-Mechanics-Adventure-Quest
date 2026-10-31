@@ -18,6 +18,7 @@ config/icon="res://assets/icon.svg"
 [autoload]
 
 DialogueManager="*res://scripts/dialogue/dialogue_manager.gd"
+AchievementManager="*uid://02cr0d27o1qy"
 
 [gui]
 

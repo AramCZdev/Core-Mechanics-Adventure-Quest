@@ -1,0 +1,17 @@
+[
+	{
+		"id": "achievement",
+		"name": "Achievement",
+		"description": "An achievement.",
+		"icon": "res://addons/SimpleAchievement/icons/SimpleAchievment.png",
+		"goal": 1
+	},
+	{
+		"id": "template_progress_Achievement",
+		"name": "Progress achievement",
+		"description": "A progress achievement.",
+		"icon": "res://addons/SimpleAchievement/icons/SimpleAchievment.png",
+		"goal": 10
+
+	}
+]

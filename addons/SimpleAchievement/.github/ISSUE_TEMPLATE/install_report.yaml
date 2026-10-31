@@ -1,0 +1,20 @@
+name: Install Report
+description: Report an install issue in SimpleAchievement
+labels: ["install issue"]
+body:
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Install issue description
+      placeholder: Describe the issue here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: "1. Go to...\n2. Jump on...\n3. See error"
+    validations:
+      required: true

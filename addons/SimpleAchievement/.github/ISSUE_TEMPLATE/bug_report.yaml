@@ -1,0 +1,27 @@
+name: Bug Report
+description: Report a bug in SimpleAchievement
+labels: ["bug"]
+body:
+  - type: checkboxes
+    id: game_related
+    attributes:
+      label: Related to the plugin
+      options:
+        - label: Is this related to the plugin itself?
+    validations:
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      placeholder: Describe the bug here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: "1. Go to...\n2. Jump on...\n3. See error"
+    validations:
+      required: true

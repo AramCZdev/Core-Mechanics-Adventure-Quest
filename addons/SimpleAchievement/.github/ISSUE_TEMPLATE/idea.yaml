@@ -1,0 +1,13 @@
+name: Idea
+description: Request an idea in SimpleAchievement
+labels: ["idea"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Idea description
+      placeholder: Describe your masterpiece here ...
+    validations:
+      required: true
+    validations:
+      required: true

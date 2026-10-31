@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://rlrso2f2gmx6"]
+
+[ext_resource type="Script" uid="uid://cbikhwsjo1eb0" path="res://addons/SimpleAchievement/ui/AchievementViewer.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://3ka6f3v8timw" path="res://addons/SimpleAchievement/icons/SimpleAchievment.png" id="2_reiib"]
+
+[node name="AchievementViewer" type="Control" unique_id=448509418]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=129874564]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=520610133]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Achievements"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1905667019]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="List" type="VBoxContainer" parent="VBoxContainer/ScrollContainer" unique_id=2090685824]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="EasyAchievments" type="Sprite2D" parent="VBoxContainer" unique_id=1965950697]
+position = Vector2(29.00003, 619)
+scale = Vector2(0.24553573, 0.24553573)
+texture = ExtResource("2_reiib")
+
+[node name="Label" type="Label" parent="VBoxContainer/EasyAchievments" unique_id=1353338744]
+offset_left = 126.2544
+offset_top = -48.87272
+offset_right = 594.618
+offset_bottom = 69.23641
+theme_override_font_sizes/font_size = 44
+text = "Achievements provided by SimpleAchievement"
+horizontal_alignment = 1
+vertical_alignment = 1

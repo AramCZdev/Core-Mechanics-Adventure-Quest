@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://cp0fwly3o2eqh"]
+
+[ext_resource type="Script" uid="uid://swr8sdklku63" path="res://addons/SimpleAchievement/ui/AchievementPopup.gd" id="1"]
+
+[node name="AchievementPopup" type="Control" unique_id=1716209527]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1953043896]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 72.0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=197759266]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/MarginContainer" unique_id=295820035]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Icon" type="TextureRect" parent="PanelContainer/MarginContainer/HBox" unique_id=913777682]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBox" unique_id=2098036432]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Header" type="Label" parent="PanelContainer/MarginContainer/HBox/VBox" unique_id=2040025490]
+modulate = Color(1, 0.8, 0.2, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Achievement Unlocked!"
+
+[node name="Title" type="Label" parent="PanelContainer/MarginContainer/HBox/VBox" unique_id=200925484]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Achievement Name"
+
+[node name="Desc" type="Label" parent="PanelContainer/MarginContainer/HBox/VBox" unique_id=1850919816]
+modulate = Color(0.85, 0.85, 0.85, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Description"
+autowrap_mode = 2

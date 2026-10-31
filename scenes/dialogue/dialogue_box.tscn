@@ -1,14 +1,14 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bj3fwpjli07gj"]
 
-[ext_resource type="Script" path="res://scripts/dialogue/dialogue_box.gd" id="1_box"]
+[ext_resource type="Script" uid="uid://lm0qb8moxlxq" path="res://scripts/dialogue/dialogue_box.gd" id="1_box"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
-bg_color = Color(0.988235, 0.980392, 0.945098, 1)
+bg_color = Color(0, 0, 0, 1)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
+border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -27,18 +27,18 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_choices"]
-bg_color = Color(0.988235, 0.980392, 0.945098, 1)
+bg_color = Color(0, 0, 0, 1)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
+border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[node name="DialogueBox" type="Control"]
+[node name="DialogueBox" type="Control" unique_id=1662593204]
 process_mode = 3
 z_index = 100
 layout_mode = 3
@@ -50,7 +50,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_box")
 
-[node name="DialoguePanel" type="PanelContainer" parent="."]
+[node name="DialoguePanel" type="PanelContainer" parent="." unique_id=52432060]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
@@ -65,68 +65,67 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_box")
 
-[node name="Margin" type="MarginContainer" parent="DialoguePanel"]
+[node name="Margin" type="MarginContainer" parent="DialoguePanel" unique_id=383975297]
 layout_mode = 2
 theme_override_constants/margin_left = 22
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 14
 
-[node name="HBox" type="HBoxContainer" parent="DialoguePanel/Margin"]
+[node name="HBox" type="HBoxContainer" parent="DialoguePanel/Margin" unique_id=1228455754]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="PortraitFrame" type="PanelContainer" parent="DialoguePanel/Margin/HBox"]
+[node name="PortraitFrame" type="PanelContainer" parent="DialoguePanel/Margin/HBox" unique_id=708183731]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(140, 140)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_portrait")
 
-[node name="Portrait" type="TextureRect" parent="DialoguePanel/Margin/HBox/PortraitFrame"]
+[node name="Portrait" type="TextureRect" parent="DialoguePanel/Margin/HBox/PortraitFrame" unique_id=66128176]
 unique_name_in_owner = true
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Content" type="VBoxContainer" parent="DialoguePanel/Margin/HBox"]
+[node name="Content" type="VBoxContainer" parent="DialoguePanel/Margin/HBox" unique_id=1253228185]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="SpeakerLabel" type="Label" parent="DialoguePanel/Margin/HBox/Content"]
+[node name="SpeakerLabel" type="Label" parent="DialoguePanel/Margin/HBox/Content" unique_id=856157645]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 28
 text = "Speaker"
 
-[node name="DialogueText" type="RichTextLabel" parent="DialoguePanel/Margin/HBox/Content"]
+[node name="DialogueText" type="RichTextLabel" parent="DialoguePanel/Margin/HBox/Content" unique_id=1133682827]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/normal_font_size = 25
 bbcode_enabled = true
 text = "Dialogue text appears here."
 scroll_active = false
-autowrap_mode = 3
 
-[node name="Footer" type="HBoxContainer" parent="DialoguePanel/Margin/HBox/Content"]
+[node name="Footer" type="HBoxContainer" parent="DialoguePanel/Margin/HBox/Content" unique_id=528063565]
 layout_mode = 2
 
-[node name="ContinueIndicator" type="Label" parent="DialoguePanel/Margin/HBox/Content/Footer"]
+[node name="ContinueIndicator" type="Label" parent="DialoguePanel/Margin/HBox/Content/Footer" unique_id=368910115]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 22
 text = "v"
 horizontal_alignment = 2
 
-[node name="ChoicesPanel" type="PanelContainer" parent="."]
+[node name="ChoicesPanel" type="PanelContainer" parent="." unique_id=919208089]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -143,14 +142,14 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_choices")
 
-[node name="Margin" type="MarginContainer" parent="ChoicesPanel"]
+[node name="Margin" type="MarginContainer" parent="ChoicesPanel" unique_id=697447116]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 14
 
-[node name="ChoiceList" type="VBoxContainer" parent="ChoicesPanel/Margin"]
+[node name="ChoiceList" type="VBoxContainer" parent="ChoicesPanel/Margin" unique_id=581674831]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8

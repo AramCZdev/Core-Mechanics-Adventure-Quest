@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cws2gruj836l0" path="res://scripts/player scripts/player.gd" id="1_3qlps"]
 [ext_resource type="Script" uid="uid://cxyrswowboqyg" path="res://scripts/scenes/game_test_scene.gd" id="1_e3u5y"]
-[ext_resource type="PackedScene" path="res://scenes/dialogue/dialogue_box.tscn" id="3_1b3v3"]
+[ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="3_1b3v3"]
+[ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="4_1b3v3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_76dhe"]
 size = Vector2(61, 61)
@@ -47,6 +48,11 @@ offset_bottom = 31.0
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1101014396]
 
 [node name="DialogueBox" parent="CanvasLayer" unique_id=1386658949 instance=ExtResource("3_1b3v3")]
+visible = false
+
+[node name="BattleUI" parent="CanvasLayer" unique_id=2069685685 instance=ExtResource("4_1b3v3")]
+visible = false
+auto_start = false
 
 [node name="dialogue" type="Area2D" parent="." unique_id=352898752]
 position = Vector2(451, 201)
@@ -54,4 +60,24 @@ position = Vector2(451, 201)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="dialogue" unique_id=1347125489]
 shape = SubResource("RectangleShape2D_gfvsb")
 
+[node name="ColorRect" type="ColorRect" parent="dialogue" unique_id=118834837]
+offset_left = -28.0
+offset_top = -28.0
+offset_right = 27.0
+offset_bottom = 28.0
+
+[node name="enemy" type="Area2D" parent="." unique_id=1262214490]
+position = Vector2(775, 451)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="enemy" unique_id=10054248]
+shape = SubResource("RectangleShape2D_gfvsb")
+
+[node name="ColorRect" type="ColorRect" parent="enemy" unique_id=1249334753]
+offset_left = -28.0
+offset_top = -28.0
+offset_right = 27.0
+offset_bottom = 28.0
+metadata/_edit_use_anchors_ = true
+
 [connection signal="body_entered" from="dialogue" to="." method="_on_dialogue_body_entered"]
+[connection signal="body_entered" from="enemy" to="." method="_on_enemy_body_entered"]

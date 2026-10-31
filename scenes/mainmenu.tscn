@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://um3klr5elj32"]
 
 [ext_resource type="Theme" uid="uid://b3d0wtk288b5d" path="res://default_theme.tres" id="1_5mbse"]
+[ext_resource type="Script" uid="uid://nrqo07kkv3r1" path="res://scenes/Menu/mainmenu.gd" id="1_natt5"]
 
 [node name="Control" type="Control" unique_id=204213643]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_natt5")
 
 [node name="Title" type="Label" parent="." unique_id=1023467384]
 layout_mode = 1
@@ -62,7 +64,7 @@ theme = ExtResource("1_5mbse")
 theme_override_font_sizes/font_size = 41
 text = "Achievements"
 
-[node name="Achievements2" type="Button" parent="VBoxContainer" unique_id=1136674547]
+[node name="Credits" type="Button" parent="VBoxContainer" unique_id=1136674547]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("1_5mbse")

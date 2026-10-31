@@ -1,0 +1,291 @@
+[gd_scene format=3 uid="uid://b8rdwnhh37oh1"]
+
+[ext_resource type="Script" uid="uid://bnppbkrsf0hdt" path="res://scripts/battle/battle_ui.gd" id="1_ui"]
+[ext_resource type="Script" uid="uid://c1x8cn6d0hrpf" path="res://scripts/battle/battle_manager.gd" id="2_manager"]
+[ext_resource type="PackedScene" path="res://scenes/battle/attack_timing.tscn" id="3_attack"]
+[ext_resource type="PackedScene" path="res://scenes/battle/block_timing.tscn" id="4_block"]
+[ext_resource type="Resource" path="res://battle/enemies/mossling/mossling.tres" id="5_enemy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.08, 0.09, 0.12, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.85, 0.85, 0.9, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_bg"]
+bg_color = Color(0.12, 0.12, 0.16, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.03, 0.03, 0.05, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enemy_fill"]
+bg_color = Color(0.78, 0.25, 0.28, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_fill"]
+bg_color = Color(0.28, 0.68, 0.38, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="BattleUI" type="Control" unique_id=203286054]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ui")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1068639206]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.02, 0.04, 0.82)
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=249127397]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Layout" type="VBoxContainer" parent="Margin" unique_id=2067285313]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="EnemyStage" type="Control" parent="Margin/Layout" unique_id=517288878]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="EnemyTexture" type="TextureRect" parent="Margin/Layout/EnemyStage" unique_id=1633413427]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EnemyPlaceholder" type="Label" parent="Margin/Layout/EnemyStage" unique_id=1578249795]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.95, 0.16)
+theme_override_font_sizes/font_size = 48
+text = "MOSSLING"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BattlePanel" type="PanelContainer" parent="Margin/Layout" unique_id=720978186]
+custom_minimum_size = Vector2(0, 230)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="PanelMargin" type="MarginContainer" parent="Margin/Layout/BattlePanel" unique_id=748431425]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="Content" type="VBoxContainer" parent="Margin/Layout/BattlePanel/PanelMargin" unique_id=103723324]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="EnemyPanel" type="HBoxContainer" parent="Margin/Layout/BattlePanel/PanelMargin/Content" unique_id=844688832]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="EnemyNameLabel" type="Label" parent="Margin/Layout/BattlePanel/PanelMargin/Content/EnemyPanel" unique_id=954290451]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Mossling"
+
+[node name="EnemyHPBar" type="ProgressBar" parent="Margin/Layout/BattlePanel/PanelMargin/Content/EnemyPanel" unique_id=1442617168]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_enemy_fill")
+max_value = 60.0
+value = 60.0
+show_percentage = false
+
+[node name="EnemyHPLabel" type="Label" parent="Margin/Layout/BattlePanel/PanelMargin/Content/EnemyPanel" unique_id=1554525682]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "HP  60 / 60"
+
+[node name="MessageLabel" type="Label" parent="Margin/Layout/BattlePanel/PanelMargin/Content" unique_id=1786948874]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "A Mossling blocks your path!"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="TurnLabel" type="Label" parent="Margin/Layout/BattlePanel/PanelMargin/Content" unique_id=1053792841]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.74, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "YOUR TURN"
+
+[node name="TimingArea" type="VBoxContainer" parent="Margin/Layout/BattlePanel/PanelMargin/Content" unique_id=504016296]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TimingPrompt" type="Label" parent="Margin/Layout/BattlePanel/PanelMargin/Content/TimingArea" unique_id=1397408070]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Press Z, X, or Enter when the marker is in the zone!"
+autowrap_mode = 3
+
+[node name="TimingHolder" type="Control" parent="Margin/Layout/BattlePanel/PanelMargin/Content/TimingArea" unique_id=1435697628]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AttackTiming" parent="Margin/Layout/BattlePanel/PanelMargin/Content/TimingArea/TimingHolder" unique_id=70045993 instance=ExtResource("3_attack")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="BlockTiming" parent="Margin/Layout/BattlePanel/PanelMargin/Content/TimingArea/TimingHolder" unique_id=1326464293 instance=ExtResource("4_block")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="PlayerPanel" type="HBoxContainer" parent="Margin/Layout/BattlePanel/PanelMargin/Content" unique_id=1984314761]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PlayerHPLabel" type="Label" parent="Margin/Layout/BattlePanel/PanelMargin/Content/PlayerPanel" unique_id=1929919290]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "HP  40 / 40"
+
+[node name="PlayerHPBar" type="ProgressBar" parent="Margin/Layout/BattlePanel/PanelMargin/Content/PlayerPanel" unique_id=1554708556]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_player_fill")
+max_value = 40.0
+value = 40.0
+show_percentage = false
+
+[node name="ItemsLabel" type="Label" parent="Margin/Layout/BattlePanel/PanelMargin/Content/PlayerPanel" unique_id=1982792960]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Potions  2"
+
+[node name="Actions" type="HBoxContainer" parent="Margin/Layout/BattlePanel/PanelMargin/Content" unique_id=27944924]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AttackButton" type="Button" parent="Margin/Layout/BattlePanel/PanelMargin/Content/Actions" unique_id=439315473]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Attack"
+
+[node name="DefendButton" type="Button" parent="Margin/Layout/BattlePanel/PanelMargin/Content/Actions" unique_id=204146150]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Defend"
+
+[node name="ItemButton" type="Button" parent="Margin/Layout/BattlePanel/PanelMargin/Content/Actions" unique_id=1250210092]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Item (2)"
+
+[node name="TalkButton" type="Button" parent="Margin/Layout/BattlePanel/PanelMargin/Content/Actions" unique_id=61249076]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Talk"
+
+[node name="BattleOverPanel" type="HBoxContainer" parent="Margin/Layout/BattlePanel/PanelMargin/Content" unique_id=2126480762]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BattleOverLabel" type="Label" parent="Margin/Layout/BattlePanel/PanelMargin/Content/BattleOverPanel" unique_id=1039383278]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.98, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 22
+text = "VICTORY!"
+vertical_alignment = 1
+
+[node name="BattleManager" type="Node" parent="." unique_id=376813476]
+script = ExtResource("2_manager")
+enemy = ExtResource("5_enemy")

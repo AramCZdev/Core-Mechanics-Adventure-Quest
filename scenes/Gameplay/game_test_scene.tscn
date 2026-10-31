@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://bvhmfk5xt8du4"]
+
+[ext_resource type="Script" uid="uid://cws2gruj836l0" path="res://scripts/player scripts/player.gd" id="1_3qlps"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_76dhe"]
+size = Vector2(61, 61)
+
+[node name="Node2D" type="Node2D" unique_id=347167711]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=222229538]
+offset_left = -617.0
+offset_top = -455.0
+offset_right = 2015.0
+offset_bottom = 1174.0
+color = Color(0.43, 1, 0.43949997, 1)
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect" unique_id=1357656731]
+layout_mode = 0
+offset_left = -1413.0
+offset_top = -875.0
+offset_right = 1219.0
+offset_bottom = 754.0
+color = Color(0.66999996, 1, 0.6755, 1)
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2053340247]
+z_index = 10
+position = Vector2(614, 306)
+script = ExtResource("1_3qlps")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=404019062]
+shape = SubResource("RectangleShape2D_76dhe")
+
+[node name="ColorRect" type="ColorRect" parent="CharacterBody2D" unique_id=1865174985]
+offset_left = -31.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 31.0
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1182904105]

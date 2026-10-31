@@ -2,8 +2,24 @@
 
 [ext_resource type="FontFile" uid="uid://deipet8iqu8q1" path="res://assets/Fonts/Symtext.ttf" id="1_e7bfs"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_76dhe"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7bfs"]
+bg_color = Color(0.62, 0.62, 0.62, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3taad"]
 bg_color = Color(1, 1, 1, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_76dhe"]
+bg_color = Color(0.4, 0.4, 0.4, 1)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
@@ -13,5 +29,12 @@ border_color = Color(0, 0, 0, 1)
 [resource]
 default_font = ExtResource("1_e7bfs")
 Button/colors/font_color = Color(0, 0, 0, 1)
+Button/colors/font_disabled_color = Color(0, 0, 0, 0.5019608)
+Button/colors/font_focus_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0, 0, 0, 1)
 Button/fonts/font = ExtResource("1_e7bfs")
-Button/styles/normal = SubResource("StyleBoxFlat_76dhe")
+Button/styles/hover = SubResource("StyleBoxFlat_e7bfs")
+Button/styles/normal = SubResource("StyleBoxFlat_3taad")
+Button/styles/pressed = SubResource("StyleBoxFlat_76dhe")

@@ -3,20 +3,27 @@ extends CharacterBody2D
 @export var speed: float = 380.0
 
 @onready var pause_menu = $"CanvasLayer/PauseMenu"
-
-var _autosave_elapsed: float = 0.0
-const AUTOSAVE_INTERVAL := 2.0
+@onready var stats_menu = $"CanvasLayer/StatsMenu"
+@onready var stats_name_label: Label = $"CanvasLayer/StatsMenu/Content/HeroName"
+@onready var stats_hp_label: Label = $"CanvasLayer/StatsMenu/Content/HP"
+@onready var stats_attack_label: Label = $"CanvasLayer/StatsMenu/Content/Attack"
 
 func _ready() -> void:
 	pause_menu.visible = false
+	stats_menu.visible = false
 	get_tree().paused = false
 	if SaveManager.has_save() and SaveManager.get_saved_scene_path() == get_tree().current_scene.scene_file_path:
 		global_position = SaveManager.get_saved_player_position()
 		speed = SaveManager.get_saved_player_speed(speed)
 	$"CanvasLayer/PauseMenu/Resume".pressed.connect(_on_resume_pressed)
 	$"CanvasLayer/PauseMenu/Menu".pressed.connect(_on_menu_pressed)
+	$"CanvasLayer/StatsMenu/Content/Close".pressed.connect(_toggle_stats_menu)
 
 func _physics_process(_delta: float) -> void:
+	if stats_menu.visible:
+		velocity = Vector2.ZERO
+		return
+
 	var direction := Input.get_vector(
 		"move_left",
 		"move_right",
@@ -26,12 +33,12 @@ func _physics_process(_delta: float) -> void:
 
 	velocity = direction * speed
 	move_and_slide()
-	_autosave_elapsed += _delta
-	if _autosave_elapsed >= AUTOSAVE_INTERVAL:
-		_autosave_elapsed = 0.0
-		_save_progress()
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_CTRL:
+		_toggle_stats_menu()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("interact"):
 		var strength_crystal: Node = get_tree().current_scene.get_node_or_null("StrengthCrystal")
 		if strength_crystal != null and strength_crystal.has_method("is_player_in_range") and strength_crystal.call("is_player_in_range", self):
@@ -44,22 +51,8 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 	if event.is_action_pressed("pause"):
-		_save_progress()
 		get_tree().paused = true
 		pause_menu.visible = true
-
-
-func _exit_tree() -> void:
-	_save_progress()
-
-
-func _save_progress() -> void:
-	if is_inside_tree() and get_tree().current_scene != null:
-		SaveManager.save_player_state(
-			get_tree().current_scene.scene_file_path,
-			global_position,
-			speed
-		)
 
 
 func _on_resume_pressed() -> void:
@@ -68,6 +61,14 @@ func _on_resume_pressed() -> void:
 
 
 func _on_menu_pressed() -> void:
-	_save_progress()
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/mainmenu.tscn")
+
+
+func _toggle_stats_menu() -> void:
+	stats_menu.visible = not stats_menu.visible
+	if stats_menu.visible:
+		var health := SaveManager.get_player_health(40, 40)
+		stats_name_label.text = "Hero: %s" % SaveManager.get_hero_name()
+		stats_hp_label.text = "HP: %d / %d" % [health.x, health.y]
+		stats_attack_label.text = "Attack: %d" % SaveManager.get_player_attack(12)

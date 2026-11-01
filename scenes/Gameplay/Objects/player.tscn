@@ -87,3 +87,69 @@ grow_horizontal = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
 text = "Pause menu"
+
+[node name="StatsMenu" type="Panel" parent="CanvasLayer" unique_id=865678247]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -155.0
+offset_right = 190.0
+offset_bottom = 155.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_sjy77")
+
+[node name="Content" type="VBoxContainer" parent="CanvasLayer/StatsMenu" unique_id=865678248]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 18.0
+offset_right = -24.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="CanvasLayer/StatsMenu/Content" unique_id=865678249]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "Hero Stats"
+horizontal_alignment = 1
+
+[node name="HeroName" type="Label" parent="CanvasLayer/StatsMenu/Content" unique_id=865678250]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Hero: Hero"
+
+[node name="HP" type="Label" parent="CanvasLayer/StatsMenu/Content" unique_id=865678251]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "HP: 40 / 40"
+
+[node name="Attack" type="Label" parent="CanvasLayer/StatsMenu/Content" unique_id=865678252]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Attack: 12"
+
+[node name="Hint" type="Label" parent="CanvasLayer/StatsMenu/Content" unique_id=865678254]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "Press Ctrl to close"
+horizontal_alignment = 1
+
+[node name="Close" type="Button" parent="CanvasLayer/StatsMenu/Content" unique_id=865678255]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme = ExtResource("2_sjy77")
+theme_override_font_sizes/font_size = 24
+text = "Close"

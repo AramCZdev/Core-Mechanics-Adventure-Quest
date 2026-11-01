@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://uvwm4w0l60n1"]
+
+[ext_resource type="Script" uid="uid://cws2gruj836l0" path="res://scripts/player scripts/player.gd" id="1_kgyvy"]
+[ext_resource type="Theme" uid="uid://b3d0wtk288b5d" path="res://default_theme.tres" id="2_sjy77"]
+[ext_resource type="Texture2D" uid="uid://dp1gv5q55ljmr" path="res://assets/Textures/UI/Resume.png" id="3_wadm0"]
+[ext_resource type="Texture2D" uid="uid://c2qn3bvuv2j5k" path="res://assets/Textures/UI/Menu.png" id="4_tcfe6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_76dhe"]
+size = Vector2(61, 61)
+
+[node name="Player" type="CharacterBody2D" unique_id=520382692]
+z_index = 10
+script = ExtResource("1_kgyvy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1429948505]
+shape = SubResource("RectangleShape2D_76dhe")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=830805370]
+offset_left = -31.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 31.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2100815544]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1176010347]
+
+[node name="PauseMenu" type="Panel" parent="CanvasLayer" unique_id=1865241134]
+process_mode = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -222.0
+offset_top = -102.0
+offset_right = 217.0
+offset_bottom = 124.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_sjy77")
+
+[node name="Resume" type="Button" parent="CanvasLayer/PauseMenu" unique_id=674535933]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -131.0
+offset_top = -39.0
+offset_right = -9.0
+offset_bottom = 83.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_sjy77")
+icon = ExtResource("3_wadm0")
+expand_icon = true
+
+[node name="Menu" type="Button" parent="CanvasLayer/PauseMenu" unique_id=1486080482]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = -39.0
+offset_right = 128.0
+offset_bottom = 83.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_sjy77")
+icon = ExtResource("4_tcfe6")
+expand_icon = true
+
+[node name="Label" type="Label" parent="CanvasLayer/PauseMenu" unique_id=865678246]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -129.5
+offset_top = 9.0
+offset_right = 129.5
+offset_bottom = 63.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "Pause menu"

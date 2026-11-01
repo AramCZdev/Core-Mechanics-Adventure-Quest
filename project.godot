@@ -11,8 +11,11 @@ config_version=5
 [application]
 
 config/name="Core Mechanics: Adventure Quest"
-run/main_scene="uid://um3klr5elj32"
+run/main_scene="uid://dk13xfw5rbxgo"
 config/features=PackedStringArray("4.7")
+boot_splash/show_image=false
+boot_splash/stretch_mode=0
+boot_splash/use_filter=false
 config/icon="res://assets/icon.svg"
 
 [autoload]

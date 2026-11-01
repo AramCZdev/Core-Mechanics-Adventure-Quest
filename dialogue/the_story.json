@@ -1,0 +1,26 @@
+{
+  "start_node": "story",
+  "nodes": {
+	"story": {
+	  "speaker": "Narrator",
+	  "portrait": "",
+	  "text": "You wake up on a mysterious island.",
+	  "next": "story2",
+	  "typing_speed": 40
+	},
+	"story2": {
+	  "speaker": "Narrator",
+	  "portrait": "",
+	  "text": "You have no memory of how you got there.",
+	  "next": "story3",
+	  "typing_speed": 40
+	},
+	"story3": {
+	  "speaker": "Narrator",
+	  "portrait": "",
+	  "text": "But maybe if you tried you could get out and remember how you got there...",
+	  "next": "",
+	  "typing_speed": 40
+	}
+  }
+}

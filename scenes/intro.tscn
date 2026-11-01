@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dk13xfw5rbxgo"]
+
+[ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="1_ioskq"]
+[ext_resource type="Script" uid="uid://dx38k4byngxp" path="res://scripts/Menu/intro.gd" id="1_yjqpq"]
+
+[node name="Control" type="Control" unique_id=372824455]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yjqpq")
+
+[node name="Background" type="ColorRect" parent="." unique_id=69951211]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=919906651]
+
+[node name="DialogueBox" parent="CanvasLayer" unique_id=1662593204 instance=ExtResource("1_ioskq")]
+pause_gameplay = false

@@ -52,8 +52,9 @@ func _on_start_pressed() -> void:
 
 
 func _on_begin_pressed() -> void:
-	_start_new_game(_hero_name_input.text)
-
+	$"AnimationPlayer".play("start")
+	$"HeroNamePanel/Begin".disabled = true
+	$"HeroNamePanel/Cancel".disabled = true
 
 func _on_name_submitted(hero_name: String) -> void:
 	_start_new_game(hero_name)
@@ -85,3 +86,9 @@ func _refresh_save_buttons() -> void:
 	_reset_button.visible = true
 	_reset_button.disabled = not save_exists
 	_reset_button.text = "Delete Save"
+
+
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "start":
+		_start_new_game(_hero_name_input.text)

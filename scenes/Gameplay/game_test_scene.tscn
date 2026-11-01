@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cxyrswowboqyg" path="res://scripts/scenes/game_test_scene.gd" id="1_e3u5y"]
 [ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="2_1b3v3"]
+[ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="3_0qg2c"]
 [ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="3_1b3v3"]
 [ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="4_1b3v3"]
 
@@ -28,6 +29,9 @@ color = Color(0.66999996, 1, 0.6755, 1)
 
 [node name="Player" parent="." unique_id=520382692 instance=ExtResource("2_1b3v3")]
 position = Vector2(614, 306)
+
+[node name="SavePoint" parent="." unique_id=1709967034 instance=ExtResource("3_0qg2c")]
+position = Vector2(614, 160)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1101014396]
 

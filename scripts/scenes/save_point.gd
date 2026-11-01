@@ -1,0 +1,45 @@
+extends Area2D
+## Interactable checkpoint that writes the current player's saved state.
+
+@onready var _prompt: Label = $Prompt
+
+var _player_in_range: CharacterBody2D
+
+
+func _ready() -> void:
+	_prompt.hide()
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
+
+
+func is_player_in_range(player: CharacterBody2D) -> bool:
+	return _player_in_range == player
+
+
+func save_player(player: CharacterBody2D) -> void:
+	if not is_player_in_range(player):
+		return
+
+	var saved := SaveManager.save_player_state(
+		get_tree().current_scene.scene_file_path,
+		player.global_position,
+		float(player.get("speed"))
+	)
+	_prompt.text = "Game saved!" if saved else "Save failed"
+	$SaveSfx.play()
+	await get_tree().create_timer(1.5).timeout
+	if is_instance_valid(_player_in_range):
+		_prompt.text = "Press E to save"
+
+
+func _on_body_entered(body: Node2D) -> void:
+	if body is CharacterBody2D:
+		_player_in_range = body
+		_prompt.text = "Press E to save"
+		_prompt.show()
+
+
+func _on_body_exited(body: Node2D) -> void:
+	if body == _player_in_range:
+		_player_in_range = null
+		_prompt.hide()

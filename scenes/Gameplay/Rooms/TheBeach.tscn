@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bjf1411bdcbyx"]
+
+[ext_resource type="Texture2D" uid="uid://xvb0vr5i815i" path="res://assets/Textures/Gameplay/beach.svg" id="1_s14xq"]
+[ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="2_bym0n"]
+
+[node name="TheBeach" type="Node2D" unique_id=1717501666]
+
+[node name="Beach" type="Sprite2D" parent="." unique_id=909242022]
+position = Vector2(211, -289.00003)
+scale = Vector2(5.109375, 5.109375)
+texture = ExtResource("1_s14xq")
+
+[node name="Player" parent="." unique_id=520382692 instance=ExtResource("2_bym0n")]
+position = Vector2(958, 515)

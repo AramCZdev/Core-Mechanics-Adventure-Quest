@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://biyqxnwtkkpag"]
+
+[ext_resource type="Script" uid="uid://bgmmdefeqqtjd" path="res://scripts/scenes/save_point.gd" id="1_cvoq4"]
+[ext_resource type="AudioStream" uid="uid://badlrvr0i5b8s" path="res://assets/Sound Effects/Saved.wav" id="2_jjubo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gfvsb"]
+size = Vector2(54, 54)
+
+[node name="SavePoint" type="Area2D" unique_id=1709967034]
+script = ExtResource("1_cvoq4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=912049168]
+shape = SubResource("RectangleShape2D_gfvsb")
+
+[node name="Marker" type="ColorRect" parent="." unique_id=639801059]
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+color = Color(0.31, 0.74, 1, 1)
+
+[node name="Prompt" type="Label" parent="." unique_id=744217402]
+offset_left = -100.0
+offset_top = -70.0
+offset_right = 100.0
+offset_bottom = -38.0
+theme_override_colors/font_color = Color(0.08, 0.12, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "Press E to save"
+horizontal_alignment = 1
+
+[node name="SaveSfx" type="AudioStreamPlayer2D" parent="." unique_id=2054984053]
+stream = ExtResource("2_jjubo")

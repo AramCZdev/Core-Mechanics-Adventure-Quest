@@ -14,6 +14,8 @@ class_name BattleManager
 
 signal battle_started(enemy: BattleEnemy)
 signal battle_ended(victory: bool)
+## No-argument version for systems that only need to know the battle finished.
+signal on_battle_ended
 signal phase_changed(new_phase: int)
 signal input_locked_changed(locked: bool)
 signal message_changed(text: String)
@@ -99,7 +101,11 @@ func start_battle(enemy_override: BattleEnemy = null) -> bool:
 		battle_error.emit("BattleManager: no enemy configured.")
 		return false
 
-	player_hp = maxi(1, player_max_hp)
+	var saved_health := SaveManager.get_player_health(player_max_hp, player_max_hp)
+	player_max_hp = saved_health.y
+	player_hp = maxi(1, saved_health.x)
+	player_attack = SaveManager.get_player_attack(player_attack)
+	SaveManager.set_player_health(player_hp, player_max_hp)
 	enemy_hp = maxi(1, enemy.max_hp)
 	items = maxi(0, starting_items)
 	_defending = false
@@ -204,6 +210,7 @@ func submit_block(zone: String, reduction: float) -> bool:
 	player_hp = maxi(0, player_hp - damage)
 
 	player_stats_changed.emit(player_hp, player_max_hp, items)
+	SaveManager.set_player_health(player_hp, player_max_hp)
 	player_damaged.emit(damage, player_hp)
 	block_resolved.emit(zone, safe_reduction, damage)
 
@@ -276,6 +283,7 @@ func _use_item() -> void:
 	player_hp += healed
 
 	player_stats_changed.emit(player_hp, player_max_hp, items)
+	SaveManager.set_player_health(player_hp, player_max_hp)
 	player_healed.emit(healed, player_hp, items)
 	if healed > 0:
 		message_changed.emit("You drink a potion and recover %d HP." % healed)
@@ -359,16 +367,29 @@ func _end_battle(victory: bool, custom_message: String = "") -> void:
 	set_process(false)
 
 	phase = Phase.VICTORY if victory else Phase.DEFEAT
+	if victory:
+		var upgraded_stats := SaveManager.reward_battle_victory(
+			player_hp,
+			player_max_hp,
+			player_attack
+		)
+		player_hp = upgraded_stats.x
+		player_max_hp = upgraded_stats.y
+		player_attack = upgraded_stats.z
+		player_stats_changed.emit(player_hp, player_max_hp, items)
+
 	if not custom_message.is_empty():
-		message_changed.emit(custom_message)
+		var reward_message := "%s\n+5 Max HP, +1 Attack." % custom_message if victory else custom_message
+		message_changed.emit(reward_message)
 	elif victory:
-		message_changed.emit("Victory! The %s is defeated." % enemy.display_name)
+		message_changed.emit("Victory! +5 Max HP, +1 Attack.")
 	else:
 		message_changed.emit("Defeat... You fall in battle.")
 
 	phase_changed.emit(phase)
 	input_locked_changed.emit(true)
 	battle_ended.emit(victory)
+	on_battle_ended.emit()
 
 
 func _begin_timed_phase(new_phase: int, duration: float) -> void:

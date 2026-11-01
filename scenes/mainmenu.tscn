@@ -110,4 +110,50 @@ theme = ExtResource("1_5mbse")
 theme_override_font_sizes/font_size = 41
 text = "Back"
 
+[node name="HeroNamePanel" type="VBoxContainer" parent="." unique_id=1078121188]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -197.5
+offset_top = -150.0
+offset_right = 197.5
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Prompt" type="Label" parent="HeroNamePanel" unique_id=1078121189]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Name your hero"
+horizontal_alignment = 1
+
+[node name="HeroNameInput" type="LineEdit" parent="HeroNamePanel" unique_id=1078121190]
+custom_minimum_size = Vector2(0, 55)
+layout_mode = 2
+theme = ExtResource("1_5mbse")
+theme_override_font_sizes/font_size = 28
+placeholder_text = "Hero"
+max_length = 20
+alignment = 1
+
+[node name="Begin" type="Button" parent="HeroNamePanel" unique_id=1078121191]
+custom_minimum_size = Vector2(0, 55)
+layout_mode = 2
+theme = ExtResource("1_5mbse")
+theme_override_font_sizes/font_size = 32
+text = "Begin Adventure"
+
+[node name="Cancel" type="Button" parent="HeroNamePanel" unique_id=1078121192]
+custom_minimum_size = Vector2(0, 55)
+layout_mode = 2
+theme = ExtResource("1_5mbse")
+theme_override_font_sizes/font_size = 32
+text = "Cancel"
+
 [connection signal="pressed" from="MainMenuOptions/Achievements" to="." method="_on_achievements_pressed"]

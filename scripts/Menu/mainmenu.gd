@@ -6,15 +6,21 @@ const GAME_SCENE := "res://scenes/Gameplay/game_test_scene.tscn"
 @onready var _play_options: VBoxContainer = $PlayOptions
 @onready var _start_button: Button = $PlayOptions/Start
 @onready var _reset_button: Button = $PlayOptions/Reset
+@onready var _hero_name_panel: VBoxContainer = $HeroNamePanel
+@onready var _hero_name_input: LineEdit = $HeroNamePanel/HeroNameInput
 
 
 func _ready() -> void:
 	_main_options.show()
 	_play_options.hide()
+	_hero_name_panel.hide()
 	$MainMenuOptions/Play.pressed.connect(_on_play_pressed)
 	_start_button.pressed.connect(_on_start_pressed)
 	_reset_button.pressed.connect(_on_reset_pressed)
 	$PlayOptions/Back.pressed.connect(_on_back_pressed)
+	$HeroNamePanel/Begin.pressed.connect(_on_begin_pressed)
+	$HeroNamePanel/Cancel.pressed.connect(_on_name_cancel_pressed)
+	_hero_name_input.text_submitted.connect(_on_name_submitted)
 	_refresh_save_buttons()
 
 
@@ -29,14 +35,38 @@ func _on_play_pressed() -> void:
 
 
 func _on_start_pressed() -> void:
-	var scene_path := GAME_SCENE
 	if SaveManager.has_save():
+		var scene_path := GAME_SCENE
 		var saved_scene := SaveManager.get_saved_scene_path()
 		if not saved_scene.is_empty() and ResourceLoader.exists(saved_scene):
 			scene_path = saved_scene
 		else:
 			SaveManager.delete_save()
-	get_tree().change_scene_to_file(scene_path)
+		get_tree().change_scene_to_file(scene_path)
+		return
+
+	_play_options.hide()
+	_hero_name_input.clear()
+	_hero_name_panel.show()
+	_hero_name_input.grab_focus()
+
+
+func _on_begin_pressed() -> void:
+	_start_new_game(_hero_name_input.text)
+
+
+func _on_name_submitted(hero_name: String) -> void:
+	_start_new_game(hero_name)
+
+
+func _on_name_cancel_pressed() -> void:
+	_hero_name_panel.hide()
+	_play_options.show()
+
+
+func _start_new_game(hero_name: String) -> void:
+	SaveManager.set_hero_name(hero_name)
+	get_tree().change_scene_to_file(GAME_SCENE)
 
 
 func _on_reset_pressed() -> void:

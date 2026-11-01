@@ -33,6 +33,11 @@ func _physics_process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
+		var strength_crystal: Node = get_tree().current_scene.get_node_or_null("StrengthCrystal")
+		if strength_crystal != null and strength_crystal.has_method("is_player_in_range") and strength_crystal.call("is_player_in_range", self):
+			strength_crystal.call("interact", self)
+			get_viewport().set_input_as_handled()
+			return
 		var save_point: Node = get_tree().current_scene.get_node_or_null("SavePoint")
 		if save_point != null and save_point.has_method("is_player_in_range") and save_point.call("is_player_in_range", self):
 			save_point.call("save_player", self)

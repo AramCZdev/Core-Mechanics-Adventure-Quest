@@ -1,8 +1,8 @@
 [
 	{
-		"id": "achievement",
-		"name": "Achievement",
-		"description": "An achievement.",
+		"id": "save",
+		"name": "What magic could it be?",
+		"description": "Save the game.",
 		"icon": "res://addons/SimpleAchievement/icons/SimpleAchievment.png",
 		"goal": 1
 	},

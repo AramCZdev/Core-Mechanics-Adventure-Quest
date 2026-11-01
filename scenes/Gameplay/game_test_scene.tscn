@@ -4,6 +4,9 @@
 [ext_resource type="Script" uid="uid://cxyrswowboqyg" path="res://scripts/scenes/game_test_scene.gd" id="1_e3u5y"]
 [ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="3_1b3v3"]
 [ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="4_1b3v3"]
+[ext_resource type="Theme" uid="uid://b3d0wtk288b5d" path="res://default_theme.tres" id="5_d05cm"]
+[ext_resource type="Texture2D" uid="uid://dp1gv5q55ljmr" path="res://assets/Textures/UI/Resume.png" id="6_448uq"]
+[ext_resource type="Texture2D" uid="uid://c2qn3bvuv2j5k" path="res://assets/Textures/UI/Menu.png" id="7_7s2eo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_76dhe"]
 size = Vector2(61, 61)
@@ -15,10 +18,10 @@ size = Vector2(54, 54)
 script = ExtResource("1_e3u5y")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=222229538]
-offset_left = -617.0
-offset_top = -455.0
-offset_right = 2015.0
-offset_bottom = 1174.0
+offset_left = -394.0
+offset_top = -451.0
+offset_right = 2238.0
+offset_bottom = 1178.0
 color = Color(0.43, 1, 0.43949997, 1)
 
 [node name="ColorRect" type="ColorRect" parent="ColorRect" unique_id=1357656731]
@@ -44,6 +47,71 @@ offset_right = 32.0
 offset_bottom = 31.0
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1182904105]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="CharacterBody2D" unique_id=781514743]
+
+[node name="PauseMenu" type="Panel" parent="CharacterBody2D/CanvasLayer" unique_id=1823093924]
+process_mode = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -222.0
+offset_top = -102.0
+offset_right = 217.0
+offset_bottom = 124.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_d05cm")
+
+[node name="Resume" type="Button" parent="CharacterBody2D/CanvasLayer/PauseMenu" unique_id=2022425339]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -131.0
+offset_top = -39.0
+offset_right = -9.0
+offset_bottom = 83.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_d05cm")
+icon = ExtResource("6_448uq")
+expand_icon = true
+
+[node name="Menu" type="Button" parent="CharacterBody2D/CanvasLayer/PauseMenu" unique_id=623278247]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = -39.0
+offset_right = 128.0
+offset_bottom = 83.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_d05cm")
+icon = ExtResource("7_7s2eo")
+expand_icon = true
+
+[node name="Label" type="Label" parent="CharacterBody2D/CanvasLayer/PauseMenu" unique_id=1590961499]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -129.5
+offset_top = 9.0
+offset_right = 129.5
+offset_bottom = 63.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "Pause menu"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1101014396]
 

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bvhmfk5xt8du4"]
 
 [ext_resource type="Script" uid="uid://cxyrswowboqyg" path="res://scripts/scenes/game_test_scene.gd" id="1_e3u5y"]
-[ext_resource type="Texture2D" uid="uid://xvb0vr5i815i" path="res://assets/Textures/Gameplay/beach.svg" id="2_0qg2c"]
 [ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="2_1b3v3"]
 [ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="3_1b3v3"]
 [ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="4_1b3v3"]
@@ -63,11 +62,6 @@ offset_top = -28.0
 offset_right = 27.0
 offset_bottom = 28.0
 metadata/_edit_use_anchors_ = true
-
-[node name="Beach" type="Sprite2D" parent="." unique_id=1531017767]
-position = Vector2(1050, 395)
-scale = Vector2(3.2509766, 3.2509766)
-texture = ExtResource("2_0qg2c")
 
 [connection signal="body_entered" from="dialogue" to="." method="_on_dialogue_body_entered"]
 [connection signal="body_entered" from="enemy" to="." method="_on_enemy_body_entered"]

@@ -27,6 +27,7 @@ func _init() -> void:
 	input_action = &"block"
 	extra_input_actions = [&"attack", &"ui_accept"]
 	marker_speed = 1.15
+	squares_enabled = true
 
 
 func _get_zones() -> Array[Dictionary]:

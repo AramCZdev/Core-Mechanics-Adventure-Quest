@@ -31,9 +31,18 @@ signal timing_timeout
 ## Set to 0 to disable the timeout (the marker will bounce forever).
 @export_range(0.0, 60.0, 0.5, "suffix:s") var input_timeout: float = 8.0
 
+@export_group("Display")
 @export var track_color: Color = Color(0.07, 0.08, 0.11, 0.95)
 @export var border_color: Color = Color(0.9, 0.9, 0.9, 1.0)
 @export var marker_color: Color = Color(1.0, 1.0, 1.0, 1.0)
+
+## Draw the track and its zones as separate square blocks instead of one
+## continuous bar. The marker and timing rules are unchanged.
+@export var squares_enabled: bool = false
+## Number of blocks to draw. 0 picks a count that makes the blocks roughly
+## square based on the bar's current width and height.
+@export_range(0, 128, 1) var square_count: int = 0
+@export_range(0.0, 16.0, 0.5, "suffix:px") var square_gap: float = 4.0
 
 var marker_position: float = 0.0
 var is_active: bool = false
@@ -81,16 +90,25 @@ func submit_now() -> Dictionary:
 
 ## Pure hit evaluation, also used by tests.
 func evaluate_fraction(fraction: float) -> Dictionary:
+	var zone := _zone_at(fraction)
+	if zone.is_empty():
+		return {"zone": "Miss", "value": 0.0}
+	return {
+		"zone": str(zone.get("name", "Miss")),
+		"value": float(zone.get("value", 0.0)),
+	}
+
+
+## Returns the most specific zone containing `fraction`, or an empty
+## dictionary when no zone matches.
+func _zone_at(fraction: float) -> Dictionary:
 	var value := clampf(fraction, 0.0, 1.0)
 	for zone in _get_zones():
 		var start: float = minf(float(zone.get("start", 0.0)), float(zone.get("end", 1.0)))
 		var end: float = maxf(float(zone.get("start", 0.0)), float(zone.get("end", 1.0)))
 		if value >= start and value <= end:
-			return {
-				"zone": str(zone.get("name", "Miss")),
-				"value": float(zone.get("value", 0.0)),
-			}
-	return {"zone": "Miss", "value": 0.0}
+			return zone
+	return {}
 
 
 ## Override in subclasses. Ordered narrowest first; the last zone should span
@@ -161,6 +179,13 @@ func _timeout_result() -> Dictionary:
 
 
 func _draw() -> void:
+	if squares_enabled:
+		_draw_square_bar()
+	else:
+		_draw_smooth_bar()
+
+
+func _draw_smooth_bar() -> void:
 	var rect := Rect2(Vector2.ZERO, size)
 	draw_rect(rect, track_color)
 
@@ -180,3 +205,51 @@ func _draw() -> void:
 
 	var marker_x := clampf(marker_position, 0.0, 1.0) * size.x
 	draw_rect(Rect2(marker_x - 2.0, -6.0, 4.0, size.y + 12.0), marker_color)
+
+
+func _draw_square_bar() -> void:
+	if size.x <= 0.0 or size.y <= 0.0:
+		return
+
+	draw_rect(Rect2(Vector2.ZERO, size), track_color)
+
+	var count := _resolved_square_count()
+	var cell_width := size.x / float(count)
+	var gap := clampf(square_gap, 0.0, minf(cell_width, size.y) * 0.45)
+	var block_size := Vector2(maxf(cell_width - gap, 1.0), maxf(size.y - gap, 1.0))
+	var block_top := (size.y - block_size.y) * 0.5
+	var block_border := Color(border_color, border_color.a * 0.4)
+
+	for index in count:
+		var block_left := float(index) * cell_width + gap * 0.5
+		var color := _zone_color_at((float(index) + 0.5) / float(count))
+		var block := Rect2(Vector2(block_left, block_top), block_size)
+		draw_rect(block, color)
+		draw_rect(block, block_border, false, 1.5)
+
+	# Highlight the block under the marker, while keeping the precise marker
+	# line so the continuous timing rules remain readable.
+	var active_index := clampi(int(marker_position * float(count)), 0, count - 1)
+	var active_left := float(active_index) * cell_width + gap * 0.5
+	draw_rect(
+		Rect2(Vector2(active_left, block_top), block_size),
+		marker_color,
+		false,
+		3.0
+	)
+
+	var marker_x := clampf(marker_position, 0.0, 1.0) * size.x
+	draw_rect(Rect2(marker_x - 2.0, -6.0, 4.0, size.y + 12.0), marker_color)
+
+
+func _resolved_square_count() -> int:
+	if square_count > 0:
+		return square_count
+	return maxi(1, roundi(size.x / maxf(size.y, 1.0)))
+
+
+func _zone_color_at(fraction: float) -> Color:
+	var zone := _zone_at(fraction)
+	if zone.is_empty():
+		return track_color
+	return zone.get("color", track_color)

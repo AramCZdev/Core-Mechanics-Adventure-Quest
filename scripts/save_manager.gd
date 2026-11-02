@@ -1,7 +1,9 @@
 extends Node
-## Small single-slot save system for player progress.
+## Single-slot save system for player progress and persistent inventory.
 
 const SAVE_PATH := "user://savegame.cfg"
+
+signal inventory_changed(inventory: Dictionary)
 
 var _config := ConfigFile.new()
 var _has_save := false
@@ -9,15 +11,24 @@ var _player_hp: int = 40
 var _player_max_hp: int = 40
 var _player_attack: int = 12
 var _hero_name := "Hero"
+var _inventory: Dictionary = {}
 
 
 func _ready() -> void:
-	_has_save = _config.load(SAVE_PATH) == OK
-	if _has_save:
-		_player_max_hp = maxi(1, int(_config.get_value("player", "max_hp", _player_max_hp)))
-		_player_hp = clampi(int(_config.get_value("player", "hp", _player_max_hp)), 0, _player_max_hp)
-		_player_attack = maxi(0, int(_config.get_value("player", "attack", _player_attack)))
-		_hero_name = str(_config.get_value("player", "hero_name", _hero_name))
+	if _config.load(SAVE_PATH) != OK:
+		return
+
+	# An inventory-only save must not make the main menu offer Continue.
+	_has_save = not str(_config.get_value("progress", "scene_path", "")).is_empty()
+	_player_max_hp = maxi(1, int(_config.get_value("player", "max_hp", _player_max_hp)))
+	_player_hp = clampi(int(_config.get_value("player", "hp", _player_max_hp)), 0, _player_max_hp)
+	_player_attack = maxi(0, int(_config.get_value("player", "attack", _player_attack)))
+	_hero_name = str(_config.get_value("player", "hero_name", _hero_name))
+
+	for item_id in _config.get_section_keys("inventory"):
+		var quantity := int(_config.get_value("inventory", item_id, 0))
+		if _is_valid_item_id(item_id) and quantity > 0:
+			_inventory[item_id] = quantity
 
 
 func has_save() -> bool:
@@ -89,6 +100,90 @@ func reward_battle_victory(current_hp: int, max_hp: int, attack: int) -> Vector3
 	return Vector3i(_player_hp, _player_max_hp, _player_attack)
 
 
+## Adds quantity copies of an item and saves the inventory immediately.
+## Returns false for invalid IDs, non-positive quantities, or save failures.
+func add_item(item_id: String, quantity: int = 1) -> bool:
+	var normalized_id := item_id.strip_edges().to_lower()
+	if not _is_valid_item_id(normalized_id) or quantity <= 0:
+		return false
+
+	var previous_quantity := get_item_count(normalized_id)
+	_inventory[normalized_id] = previous_quantity + quantity
+	if not _save_inventory():
+		if previous_quantity == 0:
+			_inventory.erase(normalized_id)
+		else:
+			_inventory[normalized_id] = previous_quantity
+		return false
+
+	inventory_changed.emit(get_inventory())
+	return true
+
+
+## Removes quantity copies of an item. Does not change inventory if insufficient.
+func remove_item(item_id: String, quantity: int = 1) -> bool:
+	var normalized_id := item_id.strip_edges().to_lower()
+	if not _is_valid_item_id(normalized_id) or quantity <= 0:
+		return false
+
+	var previous_quantity := get_item_count(normalized_id)
+	if previous_quantity < quantity:
+		return false
+
+	var remaining := previous_quantity - quantity
+	if remaining == 0:
+		_inventory.erase(normalized_id)
+	else:
+		_inventory[normalized_id] = remaining
+
+	if not _save_inventory():
+		_inventory[normalized_id] = previous_quantity
+		return false
+
+	inventory_changed.emit(get_inventory())
+	return true
+
+
+func has_item(item_id: String) -> bool:
+	return get_item_count(item_id) > 0
+
+
+func get_item_count(item_id: String) -> int:
+	var normalized_id := item_id.strip_edges().to_lower()
+	return int(_inventory.get(normalized_id, 0))
+
+
+## Returns a copy so callers cannot mutate saved inventory without using this API.
+func get_inventory() -> Dictionary:
+	return _inventory.duplicate()
+
+
+func _save_inventory() -> bool:
+	_config.erase_section("inventory")
+	for item_id in _inventory:
+		var quantity := int(_inventory[item_id])
+		if quantity > 0:
+			_config.set_value("inventory", item_id, quantity)
+
+	var result := _config.save(SAVE_PATH)
+	if result != OK:
+		push_error("SaveManager: could not save inventory (error %d)." % result)
+		return false
+	return true
+
+
+func _is_valid_item_id(item_id: String) -> bool:
+	if item_id.is_empty() or item_id.length() > 64:
+		return false
+	for character in item_id:
+		var code := character.unicode_at(0)
+		var is_lowercase := code >= 97 and code <= 122
+		var is_number := code >= 48 and code <= 57
+		if not is_lowercase and not is_number and character not in ["_", "-", "."]:
+			return false
+	return true
+
+
 func claim_strength_crystal(scene_path: String, player_position: Vector2, player_speed: float) -> bool:
 	if bool(_config.get_value("upgrades", "strength_crystal_claimed", false)):
 		return false
@@ -130,9 +225,11 @@ func delete_save() -> bool:
 			push_error("SaveManager: could not delete save file (error %d)." % result)
 			return false
 	_config.clear()
+	_inventory.clear()
 	_has_save = false
 	_player_hp = 40
 	_player_max_hp = 40
 	_player_attack = 12
 	_hero_name = "Hero"
+	inventory_changed.emit(get_inventory())
 	return true

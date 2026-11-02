@@ -170,7 +170,10 @@ func add_gold(amount: int) -> bool:
 	if amount <= 0:
 		return false
 	_gold += amount
-	return _save_gold()
+	if not _save_gold():
+		_gold -= amount
+		return false
+	return true
 
 
 func spend_gold(amount: int) -> bool:

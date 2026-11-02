@@ -6,9 +6,20 @@
 [node name="TheBeach" type="Node2D" unique_id=1717501666]
 
 [node name="Beach" type="Sprite2D" parent="." unique_id=909242022]
+z_index = 10
 position = Vector2(211, -289.00003)
 scale = Vector2(5.109375, 5.109375)
 texture = ExtResource("1_s14xq")
 
+[node name="ColorRect" type="ColorRect" parent="Beach" unique_id=109560455]
+z_index = -1
+offset_left = -653.50464
+offset_top = -361.10092
+offset_right = 735.31494
+offset_bottom = 364.30582
+color = Color(0.23137255, 0.3137255, 0.80784315, 1)
+
 [node name="Player" parent="." unique_id=520382692 instance=ExtResource("2_bym0n")]
 position = Vector2(958, 515)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1273117155]

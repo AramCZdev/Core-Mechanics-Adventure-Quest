@@ -66,7 +66,7 @@ func _on_name_cancel_pressed() -> void:
 
 
 func _start_new_game(hero_name: String) -> void:
-	SaveManager.set_hero_name(hero_name)
+	SaveManager.begin_new_game(hero_name)
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 

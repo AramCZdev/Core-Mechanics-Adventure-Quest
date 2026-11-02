@@ -1,22 +1,54 @@
 extends Node
-## Single-slot save system for player progress and persistent inventory.
+## Single-slot save system for player progress, currency, and persistent inventory.
 
-const SAVE_PATH := "user://savegame.cfg"
+const DEFAULT_SAVE_PATH := "user://savegame.cfg"
+const STARTING_GOLD := 100
+const BATTLE_VICTORY_GOLD := 25
+const STARTING_ITEMS := {"health_potion": 2}
+
+const DEFAULT_PLAYER_HP := 40
+const DEFAULT_PLAYER_ATTACK := 12
 
 signal inventory_changed(inventory: Dictionary)
+signal gold_changed(gold: int)
+
+## Override this before the node enters the tree to use another slot (tests).
+var save_path: String = DEFAULT_SAVE_PATH
 
 var _config := ConfigFile.new()
 var _has_save := false
-var _player_hp: int = 40
-var _player_max_hp: int = 40
-var _player_attack: int = 12
+var _player_hp: int = DEFAULT_PLAYER_HP
+var _player_max_hp: int = DEFAULT_PLAYER_HP
+var _player_attack: int = DEFAULT_PLAYER_ATTACK
 var _hero_name := "Hero"
 var _inventory: Dictionary = {}
-var _gold: int = 0
+var _gold: int = STARTING_GOLD
 
 
 func _ready() -> void:
-	if _config.load(SAVE_PATH) != OK:
+	_load()
+
+
+## Switches to a different save file and reloads it immediately.
+func set_save_path(path: String) -> void:
+	var normalized_path := path.strip_edges()
+	if normalized_path.is_empty():
+		return
+	save_path = normalized_path
+	_load()
+
+
+func _load() -> void:
+	_config = ConfigFile.new()
+	_has_save = false
+	_player_hp = DEFAULT_PLAYER_HP
+	_player_max_hp = DEFAULT_PLAYER_HP
+	_player_attack = DEFAULT_PLAYER_ATTACK
+	_hero_name = "Hero"
+	_inventory.clear()
+	_gold = STARTING_GOLD
+
+	if _config.load(save_path) != OK:
 		return
 
 	# An inventory-only save must not make the main menu offer Continue.
@@ -25,12 +57,29 @@ func _ready() -> void:
 	_player_hp = clampi(int(_config.get_value("player", "hp", _player_max_hp)), 0, _player_max_hp)
 	_player_attack = maxi(0, int(_config.get_value("player", "attack", _player_attack)))
 	_hero_name = str(_config.get_value("player", "hero_name", _hero_name))
-	_gold = maxi(0, int(_config.get_value("player", "gold", 0)))
+	_gold = maxi(0, int(_config.get_value("player", "gold", STARTING_GOLD)))
 
-	for item_id in _config.get_section_keys("inventory"):
-		var quantity := int(_config.get_value("inventory", item_id, 0))
-		if _is_valid_item_id(item_id) and quantity > 0:
-			_inventory[item_id] = quantity
+	if _config.has_section("inventory"):
+		for item_id in _config.get_section_keys("inventory"):
+			var quantity := int(_config.get_value("inventory", item_id, 0))
+			if _is_valid_item_id(item_id) and quantity > 0:
+				_inventory[item_id] = quantity
+
+
+## Starts a fresh run, clearing any previous progress and inventory.
+func begin_new_game(hero_name: String) -> void:
+	_remove_save_file()
+	_reset_state()
+	_hero_name = _sanitize_hero_name(hero_name)
+	_gold = STARTING_GOLD
+	_inventory = STARTING_ITEMS.duplicate()
+	_config.set_value("player", "hero_name", _hero_name)
+	_config.set_value("player", "gold", _gold)
+	for item_id in _inventory:
+		_config.set_value("inventory", item_id, _inventory[item_id])
+	_save_config()
+	inventory_changed.emit(get_inventory())
+	gold_changed.emit(_gold)
 
 
 func has_save() -> bool:
@@ -38,10 +87,9 @@ func has_save() -> bool:
 
 
 func set_hero_name(hero_name: String) -> void:
-	_hero_name = hero_name.strip_edges().left(20)
-	if _hero_name.is_empty():
-		_hero_name = "Hero"
+	_hero_name = _sanitize_hero_name(hero_name)
 	_config.set_value("player", "hero_name", _hero_name)
+	_save_config()
 
 
 func get_hero_name() -> String:
@@ -76,12 +124,12 @@ func get_player_health(default_hp: int, default_max_hp: int) -> Vector2i:
 func set_player_health(current_hp: int, max_hp: int) -> void:
 	_player_max_hp = maxi(1, max_hp)
 	_player_hp = clampi(current_hp, 0, _player_max_hp)
-	if _has_save:
-		_config.set_value("player", "hp", _player_hp)
-		_config.set_value("player", "max_hp", _player_max_hp)
-		var result := _config.save(SAVE_PATH)
-		if result != OK:
-			push_error("SaveManager: could not update player HP (error %d)." % result)
+	if not _has_save:
+		return
+
+	_config.set_value("player", "hp", _player_hp)
+	_config.set_value("player", "max_hp", _player_max_hp)
+	_save_config()
 
 
 func get_player_attack(default_attack: int) -> int:
@@ -92,14 +140,20 @@ func reward_battle_victory(current_hp: int, max_hp: int, attack: int) -> Vector3
 	_player_max_hp = maxi(1, max_hp) + 5
 	_player_hp = mini(maxi(0, current_hp) + 5, _player_max_hp)
 	_player_attack = maxi(0, attack) + 1
+	_gold += BATTLE_VICTORY_GOLD
+
 	if _has_save:
 		_config.set_value("player", "hp", _player_hp)
 		_config.set_value("player", "max_hp", _player_max_hp)
 		_config.set_value("player", "attack", _player_attack)
-		var result := _config.save(SAVE_PATH)
-		if result != OK:
-			push_error("SaveManager: could not save victory reward (error %d)." % result)
+	_config.set_value("player", "gold", _gold)
+	_save_config()
+	gold_changed.emit(_gold)
 	return Vector3i(_player_hp, _player_max_hp, _player_attack)
+
+
+func get_battle_victory_gold() -> int:
+	return BATTLE_VICTORY_GOLD
 
 
 ## Adds quantity copies of an item and saves the inventory immediately.
@@ -160,7 +214,6 @@ func get_inventory() -> Dictionary:
 	return _inventory.duplicate()
 
 
-
 ## Currency is stored in the same save file as player progress and inventory.
 func get_gold() -> int:
 	return _gold
@@ -173,6 +226,7 @@ func add_gold(amount: int) -> bool:
 	if not _save_gold():
 		_gold -= amount
 		return false
+	gold_changed.emit(_gold)
 	return true
 
 
@@ -183,30 +237,47 @@ func spend_gold(amount: int) -> bool:
 	if not _save_gold():
 		_gold += amount
 		return false
+	gold_changed.emit(_gold)
 	return true
 
 
 func _save_gold() -> bool:
 	_config.set_value("player", "gold", _gold)
-	var result := _config.save(SAVE_PATH)
-	if result != OK:
-		push_error("SaveManager: could not save currency (error %d)." % result)
-		return false
-	return true
+	return _save_config()
 
 
 func _save_inventory() -> bool:
-	_config.erase_section("inventory")
+	if _config.has_section("inventory"):
+		_config.erase_section("inventory")
 	for item_id in _inventory:
 		var quantity := int(_inventory[item_id])
 		if quantity > 0:
 			_config.set_value("inventory", item_id, quantity)
+	return _save_config()
 
-	var result := _config.save(SAVE_PATH)
+
+func _save_config() -> bool:
+	var result := _config.save(save_path)
 	if result != OK:
-		push_error("SaveManager: could not save inventory (error %d)." % result)
+		push_error("SaveManager: could not write save file (error %d)." % result)
 		return false
 	return true
+
+
+func _reset_state() -> void:
+	_config.clear()
+	_has_save = false
+	_player_hp = DEFAULT_PLAYER_HP
+	_player_max_hp = DEFAULT_PLAYER_HP
+	_player_attack = DEFAULT_PLAYER_ATTACK
+	_hero_name = "Hero"
+	_inventory.clear()
+	_gold = STARTING_GOLD
+
+
+func _sanitize_hero_name(hero_name: String) -> String:
+	var sanitized := hero_name.strip_edges().left(20)
+	return sanitized if not sanitized.is_empty() else "Hero"
 
 
 func _is_valid_item_id(item_id: String) -> bool:
@@ -247,26 +318,27 @@ func save_player_state(scene_path: String, player_position: Vector2, player_spee
 	_config.set_value("player", "max_hp", _player_max_hp)
 	_config.set_value("player", "attack", _player_attack)
 	_config.set_value("player", "hero_name", _hero_name)
-	var result := _config.save(SAVE_PATH)
-	_has_save = result == OK
-	if result != OK:
-		push_error("SaveManager: could not write save file (error %d)." % result)
-	return _has_save
+	_config.set_value("player", "gold", _gold)
+	var saved := _save_config()
+	_has_save = saved
+	return saved
 
 
 func delete_save() -> bool:
-	var absolute_path := ProjectSettings.globalize_path(SAVE_PATH)
-	if FileAccess.file_exists(SAVE_PATH):
-		var result := DirAccess.remove_absolute(absolute_path)
-		if result != OK:
-			push_error("SaveManager: could not delete save file (error %d)." % result)
-			return false
-	_config.clear()
-	_inventory.clear()
-	_has_save = false
-	_player_hp = 40
-	_player_max_hp = 40
-	_player_attack = 12
-	_hero_name = "Hero"
+	if not _remove_save_file():
+		return false
+	_reset_state()
 	inventory_changed.emit(get_inventory())
+	gold_changed.emit(_gold)
+	return true
+
+
+func _remove_save_file() -> bool:
+	if not FileAccess.file_exists(save_path):
+		return true
+	var absolute_path := ProjectSettings.globalize_path(save_path)
+	var result := DirAccess.remove_absolute(absolute_path)
+	if result != OK:
+		push_error("SaveManager: could not delete save file (error %d)." % result)
+		return false
 	return true

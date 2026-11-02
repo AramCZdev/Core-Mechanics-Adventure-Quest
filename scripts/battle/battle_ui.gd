@@ -21,7 +21,8 @@ signal battle_exited(victory: bool)
 ## and other gameplay input cannot leak through. BattleUI itself uses
 ## PROCESS_MODE_ALWAYS, so it keeps running while paused.
 @export var pause_gameplay: bool = true
-## Item support stays in BattleManager, but is hidden in the UI for now.
+## Show the Item action. Item counts come from BattleManager (normally the
+## persistent potion inventory).
 @export var items_enabled: bool = false
 @export var battle_manager_path: NodePath = ^"BattleManager"
 
@@ -29,7 +30,7 @@ signal battle_exited(victory: bool)
 ## Hide the battle screen automatically after a victory.
 @export var auto_exit_on_victory: bool = true
 ## Seconds the victory text stays visible before the battle screen closes.
-@export_range(0.0, 10.0, 0.1, "suffix:s") var victory_exit_delay: float = 2.0
+@export_range(0.0, 10.0, 0.1, "suffix:s") var victory_exit_delay: float = 3.0
 
 @onready var _manager: BattleManager = get_node_or_null(battle_manager_path) as BattleManager
 @onready var _enemy_texture: TextureRect = %EnemyTexture
@@ -57,6 +58,9 @@ signal battle_exited(victory: bool)
 
 var _paused_by_battle: bool = false
 var _exit_timer: Timer
+var _item_panel: VBoxContainer
+var _item_menu_open: bool = false
+var _item_buttons: Array[Button] = []
 
 
 func _ready() -> void:
@@ -98,6 +102,7 @@ func _ready() -> void:
 	_attack_timing.timing_finished.connect(_on_attack_timing_finished)
 	_block_timing.timing_finished.connect(_on_block_timing_finished)
 
+	_build_item_panel()
 	_hide_timing_bars()
 	_battle_over_panel.hide()
 
@@ -120,6 +125,20 @@ func begin_battle(new_enemy: BattleEnemy = null) -> bool:
 func _unhandled_input(event: InputEvent) -> void:
 	if _manager == null or not _manager.is_battle_active():
 		return
+	if _item_menu_open:
+		if event.is_action_pressed("ui_cancel"):
+			_hide_item_menu()
+			_item_button.grab_focus()
+			get_viewport().set_input_as_handled()
+			return
+		if event.is_action_pressed("move_up"):
+			_move_focus(Vector2i.UP)
+			get_viewport().set_input_as_handled()
+			return
+		if event.is_action_pressed("move_down"):
+			_move_focus(Vector2i.DOWN)
+			get_viewport().set_input_as_handled()
+			return
 	if _manager.phase != BattleManager.Phase.PLAYER_TURN:
 		return
 
@@ -153,6 +172,7 @@ func _on_battle_started(started_enemy: BattleEnemy) -> void:
 	_enemy_hp_bar.max_value = started_enemy.max_hp
 	_enemy_hp_bar.value = started_enemy.max_hp
 	_battle_over_panel.hide()
+	_hide_item_menu()
 	_actions.show()
 	_hide_timing_bars()
 	_refresh_actions()
@@ -166,6 +186,7 @@ func _on_battle_ended(victory: bool) -> void:
 		_paused_by_battle = false
 
 	_hide_timing_bars()
+	_hide_item_menu()
 	_battle_over_label.text = "VICTORY!" if victory else "DEFEAT..."
 	_battle_over_label.modulate = Color(0.98, 0.85, 0.35) if victory else Color(0.95, 0.45, 0.45)
 	_battle_over_panel.show()
@@ -195,6 +216,8 @@ func _on_exit_timer_timeout() -> void:
 
 func _on_phase_changed(new_phase: int) -> void:
 	_turn_label.text = _phase_text(new_phase)
+	if new_phase != BattleManager.Phase.PLAYER_TURN and _item_menu_open:
+		_hide_item_menu()
 	_refresh_actions()
 	if new_phase == BattleManager.Phase.PLAYER_TURN and not _battle_over_panel.visible:
 		_attack_button.call_deferred("grab_focus")
@@ -212,7 +235,7 @@ func _on_player_stats_changed(hp: int, max_hp: int, items: int) -> void:
 	_player_hp_bar.max_value = max_hp
 	_player_hp_bar.value = hp
 	_player_hp_label.text = "HP  %d / %d" % [hp, max_hp]
-	_items_label.text = "Potions  %d" % items
+	_items_label.text = "Items  %d" % items
 	_refresh_actions()
 
 
@@ -257,7 +280,14 @@ func _on_defend_pressed() -> void:
 
 
 func _on_item_pressed() -> void:
-	_request_action(BattleManager.ACTION_ITEM)
+	if _manager == null or not _manager.is_battle_active():
+		return
+	if _manager.phase != BattleManager.Phase.PLAYER_TURN:
+		return
+	if _manager.get_usable_items().is_empty():
+		_on_message_changed("You have no items left!")
+		return
+	_show_item_menu()
 
 
 func _on_talk_pressed() -> void:
@@ -312,7 +342,136 @@ func _refresh_actions() -> void:
 	_item_button.text = "Item (%d)" % _manager.items
 
 
+func _build_item_panel() -> void:
+	if _item_panel != null:
+		return
+
+	var wrapper := PanelContainer.new()
+	wrapper.name = "ItemMenu"
+	wrapper.visible = false
+	wrapper.add_theme_stylebox_override("panel", _item_panel_style())
+
+	var parent := _actions.get_parent()
+	parent.add_child(wrapper)
+	parent.move_child(wrapper, _actions.get_index())
+
+	_item_panel = VBoxContainer.new()
+	_item_panel.add_theme_constant_override("separation", 6)
+	wrapper.add_child(_item_panel)
+
+
+func _show_item_menu() -> void:
+	if _item_panel == null:
+		_build_item_panel()
+
+	var usable := _manager.get_usable_items()
+	if usable.is_empty():
+		_on_message_changed("You have no items left!")
+		return
+
+	for child in _item_panel.get_children():
+		_item_panel.remove_child(child)
+		child.queue_free()
+	_item_buttons.clear()
+
+	var title := Label.new()
+	title.text = "Use which item?"
+	title.add_theme_color_override("font_color", Color(0.23, 0.12, 0.06, 1))
+	title.add_theme_font_size_override("font_size", 18)
+	_item_panel.add_child(title)
+
+	for entry in usable:
+		var button := Button.new()
+		button.text = "%s  x%d\n%s" % [
+			str(entry.get("name", "Item")),
+			int(entry.get("count", 1)),
+			str(entry.get("description", "")),
+		]
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.custom_minimum_size = Vector2(0, 48)
+		_copy_action_button_style(button)
+		button.pressed.connect(_on_item_chosen.bind(str(entry.get("id", ""))))
+		_item_panel.add_child(button)
+		_item_buttons.append(button)
+
+	var cancel := Button.new()
+	cancel.text = "Cancel  (Esc)"
+	cancel.custom_minimum_size = Vector2(0, 40)
+	_copy_action_button_style(cancel)
+	cancel.pressed.connect(_hide_item_menu)
+	_item_panel.add_child(cancel)
+	_item_buttons.append(cancel)
+
+	_item_menu_open = true
+	_item_panel.get_parent().show()
+	_actions.hide()
+	if not _item_buttons.is_empty():
+		_item_buttons[0].call_deferred("grab_focus")
+
+
+func _hide_item_menu() -> void:
+	if _item_panel == null:
+		return
+	_item_menu_open = false
+	_item_panel.get_parent().hide()
+	if _manager != null and _manager.is_battle_active():
+		_actions.show()
+
+
+func _on_item_chosen(item_id: String) -> void:
+	_hide_item_menu()
+	if not _manager.use_item(item_id):
+		if _manager.phase == BattleManager.Phase.PLAYER_TURN:
+			_item_button.grab_focus()
+	_refresh_actions()
+
+
+func _copy_action_button_style(button: Button) -> void:
+	button.add_theme_color_override("font_color", Color(1, 0.91, 0.69, 1))
+	button.add_theme_color_override("font_hover_color", Color(1, 0.91, 0.69, 1))
+	button.add_theme_color_override("font_pressed_color", Color(1, 0.91, 0.69, 1))
+	button.add_theme_font_size_override("font_size", 16)
+	for state in ["normal", "hover", "pressed"]:
+		var style := _attack_button.get_theme_stylebox(state)
+		if style != null:
+			button.add_theme_stylebox_override(state, style)
+
+
+func _item_panel_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.83, 0.74, 0.56, 1)
+	style.border_width_left = 5
+	style.border_width_top = 5
+	style.border_width_right = 5
+	style.border_width_bottom = 5
+	style.border_color = Color(0.29, 0.17, 0.08, 1)
+	style.corner_radius_top_left = 3
+	style.corner_radius_top_right = 3
+	style.corner_radius_bottom_right = 3
+	style.corner_radius_bottom_left = 3
+	style.content_margin_left = 12
+	style.content_margin_top = 10
+	style.content_margin_right = 12
+	style.content_margin_bottom = 10
+	style.shadow_color = Color(0, 0, 0, 0.55)
+	style.shadow_size = 10
+	style.shadow_offset = Vector2(0, 5)
+	return style
+
+
 func _move_focus(direction: Vector2i) -> void:
+	if _item_menu_open:
+		if _item_buttons.is_empty():
+			return
+		var current := get_viewport().gui_get_focus_owner()
+		var item_index := _item_buttons.find(current)
+		if item_index < 0:
+			item_index = 0
+		if direction.y != 0:
+			item_index = clampi(item_index + direction.y, 0, _item_buttons.size() - 1)
+		_item_buttons[item_index].grab_focus()
+		return
+
 	var buttons: Array[Button] = [_attack_button, _defend_button]
 	if items_enabled:
 		buttons.append(_item_button)

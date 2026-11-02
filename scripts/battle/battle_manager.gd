@@ -11,11 +11,10 @@ class_name BattleManager
 ##   PLAYER_TURN -> ATTACK_TIMING -> RESOLVE_PLAYER -> ENEMY_WINDUP
 ##   -> BLOCK_TIMING -> RESOLVE_ENEMY -> PLAYER_TURN
 ## Defend / Item / Talk skip straight from RESOLVE_PLAYER to ENEMY_WINDUP.
+## Item opens a choice of owned consumables through get_usable_items().
 
 signal battle_started(enemy: BattleEnemy)
 signal battle_ended(victory: bool)
-## No-argument version for systems that only need to know the battle finished.
-signal on_battle_ended
 signal phase_changed(new_phase: int)
 signal input_locked_changed(locked: bool)
 signal message_changed(text: String)
@@ -62,14 +61,20 @@ const ACTION_TALK := "talk"
 @export_range(0, 99, 1) var starting_items: int = 2
 @export_range(0, 999, 1) var item_heal_amount: int = 15
 @export_range(0.0, 1.0, 0.05) var defend_damage_reduction: float = 0.25
+## Read potion counts from the persistent inventory and consume them on use.
+## Disable this to use the local `starting_items` count instead.
+@export var use_persistent_items: bool = true
+## Load/write HP, attack, and victory rewards through SaveManager.
+## Disable this for isolated tests.
+@export var use_persistent_progress: bool = true
 
 @export_group("Pacing")
 ## Delay after Defend / Item / Talk before the enemy acts.
-@export_range(0.0, 5.0, 0.05, "suffix:s") var transition_delay: float = 0.7
+@export_range(0.0, 5.0, 0.05, "suffix:s") var transition_delay: float = 1.2
 ## Wind-up before the block bar appears.
-@export_range(0.0, 5.0, 0.05, "suffix:s") var enemy_windup_delay: float = 0.55
+@export_range(0.0, 5.0, 0.05, "suffix:s") var enemy_windup_delay: float = 1.0
 ## How long a damage result stays on screen before the next phase.
-@export_range(0.0, 5.0, 0.05, "suffix:s") var result_delay: float = 0.7
+@export_range(0.0, 5.0, 0.05, "suffix:s") var result_delay: float = 1.2
 
 ## 0 = randomize on battle start. Set non-zero for deterministic tests.
 @export var random_seed: int = 0
@@ -80,17 +85,34 @@ var enemy_hp: int = 0
 var items: int = 0
 var turn_number: int = 0
 
+## Optional SaveManager override. Defaults to the /root/SaveManager autoload.
+var save_manager: Node
+
 var _battle_active: bool = false
 var _defending: bool = false
 var _phase_time_left: float = 0.0
 var _talk_index: int = 0
 var _talks_used: int = 0
+var _attack_buff: int = 0
+var _attack_buff_turns: int = 0
+var _defense_buff: int = 0
+var _defense_buff_turns: int = 0
 var _rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_process(false)
+	_resolve_save_manager()
+
+
+func _resolve_save_manager() -> Node:
+	if save_manager != null and is_instance_valid(save_manager):
+		return save_manager
+	if not is_inside_tree():
+		return null
+	save_manager = get_tree().root.get_node_or_null("SaveManager")
+	return save_manager
 
 
 func start_battle(enemy_override: BattleEnemy = null) -> bool:
@@ -101,16 +123,25 @@ func start_battle(enemy_override: BattleEnemy = null) -> bool:
 		battle_error.emit("BattleManager: no enemy configured.")
 		return false
 
-	var saved_health := SaveManager.get_player_health(player_max_hp, player_max_hp)
-	player_max_hp = saved_health.y
-	player_hp = maxi(1, saved_health.x)
-	player_attack = SaveManager.get_player_attack(player_attack)
-	SaveManager.set_player_health(player_hp, player_max_hp)
+	var save := _resolve_save_manager() if use_persistent_progress else null
+	if save != null:
+		var saved_health: Vector2i = save.call("get_player_health", player_max_hp, player_max_hp)
+		player_max_hp = saved_health.y
+		player_hp = maxi(1, saved_health.x)
+		player_attack = int(save.call("get_player_attack", player_attack))
+		save.call("set_player_health", player_hp, player_max_hp)
+	else:
+		player_hp = player_max_hp
+
 	enemy_hp = maxi(1, enemy.max_hp)
-	items = maxi(0, starting_items)
+	_refresh_items()
 	_defending = false
 	_talk_index = 0
 	_talks_used = 0
+	_attack_buff = 0
+	_attack_buff_turns = 0
+	_defense_buff = 0
+	_defense_buff_turns = 0
 	turn_number = 0
 	_battle_active = true
 	_phase_time_left = 0.0
@@ -153,9 +184,11 @@ func select_action(action: String) -> bool:
 			return true
 
 		ACTION_ITEM:
-			action_selected.emit(ACTION_ITEM)
-			_use_item()
-			return true
+			var usable := get_usable_items()
+			if usable.is_empty():
+				message_changed.emit("You have no items left!")
+				return true
+			return use_item(str(usable[0].get("id", "")))
 
 		ACTION_TALK:
 			action_selected.emit(ACTION_TALK)
@@ -173,8 +206,12 @@ func submit_attack(zone: String, multiplier: float) -> bool:
 		return false
 
 	var safe_multiplier := clampf(multiplier, 0.0, 10.0)
-	var damage := maxi(0, roundi(float(player_attack) * safe_multiplier))
+	var effective_attack := player_attack
+	if _attack_buff_turns > 0:
+		effective_attack += _attack_buff
+	var damage := maxi(0, roundi(float(effective_attack) * safe_multiplier))
 	enemy_hp = maxi(0, enemy_hp - damage)
+	_consume_attack_buff()
 
 	enemy_stats_changed.emit(enemy_hp, enemy.max_hp)
 	enemy_damaged.emit(damage, enemy_hp)
@@ -207,10 +244,15 @@ func submit_block(zone: String, reduction: float) -> bool:
 	if _defending:
 		damage_float *= 1.0 - clampf(defend_damage_reduction, 0.0, 1.0)
 	var damage := maxi(0, floori(damage_float))
+	if _defense_buff_turns > 0:
+		damage = maxi(0, damage - _defense_buff)
 	player_hp = maxi(0, player_hp - damage)
+	_consume_defense_buff()
 
 	player_stats_changed.emit(player_hp, player_max_hp, items)
-	SaveManager.set_player_health(player_hp, player_max_hp)
+	var save := _resolve_save_manager() if use_persistent_progress else null
+	if save != null:
+		save.call("set_player_health", player_hp, player_max_hp)
 	player_damaged.emit(damage, player_hp)
 	block_resolved.emit(zone, safe_reduction, damage)
 
@@ -273,24 +315,146 @@ func _process(delta: float) -> void:
 	advance_time(delta)
 
 
-func _use_item() -> void:
-	if items <= 0:
-		message_changed.emit("You have no items left!")
+## Returns every owned consumable the battle can use, with its count and effect.
+func get_usable_items() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var save := _resolve_save_manager()
+
+	if use_persistent_items and save != null:
+		var inventory: Dictionary = save.call("get_inventory")
+		for item_id in ItemDatabase.ITEMS:
+			var count := int(inventory.get(item_id, 0))
+			if count <= 0:
+				continue
+			var item := ItemDatabase.get_item(item_id)
+			var effect: Dictionary = item.get("effect", {})
+			if not _is_supported_effect(effect):
+				continue
+			result.append({
+				"id": item_id,
+				"name": str(item.get("name", item_id)),
+				"description": str(item.get("description", "")),
+				"count": count,
+				"effect": effect,
+			})
+		return result
+
+	if items > 0:
+		result.append({
+			"id": "health_potion",
+			"name": "Potion",
+			"description": "Restores %d HP." % item_heal_amount,
+			"count": items,
+			"effect": {"kind": "heal", "amount": item_heal_amount},
+		})
+	return result
+
+
+## Uses one specific item. Returns false if it is missing or unusable.
+func use_item(item_id: String) -> bool:
+	if not _battle_active or phase != Phase.PLAYER_TURN:
+		return false
+
+	var normalized_id := item_id.strip_edges().to_lower()
+	var save := _resolve_save_manager()
+	var effect: Dictionary
+
+	if use_persistent_items and save != null:
+		if not ItemDatabase.has_item(normalized_id):
+			message_changed.emit("You cannot use that item in battle.")
+			return false
+		if int(save.call("get_item_count", normalized_id)) <= 0:
+			message_changed.emit("You do not have that item.")
+			return false
+		var item := ItemDatabase.get_item(normalized_id)
+		effect = item.get("effect", {})
+		if not _is_supported_effect(effect):
+			message_changed.emit("You cannot use that item in battle.")
+			return false
+		if not bool(save.call("remove_item", normalized_id, 1)):
+			message_changed.emit("You cannot use that item right now.")
+			return false
+		action_selected.emit(ACTION_ITEM)
+		_refresh_items()
+	else:
+		if items <= 0:
+			message_changed.emit("You have no items left!")
+			return false
+		items -= 1
+		effect = {"kind": "heal", "amount": item_heal_amount}
+		action_selected.emit(ACTION_ITEM)
+
+	_apply_item_effect(effect)
+	player_stats_changed.emit(player_hp, player_max_hp, items)
+	if save != null and use_persistent_progress:
+		save.call("set_player_health", player_hp, player_max_hp)
+	_begin_timed_phase(Phase.RESOLVE_PLAYER, transition_delay)
+	return true
+
+
+func _refresh_items() -> void:
+	var save := _resolve_save_manager()
+
+	if use_persistent_items and save != null:
+		var inventory: Dictionary = save.call("get_inventory")
+		items = 0
+		for item_id in ItemDatabase.ITEMS:
+			var count := int(inventory.get(item_id, 0))
+			if count <= 0:
+				continue
+			var item := ItemDatabase.get_item(item_id)
+			if not _is_supported_effect(item.get("effect", {})):
+				continue
+			items += count
 		return
 
-	items -= 1
-	var healed := mini(item_heal_amount, player_max_hp - player_hp)
-	player_hp += healed
+	items = maxi(0, starting_items)
 
-	player_stats_changed.emit(player_hp, player_max_hp, items)
-	SaveManager.set_player_health(player_hp, player_max_hp)
-	player_healed.emit(healed, player_hp, items)
-	if healed > 0:
-		message_changed.emit("You drink a potion and recover %d HP." % healed)
-	else:
-		message_changed.emit("You drink a potion, but you are already at full HP.")
 
-	_begin_timed_phase(Phase.RESOLVE_PLAYER, transition_delay)
+func _is_supported_effect(effect: Dictionary) -> bool:
+	return str(effect.get("kind", "")) in [
+		"heal",
+		"temporary_attack_boost",
+		"temporary_defense_boost",
+	]
+
+
+func _apply_item_effect(effect: Dictionary) -> void:
+	var kind := str(effect.get("kind", ""))
+	match kind:
+		"heal":
+			var heal_amount := int(effect.get("amount", item_heal_amount))
+			var healed := mini(heal_amount, player_max_hp - player_hp)
+			player_hp += healed
+			player_healed.emit(healed, player_hp, items)
+			if healed > 0:
+				message_changed.emit("You drink a potion and recover %d HP." % healed)
+			else:
+				message_changed.emit("You drink a potion, but you are already at full HP.")
+		"temporary_attack_boost":
+			_attack_buff = int(effect.get("amount", 0))
+			_attack_buff_turns = maxi(1, int(effect.get("duration", 1)))
+			message_changed.emit("Attack +%d for %d turns." % [_attack_buff, _attack_buff_turns])
+		"temporary_defense_boost":
+			_defense_buff = int(effect.get("amount", 0))
+			_defense_buff_turns = maxi(1, int(effect.get("duration", 1)))
+			message_changed.emit("Defense +%d for %d turns." % [_defense_buff, _defense_buff_turns])
+
+
+func _consume_attack_buff() -> void:
+	if _attack_buff_turns <= 0:
+		return
+	_attack_buff_turns -= 1
+	if _attack_buff_turns == 0:
+		_attack_buff = 0
+
+
+func _consume_defense_buff() -> void:
+	if _defense_buff_turns <= 0:
+		return
+	_defense_buff_turns -= 1
+	if _defense_buff_turns == 0:
+		_defense_buff = 0
 
 
 func _talk_to_enemy() -> void:
@@ -367,8 +531,11 @@ func _end_battle(victory: bool, custom_message: String = "") -> void:
 	set_process(false)
 
 	phase = Phase.VICTORY if victory else Phase.DEFEAT
-	if victory:
-		var upgraded_stats := SaveManager.reward_battle_victory(
+	var save := _resolve_save_manager() if use_persistent_progress else null
+	var victory_gold := 0
+	if victory and save != null:
+		var upgraded_stats: Vector3i = save.call(
+			"reward_battle_victory",
 			player_hp,
 			player_max_hp,
 			player_attack
@@ -376,20 +543,21 @@ func _end_battle(victory: bool, custom_message: String = "") -> void:
 		player_hp = upgraded_stats.x
 		player_max_hp = upgraded_stats.y
 		player_attack = upgraded_stats.z
+		victory_gold = int(save.call("get_battle_victory_gold"))
 		player_stats_changed.emit(player_hp, player_max_hp, items)
 
 	if not custom_message.is_empty():
-		var reward_message := "%s\n+5 Max HP, +1 Attack." % custom_message if victory else custom_message
-		message_changed.emit(reward_message)
+		message_changed.emit(custom_message)
+	elif victory and save != null:
+		message_changed.emit("Victory! +5 Max HP, +1 Attack, +%d gold." % victory_gold)
 	elif victory:
-		message_changed.emit("Victory! +5 Max HP, +1 Attack.")
+		message_changed.emit("Victory!")
 	else:
 		message_changed.emit("Defeat... You fall in battle.")
 
 	phase_changed.emit(phase)
 	input_locked_changed.emit(true)
 	battle_ended.emit(victory)
-	on_battle_ended.emit()
 
 
 func _begin_timed_phase(new_phase: int, duration: float) -> void:

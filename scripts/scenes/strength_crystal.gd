@@ -8,6 +8,7 @@ var _player_in_range: CharacterBody2D
 
 
 func _ready() -> void:
+	add_to_group("interactable")
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	if SaveManager.has_claimed_strength_crystal():
@@ -29,6 +30,9 @@ func interact(player: CharacterBody2D) -> void:
 	):
 		_crystal.modulate = Color(0.35, 0.35, 0.35, 1.0)
 		_prompt.text = "Stronger! +10 HP, +3 Attack"
+		var sfx := get_node_or_null("StrongSfx") as AudioStreamPlayer2D
+		if sfx != null:
+			sfx.play()
 	else:
 		_prompt.text = "This crystal is dormant"
 

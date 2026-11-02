@@ -16,6 +16,10 @@ func is_player_in_range(player: CharacterBody2D) -> bool:
 	return _player_in_range == player
 
 
+func interact(player: CharacterBody2D) -> void:
+	save_player(player)
+
+
 func save_player(player: CharacterBody2D) -> void:
 	if not is_player_in_range(player):
 		return

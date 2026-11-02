@@ -11,13 +11,20 @@ var _failures: Array[String] = []
 
 func _initialize() -> void:
 	_ui = load("res://scenes/battle/battle_ui.tscn").instantiate() as BattleUI
+	_manager = _ui.get_node("BattleManager") as BattleManager
+	# Keep the test isolated from the player's real save file.
+	_manager.use_persistent_progress = false
+	_manager.use_persistent_items = false
+	_manager.transition_delay = 0.0
+	_manager.enemy_windup_delay = 0.0
+	_manager.result_delay = 0.0
 	root.add_child(_ui)
 	await process_frame
-	_manager = _ui.get_node("BattleManager") as BattleManager
 
 	_test_initial_state()
 	_test_attack_flow()
 	_test_block_flow()
+	_test_item_picker()
 	_test_victory()
 	await _test_victory_auto_exit()
 
@@ -80,6 +87,34 @@ func _test_block_flow() -> void:
 	_manager.advance_time(1.0)
 	_check(_manager.phase == BattleManager.Phase.PLAYER_TURN, "UI returns to player turn")
 	_check(not _attack_button().disabled, "actions re-enabled on player turn")
+
+
+func _test_item_picker() -> void:
+	_ui.items_enabled = true
+	_ui._refresh_actions()
+	_check(_item_button().visible, "item button visible once items are enabled")
+
+	_manager.player_hp = 20
+	_manager.player_stats_changed.emit(20, _manager.player_max_hp, _manager.items)
+	_item_button().pressed.emit()
+
+	_check(_ui._item_menu_open, "item button opens the picker")
+	_check(_ui._item_buttons.size() == 2, "picker lists owned item plus cancel")
+	_check(_ui._item_panel.get_parent().visible, "picker panel is visible")
+	_check(not _attack_button().is_visible_in_tree(), "actions hidden while picker is open")
+
+	_ui._on_item_chosen("health_potion")
+	_check(_manager.player_hp == 35, "picker heals with the chosen item")
+	_check(_manager.items == 1, "picker consumes exactly one item")
+	_check(not _ui._item_menu_open, "picker closes after choosing")
+
+	# Finish the enemy turn so the next test starts on the player's turn.
+	_manager.advance_time(0.01)
+	_manager.advance_time(0.01)
+	_block_timing().marker_position = 0.5
+	_block_timing().submit_now()
+	_manager.advance_time(0.01)
+	_check(_manager.phase == BattleManager.Phase.PLAYER_TURN, "item turn ends back on player turn")
 
 
 func _test_victory() -> void:

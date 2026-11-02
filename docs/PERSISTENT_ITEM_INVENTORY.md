@@ -11,7 +11,13 @@ The project autoloads `SaveManager` and `ShopManager`. Item definitions live in 
 | `strength_potion` | Strength Potion | +5 attack for 3 turns | 45 |
 | `defense_potion` | Defense Potion | +5 defense for 3 turns | 45 |
 
-The catalog stores item descriptions and effect metadata. The battle system still needs to apply these effects when an item is used.
+The catalog stores item descriptions and effect metadata. Choosing the Item action
+in battle opens a picker of every owned consumable with a supported effect (heal,
+temporary attack boost, or temporary defense boost). The chosen item is removed
+from the persistent inventory and its effect is applied for that turn.
+
+A new game starts with **100 gold** and **2 Health Potions**. Winning a battle
+awards **25 gold** in addition to the stat increases.
 
 ## Inventory API
 
@@ -19,7 +25,7 @@ The catalog stores item descriptions and effect metadata. The battle system stil
 SaveManager.add_item("health_potion", 3)
 
 if SaveManager.has_item("health_potion"):
-    print(SaveManager.get_item_count("health_potion"))
+	print(SaveManager.get_item_count("health_potion"))
 
 SaveManager.remove_item("health_potion")
 var inventory: Dictionary = SaveManager.get_inventory()
@@ -39,7 +45,7 @@ SaveManager.add_gold(100)
 print(SaveManager.get_gold())
 
 if SaveManager.spend_gold(25):
-    print("Purchase paid")
+	print("Purchase paid")
 ```
 
 Gold persists in the save file and cannot be spent below zero.
@@ -51,15 +57,20 @@ Two example shops are included: `general_store` and `traveling_merchant`. Each s
 ```gdscript
 var offers: Array[Dictionary] = ShopManager.get_shop_inventory("general_store")
 for offer in offers:
-    print(offer["name"], " - ", offer["price"], " gold")
+	print(offer["name"], " - ", offer["price"], " gold")
 
 if ShopManager.buy_item("general_store", "health_potion", 2):
-    print("Bought two potions")
+	print("Bought two potions")
 ```
 
 Purchases check the shop's offers, validate the item and quantity, deduct gold, and add the purchased items. If adding the item fails, the gold deduction is refunded.
 
-The reusable shop screen is `scenes/shop.tscn`, driven by `scripts/shop_ui.gd`. Instance it and set `shop_id` to `general_store` or `traveling_merchant`; call `open_shop(shop_id)` to show a different shop. The scene builds its offer list, displays the player's gold, handles purchases, and reports success or failure. NPC interaction and placing shopkeepers in the world remain game-specific integration work.
+The reusable shop screen is `scenes/shop.tscn`, driven by `scripts/shop_ui.gd`. Instance it and set `shop_id` to `general_store` or `traveling_merchant`; call `open_shop(shop_id)` to show a different shop. The scene builds its offer list, displays the player's gold, handles purchases, and reports success or failure.
+
+`scenes/Gameplay/Objects/shop_npc.tscn` is a ready-made shopkeeper. It shows a
+prompt when the player is in range, emits `shop_requested(shop_id)` on interact,
+and is already placed in `scenes/Gameplay/game_test_scene.tscn` alongside the
+shop window. The test scene opens the shop when the signal fires.
 
 
 ### Creating your own shop
@@ -68,18 +79,18 @@ Call `ShopManager.create_shop()` with a unique ID, display name, an item-to-pric
 
 ```gdscript
 func _ready() -> void:
-    var created := ShopManager.create_shop(
-        "blacksmith",
-        "The Blacksmith",
-        {
-            "health_potion": 12,
-            "strength_potion": 90,
-            "defense_potion": 65
-        },
+	var created := ShopManager.create_shop(
+		"blacksmith",
+		"The Blacksmith",
+		{
+			"health_potion": 12,
+			"strength_potion": 90,
+			"defense_potion": 65
+		},
         "Special supplies, at blacksmith prices."
-    )
-    if created:
-        $Shop.open_shop("blacksmith")
+	)
+	if created:
+		$Shop.open_shop("blacksmith")
 ```
 
 The item IDs must exist in `ItemDatabase`. Prices are whole numbers and can be zero (free), but cannot be negative. Creating a shop with an ID that already exists replaces that custom definition; a custom shop can also override a built-in shop ID. Custom shop definitions are held in memory, not saved, so register them again when the game starts.

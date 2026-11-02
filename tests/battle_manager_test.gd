@@ -15,6 +15,9 @@ var _last_block: Array = []
 
 func _initialize() -> void:
 	_manager = BattleManager.new()
+	# Keep the test isolated from the player's real save file.
+	_manager.use_persistent_progress = false
+	_manager.use_persistent_items = false
 	root.add_child(_manager)
 	_manager.transition_delay = 0.0
 	_manager.enemy_windup_delay = 0.0
@@ -116,6 +119,7 @@ func _test_item_and_no_items() -> void:
 	_start(_make_enemy(100, 10))
 	_manager.player_hp = 20
 	_manager.player_stats_changed.emit(20, 40, 2)
+	_check(_manager.get_usable_items().size() == 1, "usable items are listed")
 	_check(_manager.select_action(BattleManager.ACTION_ITEM), "item accepted")
 	_check(_manager.player_hp == 35, "item heals 15")
 	_check(_manager.items == 1, "item consumed")

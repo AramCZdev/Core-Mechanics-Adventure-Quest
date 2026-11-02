@@ -7,6 +7,8 @@ extends CharacterBody2D
 @onready var stats_name_label: Label = $"CanvasLayer/StatsMenu/Content/HeroName"
 @onready var stats_hp_label: Label = $"CanvasLayer/StatsMenu/Content/HP"
 @onready var stats_attack_label: Label = $"CanvasLayer/StatsMenu/Content/Attack"
+@onready var stats_gold_label: Label = $"CanvasLayer/StatsMenu/Content/Gold"
+@onready var stats_potions_label: Label = $"CanvasLayer/StatsMenu/Content/Potions"
 
 func _ready() -> void:
 	pause_menu.visible = false
@@ -40,6 +42,11 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("interact"):
+		for interactable in get_tree().get_nodes_in_group("interactable"):
+			if interactable.has_method("is_player_in_range") and interactable.call("is_player_in_range", self):
+				interactable.call("interact", self)
+				get_viewport().set_input_as_handled()
+				return
 		var strength_crystal: Node = get_tree().current_scene.get_node_or_null("StrengthCrystal")
 		if strength_crystal != null and strength_crystal.has_method("is_player_in_range") and strength_crystal.call("is_player_in_range", self):
 			strength_crystal.call("interact", self)
@@ -47,7 +54,10 @@ func _input(event: InputEvent) -> void:
 			return
 		var save_point: Node = get_tree().current_scene.get_node_or_null("SavePoint")
 		if save_point != null and save_point.has_method("is_player_in_range") and save_point.call("is_player_in_range", self):
-			save_point.call("save_player", self)
+			if save_point.has_method("interact"):
+				save_point.call("interact", self)
+			else:
+				save_point.call("save_player", self)
 			get_viewport().set_input_as_handled()
 			return
 	if event.is_action_pressed("pause"):
@@ -69,6 +79,10 @@ func _toggle_stats_menu() -> void:
 	stats_menu.visible = not stats_menu.visible
 	if stats_menu.visible:
 		var health := SaveManager.get_player_health(40, 40)
+		var inventory := SaveManager.get_inventory()
+		var potions := int(inventory.get("health_potion", 0)) + int(inventory.get("greater_health_potion", 0))
 		stats_name_label.text = "Hero: %s" % SaveManager.get_hero_name()
 		stats_hp_label.text = "HP: %d / %d" % [health.x, health.y]
 		stats_attack_label.text = "Attack: %d" % SaveManager.get_player_attack(12)
+		stats_gold_label.text = "Gold: %d" % SaveManager.get_gold()
+		stats_potions_label.text = "Potions: %d" % potions

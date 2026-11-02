@@ -280,7 +280,7 @@ visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.28, 0.17, 0.09, 1)
 theme_override_font_sizes/font_size = 14
-text = "Potions  2"
+text = "Items  2"
 
 [node name="Actions" type="HBoxContainer" parent="Margin/Layout/BattlePanel/PanelMargin/Content" unique_id=27944924]
 unique_name_in_owner = true

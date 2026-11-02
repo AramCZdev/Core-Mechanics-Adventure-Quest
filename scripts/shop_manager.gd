@@ -26,6 +26,21 @@ const SHOPS := {
 ## Runtime-created shops are kept separately from the built-in examples.
 var _custom_shops: Dictionary = {}
 
+var _save_manager: Node
+
+
+func _ready() -> void:
+	_get_save_manager()
+
+
+func _get_save_manager() -> Node:
+	if _save_manager != null and is_instance_valid(_save_manager):
+		return _save_manager
+	if not is_inside_tree():
+		return null
+	_save_manager = get_tree().root.get_node_or_null("SaveManager")
+	return _save_manager
+
 
 ## Creates or replaces a custom shop.
 ## offers maps item IDs to prices, for example:
@@ -132,10 +147,12 @@ func get_shop_inventory(shop_id: String) -> Array[Dictionary]:
 
 ## Buys an item and persists both the gold deduction and item quantity.
 func buy_item(shop_id: String, item_id: String, quantity: int = 1) -> bool:
+	var save_manager := _get_save_manager()
+	if save_manager == null or quantity <= 0:
+		return false
+
 	var normalized_shop_id := _normalize_shop_id(shop_id)
 	var normalized_item_id := item_id.strip_edges().to_lower()
-	if quantity <= 0:
-		return false
 
 	var shop := get_shop(normalized_shop_id)
 	if shop.is_empty():
@@ -146,12 +163,12 @@ func buy_item(shop_id: String, item_id: String, quantity: int = 1) -> bool:
 
 	var unit_price := int(offers[normalized_item_id])
 	var total_price := unit_price * quantity
-	if total_price > 0 and not SaveManager.spend_gold(total_price):
+	if total_price > 0 and not save_manager.call("spend_gold", total_price):
 		return false
 
-	if not SaveManager.add_item(normalized_item_id, quantity):
+	if not save_manager.call("add_item", normalized_item_id, quantity):
 		if total_price > 0:
-			SaveManager.add_gold(total_price)
+			save_manager.call("add_gold", total_price)
 		return false
 	return true
 

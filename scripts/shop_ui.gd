@@ -3,6 +3,7 @@ extends Control
 
 @export var shop_id: String = "general_store"
 
+var _title_label: Label
 var _gold_label: Label
 var _message_label: Label
 var _offers_container: VBoxContainer
@@ -37,11 +38,10 @@ func _build_interface() -> void:
 	var header := HBoxContainer.new()
 	column.add_child(header)
 
-	var title := Label.new()
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 24)
-	header.add_child(title)
-	title.name = "ShopTitle"
+	_title_label = Label.new()
+	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_title_label.add_theme_font_size_override("font_size", 24)
+	header.add_child(_title_label)
 
 	_gold_label = Label.new()
 	header.add_child(_gold_label)
@@ -64,12 +64,11 @@ func _refresh() -> void:
 		return
 
 	var shop := ShopManager.get_shop(shop_id)
-	var title: Label = get_node("CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/ShopTitle")
 	if shop.is_empty():
-		title.text = "Shop unavailable"
+		_title_label.text = "Shop unavailable"
 		_message_label.text = "This shop does not exist."
 	else:
-		title.text = str(shop.get("name", "Shop"))
+		_title_label.text = str(shop.get("name", "Shop"))
 		_message_label.text = str(shop.get("description", ""))
 
 	_gold_label.text = "Gold: %d" % SaveManager.get_gold()

@@ -59,7 +59,7 @@ if ShopManager.buy_item("general_store", "health_potion", 2):
 
 Purchases check the shop's offers, validate the item and quantity, deduct gold, and add the purchased items. If adding the item fails, the gold deduction is refunded.
 
-A UI can display the returned shop data and call `buy_item()` from a Buy button. This PR supplies the reusable shop logic and data, not a finished shop screen or NPC interaction.
+The reusable shop screen is `scenes/shop.tscn`, driven by `scripts/shop_ui.gd`. Instance it and set `shop_id` to `general_store` or `traveling_merchant`; call `open_shop(shop_id)` to show a different shop. The scene builds its offer list, displays the player's gold, handles purchases, and reports success or failure. NPC interaction and placing shopkeepers in the world remain game-specific integration work.
 
 ## Save behavior
 

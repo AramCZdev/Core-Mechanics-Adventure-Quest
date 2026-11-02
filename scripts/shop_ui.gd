@@ -1,6 +1,8 @@
 extends Control
 ## Reusable shop window. Set shop_id before showing this scene.
 
+signal closed
+
 @export var shop_id: String = "general_store"
 
 var _title_label: Label

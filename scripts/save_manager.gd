@@ -12,6 +12,7 @@ var _player_max_hp: int = 40
 var _player_attack: int = 12
 var _hero_name := "Hero"
 var _inventory: Dictionary = {}
+var _gold: int = 0
 
 
 func _ready() -> void:
@@ -24,6 +25,7 @@ func _ready() -> void:
 	_player_hp = clampi(int(_config.get_value("player", "hp", _player_max_hp)), 0, _player_max_hp)
 	_player_attack = maxi(0, int(_config.get_value("player", "attack", _player_attack)))
 	_hero_name = str(_config.get_value("player", "hero_name", _hero_name))
+	_gold = maxi(0, int(_config.get_value("player", "gold", 0)))
 
 	for item_id in _config.get_section_keys("inventory"):
 		var quantity := int(_config.get_value("inventory", item_id, 0))
@@ -156,6 +158,38 @@ func get_item_count(item_id: String) -> int:
 ## Returns a copy so callers cannot mutate saved inventory without using this API.
 func get_inventory() -> Dictionary:
 	return _inventory.duplicate()
+
+
+
+## Currency is stored in the same save file as player progress and inventory.
+func get_gold() -> int:
+	return _gold
+
+
+func add_gold(amount: int) -> bool:
+	if amount <= 0:
+		return false
+	_gold += amount
+	return _save_gold()
+
+
+func spend_gold(amount: int) -> bool:
+	if amount <= 0 or _gold < amount:
+		return false
+	_gold -= amount
+	if not _save_gold():
+		_gold += amount
+		return false
+	return true
+
+
+func _save_gold() -> bool:
+	_config.set_value("player", "gold", _gold)
+	var result := _config.save(SAVE_PATH)
+	if result != OK:
+		push_error("SaveManager: could not save currency (error %d)." % result)
+		return false
+	return true
 
 
 func _save_inventory() -> bool:

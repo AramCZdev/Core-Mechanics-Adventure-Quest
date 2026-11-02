@@ -146,7 +146,7 @@ func buy_item(shop_id: String, item_id: String, quantity: int = 1) -> bool:
 
 	var unit_price := int(offers[normalized_item_id])
 	var total_price := unit_price * quantity
-	if not SaveManager.spend_gold(total_price):
+	if total_price > 0 and not SaveManager.spend_gold(total_price):
 		return false
 
 	if not SaveManager.add_item(normalized_item_id, quantity):

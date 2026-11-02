@@ -23,11 +23,7 @@ func is_player_in_range(player: CharacterBody2D) -> bool:
 func interact(player: CharacterBody2D) -> void:
 	if not is_player_in_range(player):
 		return
-	if SaveManager.claim_strength_crystal(
-		get_tree().current_scene.scene_file_path,
-		player.global_position,
-		float(player.get("speed"))
-	):
+	if SaveManager.claim_strength_crystal():
 		_crystal.modulate = Color(0.35, 0.35, 0.35, 1.0)
 		_prompt.text = "Stronger! +10 HP, +3 Attack"
 		var sfx := get_node_or_null("StrongSfx") as AudioStreamPlayer2D

@@ -13,33 +13,33 @@ shadow_size = 8
 shadow_offset = Vector2(0, 4.095)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7bfs"]
-bg_color = Color(0.62, 0.62, 0.62, 1)
+bg_color = Color(0.83, 0.76636666, 0.63909996, 1)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
-shadow_size = 8
-shadow_offset = Vector2(0, 4.095)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3taad"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
+border_color = Color(0.2901961, 0.16862746, 0.078431375, 1)
 shadow_size = 6
 shadow_offset = Vector2(0, 4.095)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_76dhe"]
-bg_color = Color(0.4, 0.4, 0.4, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3taad"]
+bg_color = Color(0.83, 0.74, 0.56, 1)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
-shadow_size = 8
+border_color = Color(0.2901961, 0.16862746, 0.078431375, 1)
+shadow_size = 6
+shadow_offset = Vector2(0, 4.095)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_50bnw"]
+bg_color = Color(0.83, 0.7912666, 0.7138, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.2901961, 0.16862746, 0.078431375, 1)
+shadow_size = 6
 shadow_offset = Vector2(0, 4.095)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7j863"]
@@ -64,5 +64,5 @@ Button/fonts/font = ExtResource("1_e7bfs")
 Button/styles/disabled = SubResource("StyleBoxFlat_r4o4u")
 Button/styles/hover = SubResource("StyleBoxFlat_e7bfs")
 Button/styles/normal = SubResource("StyleBoxFlat_3taad")
-Button/styles/pressed = SubResource("StyleBoxFlat_76dhe")
+Button/styles/pressed = SubResource("StyleBoxFlat_50bnw")
 Panel/styles/panel = SubResource("StyleBoxFlat_7j863")

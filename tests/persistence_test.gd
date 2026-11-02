@@ -73,18 +73,22 @@ func _test_strength_crystal() -> void:
 	_check(not _save.call("has_claimed_strength_crystal"), "strength crystal initially unclaimed")
 	var hp_before: Vector2i = _save.call("get_player_health", 40, 40)
 	var atk_before: int = _save.call("get_player_attack", 12)
-	_check(_save.call("claim_strength_crystal", "res://scenes/Gameplay/game_test_scene.tscn", Vector2(100, 100), 380.0), "claim strength crystal succeeds")
+	_check(_save.call("claim_strength_crystal"), "claim strength crystal succeeds")
 	_check(_save.call("has_claimed_strength_crystal"), "strength crystal marked as claimed")
-	_check(not _save.call("claim_strength_crystal", "res://scenes/Gameplay/game_test_scene.tscn", Vector2(100, 100), 380.0), "strength crystal cannot be claimed twice")
+	_check(not _save.call("claim_strength_crystal"), "strength crystal cannot be claimed twice")
+	_check(not _save.call("has_save"), "strength crystal does not save the game")
 	var hp_after: Vector2i = _save.call("get_player_health", 40, 40)
 	var atk_after: int = _save.call("get_player_attack", 12)
 	_check(hp_after.y == hp_before.y + 10, "strength crystal adds 10 max HP")
 	_check(atk_after == atk_before + 3, "strength crystal adds 3 attack")
 
-	# Persistence check across reload
+	# Save manually as a SavePoint would:
+	_save.call("save_player_state", "res://scenes/Gameplay/game_test_scene.tscn", Vector2(100, 100), 380.0)
+
+	# Persistence check across reload once saved at a save point
 	_save.call("set_save_path", TEST_SAVE_PATH)
 	await process_frame
-	_check(_save.call("has_claimed_strength_crystal"), "strength crystal status persists across reload")
+	_check(_save.call("has_claimed_strength_crystal"), "strength crystal status persists across reload once saved")
 
 
 func _test_battle_items() -> void:

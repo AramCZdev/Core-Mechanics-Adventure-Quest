@@ -115,7 +115,7 @@ func get_saved_player_speed(default_speed: float = 380.0) -> float:
 
 
 func get_player_health(default_hp: int, default_max_hp: int) -> Vector2i:
-	if not _has_save:
+	if not _has_save and _player_max_hp == DEFAULT_PLAYER_HP and _player_hp == DEFAULT_PLAYER_HP:
 		return Vector2i(default_hp, default_max_hp)
 	var max_hp := maxi(1, _player_max_hp)
 	return Vector2i(clampi(_player_hp, 0, max_hp), max_hp)
@@ -133,7 +133,9 @@ func set_player_health(current_hp: int, max_hp: int) -> void:
 
 
 func get_player_attack(default_attack: int) -> int:
-	return _player_attack if _has_save else default_attack
+	if not _has_save and _player_attack == DEFAULT_PLAYER_ATTACK:
+		return default_attack
+	return _player_attack
 
 
 func reward_battle_victory(current_hp: int, max_hp: int, attack: int) -> Vector3i:
@@ -292,7 +294,7 @@ func _is_valid_item_id(item_id: String) -> bool:
 	return true
 
 
-func claim_strength_crystal(scene_path: String, player_position: Vector2, player_speed: float) -> bool:
+func claim_strength_crystal(_scene_path: String = "", _player_position: Vector2 = Vector2.ZERO, _player_speed: float = 380.0) -> bool:
 	if bool(_config.get_value("upgrades", "strength_crystal_claimed", false)):
 		return false
 
@@ -300,7 +302,7 @@ func claim_strength_crystal(scene_path: String, player_position: Vector2, player
 	_player_hp = mini(_player_hp + 10, _player_max_hp)
 	_player_attack += 3
 	_config.set_value("upgrades", "strength_crystal_claimed", true)
-	return save_player_state(scene_path, player_position, player_speed)
+	return true
 
 
 func has_claimed_strength_crystal() -> bool:

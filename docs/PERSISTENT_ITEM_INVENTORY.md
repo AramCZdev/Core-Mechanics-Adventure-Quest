@@ -61,6 +61,33 @@ Purchases check the shop's offers, validate the item and quantity, deduct gold, 
 
 The reusable shop screen is `scenes/shop.tscn`, driven by `scripts/shop_ui.gd`. Instance it and set `shop_id` to `general_store` or `traveling_merchant`; call `open_shop(shop_id)` to show a different shop. The scene builds its offer list, displays the player's gold, handles purchases, and reports success or failure. NPC interaction and placing shopkeepers in the world remain game-specific integration work.
 
+
+### Creating your own shop
+
+Call `ShopManager.create_shop()` with a unique ID, display name, an item-to-price dictionary, and an optional description:
+
+```gdscript
+func _ready() -> void:
+    var created := ShopManager.create_shop(
+        "blacksmith",
+        "The Blacksmith",
+        {
+            "health_potion": 12,
+            "strength_potion": 90,
+            "defense_potion": 65
+        },
+        "Special supplies, at blacksmith prices."
+    )
+    if created:
+        $Shop.open_shop("blacksmith")
+```
+
+The item IDs must exist in `ItemDatabase`. Prices are whole numbers and can be zero (free), but cannot be negative. Creating a shop with an ID that already exists replaces that custom definition; a custom shop can also override a built-in shop ID. Custom shop definitions are held in memory, not saved, so register them again when the game starts.
+
+You can change an existing custom offer with `ShopManager.set_shop_price("blacksmith", "health_potion", 20)`, add or change an offer with `ShopManager.add_shop_offer("blacksmith", "greater_health_potion", 100)`, or remove one with `ShopManager.remove_shop_offer("blacksmith", "health_potion")`. These methods return `false` if the shop or item is invalid or the operation cannot be performed.
+
+After creating a shop, use the same reusable scene: `$Shop.open_shop("blacksmith")`. The shop UI automatically displays the custom name, description, offers, and prices, and purchases use those prices.
+
 ## Save behavior
 
 Inventory and currency are written to `user://savegame.cfg` immediately. Inventory-only data does not count as a gameplay progress save, so it will not make the main menu show Continue before a Save Point records a scene.

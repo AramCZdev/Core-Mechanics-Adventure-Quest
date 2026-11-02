@@ -23,6 +23,7 @@ config/icon="res://assets/icon.svg"
 DialogueManager="*res://scripts/dialogue/dialogue_manager.gd"
 AchievementManager="*uid://02cr0d27o1qy"
 SaveManager="*res://scripts/save_manager.gd"
+ShopManager="*res://scripts/shop_manager.gd"
 
 [gui]
 

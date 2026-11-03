@@ -13,6 +13,7 @@ extends CharacterBody2D
 
 var _facing_direction: String = "down"
 var _is_hurting: bool = false
+var _cutscene_locked: bool = false
 
 func _ready() -> void:
 	pause_menu.visible = false
@@ -31,6 +32,11 @@ func _ready() -> void:
 	$"CanvasLayer/StatsMenu/Content/Close".pressed.connect(_toggle_stats_menu)
 
 func _physics_process(_delta: float) -> void:
+	if _cutscene_locked:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
 	if stats_menu.visible:
 		velocity = Vector2.ZERO
 		_update_idle_animation()
@@ -54,7 +60,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _update_movement_animation(direction: Vector2) -> void:
-	if animated_sprite == null or _is_hurting:
+	if animated_sprite == null or _is_hurting or _cutscene_locked:
 		return
 
 	if direction == Vector2.ZERO:
@@ -78,7 +84,7 @@ func _update_movement_animation(direction: Vector2) -> void:
 
 
 func _update_idle_animation() -> void:
-	if animated_sprite == null or _is_hurting:
+	if animated_sprite == null or _is_hurting or _cutscene_locked:
 		return
 	var anim_name := "walk_" + _facing_direction
 	if animated_sprite.animation != anim_name:
@@ -95,6 +101,31 @@ func play_hurt(direction_override: String = "") -> void:
 		dir = "down"
 	_is_hurting = true
 	animated_sprite.play("hurt_" + dir)
+
+
+func begin_hurt_cutscene() -> void:
+	_cutscene_locked = true
+	_is_hurting = false
+	velocity = Vector2.ZERO
+	show_hurt_pose("down")
+
+
+func end_hurt_cutscene() -> void:
+	_cutscene_locked = false
+	_is_hurting = false
+	_update_idle_animation()
+
+
+func show_hurt_pose(direction: String = "down") -> void:
+	if animated_sprite == null:
+		return
+	var dir := direction if direction in ["up", "down", "left", "right"] else "down"
+	_facing_direction = dir
+	var anim_name := "hurt_" + dir
+	animated_sprite.play(anim_name)
+	animated_sprite.pause()
+	# The hurt animations end on the resting hurt frame (hurt/down/00.png for "down").
+	animated_sprite.frame = animated_sprite.sprite_frames.get_frame_count(anim_name) - 1
 
 
 func _on_animation_finished() -> void:

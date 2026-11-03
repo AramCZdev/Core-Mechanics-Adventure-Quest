@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://cxyrswowboqyg" path="res://scripts/scenes/game_test_scene.gd" id="1_e3u5y"]
 [ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="2_1b3v3"]
 [ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="3_0qg2c"]
-[ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/strength_crystal.tscn" id="5_strength"]
 [ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="3_1b3v3"]
 [ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="4_1b3v3"]
+[ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/strength_crystal.tscn" id="5_strength"]
 [ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/shop_npc.tscn" id="6_shop_npc"]
 [ext_resource type="PackedScene" path="res://scenes/shop.tscn" id="7_shop"]
 
@@ -33,22 +33,21 @@ color = Color(0.66999996, 1, 0.6755, 1)
 [node name="Player" parent="." unique_id=520382692 instance=ExtResource("2_1b3v3")]
 position = Vector2(614, 306)
 
-[node name="SavePoint" parent="." unique_id=1709967034 instance=ExtResource("3_0qg2c") groups=["interactable"]]
+[node name="SavePoint" parent="." unique_id=1709967034 groups=["interactable"] instance=ExtResource("3_0qg2c")]
 position = Vector2(614, 160)
 
-[node name="StrengthCrystal" parent="." instance=ExtResource("5_strength")]
+[node name="StrengthCrystal" parent="." unique_id=279653140 instance=ExtResource("5_strength")]
 position = Vector2(820, 220)
 
-[node name="ShopNpc" parent="." instance=ExtResource("6_shop_npc") groups=["interactable"]]
+[node name="ShopNpc" parent="." unique_id=1506998129 groups=["interactable"] instance=ExtResource("6_shop_npc")]
 position = Vector2(430, 390)
-shop_id = "general_store"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1101014396]
 
 [node name="DialogueBox" parent="CanvasLayer" unique_id=1386658949 instance=ExtResource("3_1b3v3")]
 visible = false
 
-[node name="Shop" parent="CanvasLayer" instance=ExtResource("7_shop")]
+[node name="Shop" parent="CanvasLayer" unique_id=1009184980 instance=ExtResource("7_shop")]
 visible = false
 
 [node name="BattleUI" parent="CanvasLayer" unique_id=2069685685 instance=ExtResource("4_1b3v3")]
@@ -82,6 +81,6 @@ offset_bottom = 28.0
 color = Color(1, 0, 0, 1)
 metadata/_edit_use_anchors_ = true
 
+[connection signal="shop_requested" from="ShopNpc" to="." method="_on_shop_requested"]
 [connection signal="body_entered" from="dialogue" to="." method="_on_dialogue_body_entered"]
 [connection signal="body_entered" from="enemy" to="." method="_on_enemy_body_entered"]
-[connection signal="shop_requested" from="ShopNpc" to="." method="_on_shop_requested"]

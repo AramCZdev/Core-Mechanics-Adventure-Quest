@@ -82,7 +82,7 @@ anchor_bottom = 0.5
 offset_left = -197.5
 offset_top = -190.875
 offset_right = 197.5
-offset_bottom = 190.875
+offset_bottom = 91.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
@@ -101,13 +101,6 @@ size_flags_vertical = 3
 theme = ExtResource("1_5mbse")
 theme_override_font_sizes/font_size = 41
 text = "Settings"
-
-[node name="Achievements" type="Button" parent="MainMenuOptions" unique_id=1854912389]
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("1_5mbse")
-theme_override_font_sizes/font_size = 41
-text = "Achievements"
 
 [node name="Credits" type="Button" parent="MainMenuOptions" unique_id=1136674547]
 layout_mode = 2
@@ -204,5 +197,4 @@ text = "Cancel"
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=678279912]
 libraries/ = SubResource("AnimationLibrary_3vvtq")
 
-[connection signal="pressed" from="MainMenuOptions/Achievements" to="." method="_on_achievements_pressed"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

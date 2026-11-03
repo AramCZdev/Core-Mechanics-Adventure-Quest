@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://uvwm4w0l60n1"]
 
 [ext_resource type="Script" uid="uid://cws2gruj836l0" path="res://scripts/player scripts/player.gd" id="1_kgyvy"]
+[ext_resource type="SpriteFrames" path="res://assets/free-8-direction-hero-adventurer/adventurer_sprite_frames.tres" id="2_frames"]
 [ext_resource type="Theme" uid="uid://b3d0wtk288b5d" path="res://default_theme.tres" id="2_sjy77"]
 [ext_resource type="Texture2D" uid="uid://dp1gv5q55ljmr" path="res://assets/Textures/UI/Resume.png" id="3_wadm0"]
 [ext_resource type="Texture2D" uid="uid://c2qn3bvuv2j5k" path="res://assets/Textures/UI/Menu.png" id="4_tcfe6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_76dhe"]
-size = Vector2(61, 61)
+size = Vector2(34, 61)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7bfs"]
 bg_color = Color(0.83137256, 0.7411765, 0.56078434, 1)
@@ -90,13 +91,14 @@ z_index = 10
 script = ExtResource("1_kgyvy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1429948505]
+position = Vector2(-3, 0)
 shape = SubResource("RectangleShape2D_76dhe")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=830805370]
-offset_left = -31.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 31.0
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1366074330]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("2_frames")
+animation = &"walk_down"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2100815544]
 

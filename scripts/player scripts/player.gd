@@ -9,12 +9,21 @@ extends CharacterBody2D
 @onready var stats_attack_label: Label = $"CanvasLayer/StatsMenu/Content/Attack"
 @onready var stats_gold_label: Label = $"CanvasLayer/StatsMenu/Content/Gold"
 @onready var stats_potions_label: Label = $"CanvasLayer/StatsMenu/Content/Potions"
+@onready var animated_sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
+
+var _facing_direction: String = "down"
+var _is_hurting: bool = false
 
 func _ready() -> void:
 	pause_menu.visible = false
 	stats_menu.visible = false
 	get_tree().paused = false
-	if SaveManager.has_save() and SaveManager.get_saved_scene_path() == get_tree().current_scene.scene_file_path:
+	if animated_sprite != null:
+		animated_sprite.animation = "walk_down"
+		animated_sprite.stop()
+		animated_sprite.frame = 0
+		animated_sprite.animation_finished.connect(_on_animation_finished)
+	if SaveManager.has_save() and get_tree().current_scene != null and SaveManager.get_saved_scene_path() == get_tree().current_scene.scene_file_path:
 		global_position = SaveManager.get_saved_player_position()
 		speed = SaveManager.get_saved_player_speed(speed)
 	$"CanvasLayer/PauseMenu/Resume".pressed.connect(_on_resume_pressed)
@@ -24,17 +33,74 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if stats_menu.visible:
 		velocity = Vector2.ZERO
+		_update_idle_animation()
+		return
+
+	if _is_hurting:
+		velocity = Vector2.ZERO
+		move_and_slide()
 		return
 
 	var direction := Input.get_vector(
 		"move_left",
 		"move_right",
 		"move_up",
-        "move_down"
+		"move_down"
 	)
 
 	velocity = direction * speed
 	move_and_slide()
+	_update_movement_animation(direction)
+
+
+func _update_movement_animation(direction: Vector2) -> void:
+	if animated_sprite == null or _is_hurting:
+		return
+
+	if direction == Vector2.ZERO:
+		_update_idle_animation()
+		return
+
+	if absf(direction.x) > absf(direction.y):
+		if direction.x > 0.0:
+			_facing_direction = "right"
+		else:
+			_facing_direction = "left"
+	else:
+		if direction.y > 0.0:
+			_facing_direction = "down"
+		else:
+			_facing_direction = "up"
+
+	var anim_name := "walk_" + _facing_direction
+	if animated_sprite.animation != anim_name or not animated_sprite.is_playing():
+		animated_sprite.play(anim_name)
+
+
+func _update_idle_animation() -> void:
+	if animated_sprite == null or _is_hurting:
+		return
+	var anim_name := "walk_" + _facing_direction
+	if animated_sprite.animation != anim_name:
+		animated_sprite.animation = anim_name
+	animated_sprite.stop()
+	animated_sprite.frame = 0
+
+
+func play_hurt(direction_override: String = "") -> void:
+	if animated_sprite == null:
+		return
+	var dir := direction_override if not direction_override.is_empty() else _facing_direction
+	if not dir in ["up", "down", "left", "right"]:
+		dir = "down"
+	_is_hurting = true
+	animated_sprite.play("hurt_" + dir)
+
+
+func _on_animation_finished() -> void:
+	if animated_sprite != null and animated_sprite.animation.begins_with("hurt_"):
+		_is_hurting = false
+		_update_idle_animation()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_CTRL:

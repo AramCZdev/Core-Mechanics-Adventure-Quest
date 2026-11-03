@@ -1,0 +1,18 @@
+FREE 8-DIRECTION HERO - ADVENTURER - LICENSE
+Copyright (c) 2026 RetroLabStudioCo (furkan90x.itch.io)
+
+You may:
+  * use these assets in personal and commercial projects (games, apps, videos,
+    streams, prototypes, game jams), with no royalties;
+  * modify, recolour, crop, animate or otherwise edit them for your project.
+
+Credit ("Art by RetroLabStudioCo") is appreciated but not required.
+
+You may not:
+  * resell, sublicense or redistribute the assets as-is or modified as assets
+    (for example in another asset pack, sprite library or marketplace listing);
+  * use the assets, in whole or in part, to train, fine-tune or evaluate AI /
+    machine-learning models, or include them in datasets for that purpose;
+  * claim the original artwork as your own.
+
+THE ASSETS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.

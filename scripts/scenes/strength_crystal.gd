@@ -1,8 +1,10 @@
 extends Area2D
 ## One-time upgrade that permanently increases the player's battle stats.
 
+const USED_TEXTURE: Texture2D = preload("res://assets/Textures/Gameplay/Objects/StrengthCrystalUsed.png")
+
 @onready var _prompt: Label = $Prompt
-@onready var _crystal: ColorRect = $Crystal
+@onready var crystal: Sprite2D = $Crystal
 
 var _player_in_range: CharacterBody2D
 
@@ -12,7 +14,7 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	if SaveManager.has_claimed_strength_crystal():
-		_crystal.modulate = Color(0.35, 0.35, 0.35, 1.0)
+		crystal.texture = USED_TEXTURE
 	_prompt.hide()
 
 
@@ -24,7 +26,7 @@ func interact(player: CharacterBody2D) -> void:
 	if not is_player_in_range(player):
 		return
 	if SaveManager.claim_strength_crystal():
-		_crystal.modulate = Color(0.35, 0.35, 0.35, 1.0)
+		crystal.texture = USED_TEXTURE
 		_prompt.text = "Stronger! +10 HP, +3 Attack"
 		var sfx := get_node_or_null("StrongSfx") as AudioStreamPlayer2D
 		if sfx != null:

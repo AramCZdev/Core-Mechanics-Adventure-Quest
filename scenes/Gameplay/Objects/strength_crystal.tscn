@@ -1,25 +1,25 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b07fuw8kgs2rg"]
 
-[ext_resource type="Script" path="res://scripts/scenes/strength_crystal.gd" id="1_strength"]
+[ext_resource type="Script" uid="uid://co0ddgirmrbuf" path="res://scripts/scenes/strength_crystal.gd" id="1_strength"]
+[ext_resource type="Texture2D" uid="uid://dc7l75afm02mo" path="res://assets/Textures/Gameplay/Objects/StrengthCrystal.png" id="2_3x3wn"]
 [ext_resource type="AudioStream" uid="uid://caseepgrsqlgq" path="res://assets/Sound Effects/Stronger.wav" id="2_strong"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_strength"]
-size = Vector2(54, 54)
+size = Vector2(16, 53)
 
-[node name="StrengthCrystal" type="Area2D" groups=["interactable"]]
+[node name="StrengthCrystal" type="Area2D" unique_id=1989369830 groups=["interactable"]]
 script = ExtResource("1_strength")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=332240739]
+position = Vector2(0, 2.5)
 shape = SubResource("RectangleShape2D_strength")
 
-[node name="Crystal" type="ColorRect" parent="."]
-offset_left = -20.0
-offset_top = -30.0
-offset_right = 20.0
-offset_bottom = 30.0
-color = Color(1, 0.72, 0.18, 1)
+[node name="Crystal" type="Sprite2D" parent="." unique_id=1554034018]
+position = Vector2(5.9604645e-08, -1.4901161e-08)
+scale = Vector2(0.515625, 0.46604565)
+texture = ExtResource("2_3x3wn")
 
-[node name="Prompt" type="Label" parent="."]
+[node name="Prompt" type="Label" parent="." unique_id=27596413]
 offset_left = -125.0
 offset_top = -72.0
 offset_right = 125.0
@@ -28,5 +28,5 @@ theme_override_colors/font_color = Color(0.16, 0.1, 0.02, 1)
 theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 
-[node name="StrongSfx" type="AudioStreamPlayer2D" parent="."]
+[node name="StrongSfx" type="AudioStreamPlayer2D" parent="." unique_id=1033109096]
 stream = ExtResource("2_strong")

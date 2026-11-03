@@ -4,7 +4,7 @@ extends BattleEnemy
 ## The player's first three turns are restricted to Attack, Defend, then Talk.
 ## Talking on the third turn wins the battle.
 
-const DUMMY_TEXTURE := preload("res://assets/Textures/Gameplay/Objects/beach.svg")
+const DUMMY_TEXTURE := preload("res://assets/Textures/Gameplay/Objects/dummy.svg")
 
 
 func _init() -> void:

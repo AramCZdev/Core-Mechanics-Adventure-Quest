@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bgmmdefeqqtjd" path="res://scripts/scenes/save_point.gd" id="1_cvoq4"]
 [ext_resource type="AudioStream" uid="uid://badlrvr0i5b8s" path="res://assets/Sound Effects/Saved.wav" id="2_jjubo"]
+[ext_resource type="Texture2D" uid="uid://bn1urh5rjwble" path="res://assets/Textures/Gameplay/Objects/Disk.png" id="3_vi6ah"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gfvsb"]
 size = Vector2(54, 54)
@@ -12,12 +13,15 @@ script = ExtResource("1_cvoq4")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=912049168]
 shape = SubResource("RectangleShape2D_gfvsb")
 
-[node name="Marker" type="ColorRect" parent="." unique_id=639801059]
-offset_left = -25.0
-offset_top = -25.0
-offset_right = 25.0
-offset_bottom = 25.0
-color = Color(0.31, 0.74, 1, 1)
+[node name="Texture" type="Node2D" parent="." unique_id=64073579]
+
+[node name="TextureRect" type="TextureRect" parent="Texture" unique_id=741420338]
+offset_left = -27.0
+offset_top = -27.0
+offset_right = 27.0
+offset_bottom = 27.0
+texture = ExtResource("3_vi6ah")
+expand_mode = 1
 
 [node name="Prompt" type="Label" parent="." unique_id=744217402]
 offset_left = -100.0

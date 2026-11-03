@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://56us4mojoove"
-path="res://.godot/imported/beach.svg-f1194f54428bd7e488a2c6509706bc98.ctex"
+uid="uid://dc7l75afm02mo"
+path="res://.godot/imported/StrengthCrystal.png-61258e2c67aeca321fcfd442718c1063.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Textures/Gameplay/Objects/beach.svg"
-dest_files=["res://.godot/imported/beach.svg-f1194f54428bd7e488a2c6509706bc98.ctex"]
+source_file="res://assets/Textures/Gameplay/Objects/StrengthCrystal.png"
+dest_files=["res://.godot/imported/StrengthCrystal.png-61258e2c67aeca321fcfd442718c1063.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

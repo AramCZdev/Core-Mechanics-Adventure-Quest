@@ -2,6 +2,7 @@ extends Area2D
 ## Interactable checkpoint that writes the current player's saved state.
 
 @onready var _prompt: Label = $Prompt
+@onready var texture: Node2D = $Texture
 
 var _player_in_range: CharacterBody2D
 
@@ -33,6 +34,9 @@ func save_player(player: CharacterBody2D) -> void:
 	var save_sfx := get_node_or_null("SaveSfx") as AudioStreamPlayer2D
 	if save_sfx != null:
 		save_sfx.play()
+	texture.rotate(90)
+	await get_tree().create_timer(0.5).timeout
+	texture.rotate(-90)
 	await get_tree().create_timer(1.5).timeout
 	if is_instance_valid(_player_in_range):
 		_prompt.text = "Press E to save"

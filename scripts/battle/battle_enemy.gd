@@ -43,8 +43,14 @@ class_name BattleEnemy
 ## empty. Leave empty for the default "A <name> blocks your path!".
 @export_multiline var intro_text: String = ""
 
-## Optional artwork shown above the battle UI. Leave empty to show the
-## placeholder label instead.
+## Optional artwork shown above the battle UI. Leave empty to show no artwork.
 @export var texture: Texture2D
 
 @export_multiline var description: String = ""
+
+@export_group("Turn restrictions")
+## Optional action allowed on each player turn, in order. Use BattleManager
+## action names: "attack", "defend", "item", "talk". An empty list allows every
+## action. The last entry repeats if the battle runs longer than the list.
+## Example: ["attack", "defend", "talk"].
+@export var turn_action_restrictions: PackedStringArray = PackedStringArray()

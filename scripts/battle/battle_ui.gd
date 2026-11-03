@@ -34,7 +34,6 @@ signal battle_exited(victory: bool)
 
 @onready var _manager: BattleManager = get_node_or_null(battle_manager_path) as BattleManager
 @onready var _enemy_texture: TextureRect = %EnemyTexture
-@onready var _enemy_placeholder: Label = %EnemyPlaceholder
 @onready var _enemy_name_label: Label = %EnemyNameLabel
 @onready var _enemy_hp_bar: ProgressBar = %EnemyHPBar
 @onready var _enemy_hp_label: Label = %EnemyHPLabel
@@ -167,8 +166,6 @@ func _on_battle_started(started_enemy: BattleEnemy) -> void:
 	_enemy_name_label.text = started_enemy.display_name
 	_enemy_texture.texture = started_enemy.texture
 	_enemy_texture.visible = started_enemy.texture != null
-	_enemy_placeholder.text = started_enemy.display_name.to_upper()
-	_enemy_placeholder.visible = started_enemy.texture == null
 	_enemy_hp_bar.max_value = started_enemy.max_hp
 	_enemy_hp_bar.value = started_enemy.max_hp
 	_battle_over_panel.hide()
@@ -176,7 +173,7 @@ func _on_battle_started(started_enemy: BattleEnemy) -> void:
 	_actions.show()
 	_hide_timing_bars()
 	_refresh_actions()
-	_attack_button.call_deferred("grab_focus")
+	_focus_first_allowed_action()
 	battle_started.emit(started_enemy)
 
 
@@ -220,7 +217,7 @@ func _on_phase_changed(new_phase: int) -> void:
 		_hide_item_menu()
 	_refresh_actions()
 	if new_phase == BattleManager.Phase.PLAYER_TURN and not _battle_over_panel.visible:
-		_attack_button.call_deferred("grab_focus")
+		_focus_first_allowed_action()
 
 
 func _on_input_locked_changed(_locked: bool) -> void:
@@ -333,12 +330,16 @@ func _refresh_actions() -> void:
 		return
 
 	var locked: bool = _manager.is_input_locked()
-	_attack_button.disabled = locked
-	_defend_button.disabled = locked
-	_talk_button.disabled = locked
+	var allowed: PackedStringArray = _manager.get_allowed_actions()
+	var restricted: bool = not allowed.is_empty()
+	_attack_button.disabled = locked or (restricted and not allowed.has(BattleManager.ACTION_ATTACK))
+	_defend_button.disabled = locked or (restricted and not allowed.has(BattleManager.ACTION_DEFEND))
+	_talk_button.disabled = locked or (restricted and not allowed.has(BattleManager.ACTION_TALK))
 	_item_button.visible = items_enabled
 	_items_label.visible = items_enabled
-	_item_button.disabled = locked or not items_enabled or _manager.items <= 0
+	_item_button.disabled = locked or not items_enabled or _manager.items <= 0 or (
+		restricted and not allowed.has(BattleManager.ACTION_ITEM)
+	)
 	_item_button.text = "Item (%d)" % _manager.items
 
 
@@ -472,10 +473,9 @@ func _move_focus(direction: Vector2i) -> void:
 		_item_buttons[item_index].grab_focus()
 		return
 
-	var buttons: Array[Button] = [_attack_button, _defend_button]
-	if items_enabled:
-		buttons.append(_item_button)
-	buttons.append(_talk_button)
+	var buttons := _action_buttons()
+	if buttons.is_empty():
+		return
 
 	var focus_owner := get_viewport().gui_get_focus_owner()
 	var index := buttons.find(focus_owner)
@@ -486,6 +486,20 @@ func _move_focus(direction: Vector2i) -> void:
 		index = clampi(index + direction.x, 0, buttons.size() - 1)
 
 	buttons[index].grab_focus()
+
+
+func _action_buttons() -> Array[Button]:
+	var buttons: Array[Button] = []
+	for button in [_attack_button, _defend_button, _item_button, _talk_button]:
+		if button.visible and not button.disabled:
+			buttons.append(button)
+	return buttons
+
+
+func _focus_first_allowed_action() -> void:
+	var buttons := _action_buttons()
+	if not buttons.is_empty():
+		buttons[0].call_deferred("grab_focus")
 
 
 func _phase_text(current_phase: int) -> String:

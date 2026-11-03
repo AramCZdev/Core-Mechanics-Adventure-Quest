@@ -166,6 +166,10 @@ func select_action(action: String) -> bool:
 	if not _battle_active or phase != Phase.PLAYER_TURN:
 		return false
 
+	if not is_action_allowed(action):
+		message_changed.emit(_action_restriction_message())
+		return false
+
 	match action:
 		ACTION_ATTACK:
 			action_selected.emit(ACTION_ATTACK)
@@ -273,6 +277,26 @@ func submit_block(zone: String, reduction: float) -> bool:
 
 func is_input_locked() -> bool:
 	return not _battle_active or phase != Phase.PLAYER_TURN
+
+
+## Returns the actions allowed on the current player turn. An empty result
+## means every action is allowed.
+func get_allowed_actions() -> PackedStringArray:
+	if enemy == null or enemy.turn_action_restrictions.is_empty() or turn_number <= 0:
+		return PackedStringArray()
+
+	var index := mini(turn_number - 1, enemy.turn_action_restrictions.size() - 1)
+	var action := enemy.turn_action_restrictions[index].strip_edges().to_lower()
+	if action.is_empty():
+		return PackedStringArray()
+	return PackedStringArray([action])
+
+
+func is_action_allowed(action: String) -> bool:
+	var allowed := get_allowed_actions()
+	if allowed.is_empty():
+		return true
+	return action.to_lower() in allowed
 
 
 func is_battle_active() -> bool:
@@ -522,6 +546,23 @@ func _player_turn_message() -> String:
 		return "A %s blocks your path!" % enemy.display_name
 
 	return "Your turn. Choose an action."
+
+
+func _action_restriction_message() -> String:
+	var allowed := get_allowed_actions()
+	if allowed.is_empty():
+		return "You cannot do that right now."
+	match allowed[0]:
+		ACTION_ATTACK:
+			return "You can only Attack this turn."
+		ACTION_DEFEND:
+			return "You can only Defend this turn."
+		ACTION_ITEM:
+			return "You can only use an Item this turn."
+		ACTION_TALK:
+			return "You can only Talk this turn."
+		_:
+			return "You cannot do that right now."
 
 
 func _end_battle(victory: bool, custom_message: String = "") -> void:

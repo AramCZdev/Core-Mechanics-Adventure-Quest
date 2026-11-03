@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c2qn3bvuv2j5k"
-path="res://.godot/imported/Menu.png-03e2d8738285339e9277635b68ae8f81.ctex"
+path.s3tc="res://.godot/imported/Menu.png-03e2d8738285339e9277635b68ae8f81.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/Textures/UI/Menu.png"
-dest_files=["res://.godot/imported/Menu.png-03e2d8738285339e9277635b68ae8f81.ctex"]
+dest_files=["res://.godot/imported/Menu.png-03e2d8738285339e9277635b68ae8f81.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

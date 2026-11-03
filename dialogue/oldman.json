@@ -1,0 +1,40 @@
+{
+	"start_node": "oldman_intro",
+	"nodes": {
+		"oldman_intro": {
+			"speaker": "Old Man",
+			"portrait": "",
+			"text": "Kid are you okay?",
+			"next": "okay?",
+			"typing_speed": 40.0
+		},
+		"okay?": {
+			"speaker": "Old Man",
+			"portrait": "",
+			"text": "What's your name anyway?",
+			"choices": [
+				{
+					"text": "[[name]]",
+					"next": "name_said"
+				}
+			]
+		},
+		"name_said": {
+			"speaker": "Old Man",
+			"portrait": "",
+			"text": "[[name]]. That's a nice name",
+			"next": "training_start"
+		},
+		"training_start": {
+			"speaker": "Old Man",
+			"portrait": "",
+			"text": "To get out you need to be trained to survive emergencies.",
+			"next": "training_start2"
+		},
+		"training_start2": {
+			"speaker": "Old Man",
+			"portrait": "",
+			"text": "I have a training dummmy here. You can try fighting it"
+		}
+	}
+}

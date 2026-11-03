@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://uvwm4w0l60n1"]
 
 [ext_resource type="Script" uid="uid://cws2gruj836l0" path="res://scripts/player scripts/player.gd" id="1_kgyvy"]
-[ext_resource type="SpriteFrames" uid="uid://dydas6obhih4e" path="res://assets/free-8-direction-hero-adventurer/adventurer_sprite_frames.tres" id="2_frames"]
+[ext_resource type="SpriteFrames" uid="uid://dydas6obhih4e" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/adventurer_sprite_frames.tres" id="2_frames"]
 [ext_resource type="Theme" uid="uid://b3d0wtk288b5d" path="res://default_theme.tres" id="2_sjy77"]
 [ext_resource type="Texture2D" uid="uid://dp1gv5q55ljmr" path="res://assets/Textures/UI/Resume.png" id="3_wadm0"]
 [ext_resource type="Texture2D" uid="uid://c2qn3bvuv2j5k" path="res://assets/Textures/UI/Menu.png" id="4_tcfe6"]

@@ -4,6 +4,83 @@
 [ext_resource type="Script" uid="uid://b5ju542kmvt0b" path="res://scripts/the_beach.gd" id="1_v8vts"]
 [ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="2_bym0n"]
 [ext_resource type="Texture2D" uid="uid://bmv8xo7ysbp7y" path="res://assets/Textures/Emotions/Huh.png" id="3_bym0n"]
+[ext_resource type="Texture2D" uid="uid://dwvoulu47kxy7" path="res://assets/Free Asset Packs/old_man/48x48.png" id="4_oldman"]
+[ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="6_es2dl"]
+[ext_resource type="PackedScene" path="res://scenes/shop.tscn" id="7_extdt"]
+[ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="8_4c3sh"]
+[ext_resource type="Texture2D" uid="uid://56us4mojoove" path="res://assets/Textures/Gameplay/Objects/beach.svg" id="9_extdt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_0"]
+atlas = ExtResource("4_oldman")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_1"]
+atlas = ExtResource("4_oldman")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_2"]
+atlas = ExtResource("4_oldman")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_3"]
+atlas = ExtResource("4_oldman")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_0"]
+atlas = ExtResource("4_oldman")
+region = Rect2(48, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_1"]
+atlas = ExtResource("4_oldman")
+region = Rect2(96, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_2"]
+atlas = ExtResource("4_oldman")
+region = Rect2(144, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_3"]
+atlas = ExtResource("4_oldman")
+region = Rect2(192, 48, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d03v7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_3")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_3")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jkn65"]
+size = Vector2(54, 73)
 
 [sub_resource type="Animation" id="Animation_s14xq"]
 length = 0.001
@@ -34,7 +111,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Tut:position")
+tracks/2/path = NodePath("Old Man:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -46,7 +123,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Tut/Huh:visible")
+tracks/3/path = NodePath("Old Man/Huh:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -86,19 +163,19 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Tut:position")
+tracks/2/path = NodePath("Old Man:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.96666664, 1.69, 2.1333334, 2.5333333),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(302, -22), Vector2(901, 501), Vector2(901, 501), Vector2(1008, 691), Vector2(834, 418)]
+"values": [Vector2(302, -22), Vector2(901, 501), Vector2(901, 501), Vector2(1028.12, 691), Vector2(834, 418)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Tut/Huh:visible")
+tracks/3/path = NodePath("Old Man/Huh:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -114,40 +191,87 @@ _data = {
 &"start": SubResource("Animation_bym0n")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d03v7"]
+size = Vector2(4362, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i5d2y"]
+size = Vector2(51, 86)
+
 [node name="TheBeach" type="Node2D" unique_id=1717501666]
 script = ExtResource("1_v8vts")
 
 [node name="Beach" type="Sprite2D" parent="." unique_id=909242022]
-z_index = 3
 position = Vector2(211, -289.00003)
 scale = Vector2(5.109375, 5.109375)
 texture = ExtResource("1_s14xq")
 
 [node name="ColorRect" type="ColorRect" parent="Beach" unique_id=109560455]
 z_index = -1
-offset_left = -653.50464
-offset_top = -361.10092
-offset_right = 735.31494
-offset_bottom = 364.30582
+offset_left = -612.7951
+offset_top = -331.93884
+offset_right = 776.0245
+offset_bottom = 393.4679
 color = Color(0.23137255, 0.3137255, 0.80784315, 1)
 
 [node name="Player" parent="." unique_id=520382692 instance=ExtResource("2_bym0n")]
 position = Vector2(1085, 764)
 rotation = -0.12391838
 
-[node name="Tut" type="ColorRect" parent="." unique_id=1626114850]
+[node name="Old Man" type="Node2D" parent="." unique_id=1626114850]
 z_index = 10
-offset_left = 302.0
-offset_top = -22.0
-offset_right = 357.99683
-offset_bottom = 34.000347
-color = Color(1, 0.81, 0.81, 1)
+position = Vector2(302, -22)
 
-[node name="Huh" type="Sprite2D" parent="Tut" unique_id=993759154]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Old Man" unique_id=1936777142]
+position = Vector2(11.374985, 54.625008)
+scale = Vector2(1.6093748, 1.6093748)
+sprite_frames = SubResource("SpriteFrames_d03v7")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Huh" type="Sprite2D" parent="Old Man" unique_id=993759154]
 visible = false
-position = Vector2(28, -40)
+position = Vector2(13, -21)
 scale = Vector2(1.1875, 1.1875)
 texture = ExtResource("3_bym0n")
 
+[node name="StaticBody2D" type="StaticBody2D" parent="Old Man" unique_id=1152713621]
+position = Vector2(13, 63)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Old Man/StaticBody2D" unique_id=669466631]
+position = Vector2(-4, -6.5)
+shape = SubResource("RectangleShape2D_jkn65")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1273117155]
 libraries/ = SubResource("AnimationLibrary_v8vts")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=175727743]
+
+[node name="DialogueBox" parent="CanvasLayer" unique_id=1662593204 instance=ExtResource("6_es2dl")]
+visible = false
+
+[node name="Shop" parent="CanvasLayer" unique_id=901593202 instance=ExtResource("7_extdt")]
+visible = false
+
+[node name="BattleUI" parent="CanvasLayer" unique_id=203286054 instance=ExtResource("8_4c3sh")]
+visible = false
+auto_start = false
+
+[node name="Barrier" type="StaticBody2D" parent="." unique_id=1587384537]
+position = Vector2(537, 227)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Barrier" unique_id=925584786]
+position = Vector2(-119, 0)
+shape = SubResource("RectangleShape2D_d03v7")
+
+[node name="Dummy" type="Area2D" parent="." unique_id=425602140]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Dummy" unique_id=1543209047]
+position = Vector2(1071.5, 438)
+shape = SubResource("RectangleShape2D_i5d2y")
+
+[node name="Sprite2D" type="Sprite2D" parent="Dummy" unique_id=469835335]
+position = Vector2(1070.5, 437.5)
+scale = Vector2(1.359375, 1.359375)
+texture = ExtResource("9_extdt")
+
+[connection signal="body_entered" from="Dummy" to="." method="_on_dummy_body_entered"]

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3 uid="uid://dhxmxmulo04k3"]
+
+[ext_resource type="Script" uid="uid://dk4wyjcmu5766" path="res://battle/enemies/dummy/dummy_enemy.gd" id="1_enemy"]
+
+[resource]
+script = ExtResource("1_enemy")
+attack_damage = 0
+talk_lines = null
+turn_lines = null
+turn_action_restrictions = null

@@ -160,7 +160,8 @@ func _enter_node(node_id: String) -> void:
         )
         return
 
-    var node_data: Dictionary = node_value
+    var node_data: Dictionary = node_value.duplicate(true)
+    _resolve_node_placeholders(node_data)
     var choice_result := _build_choices(node_data, node_id)
     if not choice_result["ok"]:
         _fail_and_end(str(choice_result["error"]))
@@ -203,7 +204,7 @@ func _build_choices(node_data: Dictionary, node_id: String) -> Dictionary:
             }
 
         var choice: Dictionary = raw_choice
-        var choice_text := str(choice.get("text", ""))
+        var choice_text := _resolve_placeholders(str(choice.get("text", "")))
         if choice_text.strip_edges().is_empty():
             return {
                 "ok": false,
@@ -303,6 +304,30 @@ func _resolve_dialogue_path(path: String) -> String:
     if cleaned.get_extension().is_empty():
         cleaned += ".json"
     return DEFAULT_DIALOGUE_DIRECTORY.path_join(cleaned)
+
+
+func _resolve_node_placeholders(node_data: Dictionary) -> void:
+    for key in ["text", "speaker"]:
+        if not node_data.has(key):
+            continue
+        var value: Variant = node_data[key]
+        if typeof(value) == TYPE_STRING or typeof(value) == TYPE_STRING_NAME:
+            node_data[key] = _resolve_placeholders(String(value))
+
+
+func _resolve_placeholders(text: String) -> String:
+    if not text.contains("[[name]]"):
+        return text
+    return text.replace("[[name]]", _get_hero_name())
+
+
+func _get_hero_name() -> String:
+    var save_manager := get_node_or_null("/root/SaveManager")
+    if save_manager != null and save_manager.has_method("get_hero_name"):
+        var hero_name := str(save_manager.call("get_hero_name")).strip_edges()
+        if not hero_name.is_empty():
+            return hero_name
+    return "Hero"
 
 
 func _node_id_from(value: Variant) -> String:

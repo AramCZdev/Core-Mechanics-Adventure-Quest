@@ -1,0 +1,221 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dydas6obhih4e"]
+
+[ext_resource type="Texture2D" uid="uid://bbi76m3ebunjn" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/down/00.png" id="1_2vb5j"]
+[ext_resource type="Texture2D" uid="uid://dw8lvwvnyvp8g" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/down/01.png" id="2_8b066"]
+[ext_resource type="Texture2D" uid="uid://bxlu3i3dty2ey" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/down/02.png" id="3_fn8dg"]
+[ext_resource type="Texture2D" uid="uid://qxtl2pc1scj5" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/left/00.png" id="4_fpjo3"]
+[ext_resource type="Texture2D" uid="uid://qdb884y8a4rx" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/left/01.png" id="5_nrfpm"]
+[ext_resource type="Texture2D" uid="uid://dk5s6jp2gyb87" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/left/02.png" id="6_evtce"]
+[ext_resource type="Texture2D" uid="uid://cigvrubbwqj2e" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/right/00.png" id="7_po5wn"]
+[ext_resource type="Texture2D" uid="uid://bhts3k8jhiys6" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/right/01.png" id="8_tsp3u"]
+[ext_resource type="Texture2D" uid="uid://b5aiieoljui2g" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/right/02.png" id="9_s2gw8"]
+[ext_resource type="Texture2D" uid="uid://dyqxqocgiuepp" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/up/00.png" id="10_46efw"]
+[ext_resource type="Texture2D" uid="uid://b4mtdyq0vpvmy" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/up/01.png" id="11_mhgt2"]
+[ext_resource type="Texture2D" uid="uid://cy4s11n5576kc" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/hurt/up/02.png" id="12_h4otb"]
+[ext_resource type="Texture2D" uid="uid://dr1ibjjce0t5u" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/down/00.png" id="13_2lvxi"]
+[ext_resource type="Texture2D" uid="uid://c0yyjpfoknn26" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/down/01.png" id="14_0anxy"]
+[ext_resource type="Texture2D" uid="uid://d0tovfg24rl6l" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/down/02.png" id="15_x1maf"]
+[ext_resource type="Texture2D" uid="uid://cb7sp3temj4kh" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/down/03.png" id="16_7vlxw"]
+[ext_resource type="Texture2D" uid="uid://bcqkoufqy66fk" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/down/04.png" id="17_cgnc3"]
+[ext_resource type="Texture2D" uid="uid://fn8raajcowod" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/down/05.png" id="18_cokjh"]
+[ext_resource type="Texture2D" uid="uid://ci604ur5r5cqi" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/down/06.png" id="19_qqa1e"]
+[ext_resource type="Texture2D" uid="uid://cmobqb5y7hffm" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/down/07.png" id="20_58wuh"]
+[ext_resource type="Texture2D" uid="uid://bnck0prgdwdg" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/left/00.png" id="21_qwtfc"]
+[ext_resource type="Texture2D" uid="uid://bbo6133wp3xi5" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/left/01.png" id="22_apcae"]
+[ext_resource type="Texture2D" uid="uid://dchpe13k02q5p" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/left/02.png" id="23_nvo17"]
+[ext_resource type="Texture2D" uid="uid://dci00xni1yrmr" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/left/03.png" id="24_x3uoa"]
+[ext_resource type="Texture2D" uid="uid://r7u3dum6ub7t" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/left/04.png" id="25_3uobm"]
+[ext_resource type="Texture2D" uid="uid://blx17udb7ymnw" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/left/05.png" id="26_uw5qa"]
+[ext_resource type="Texture2D" uid="uid://dlloq6e62412b" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/left/06.png" id="27_4fbkw"]
+[ext_resource type="Texture2D" uid="uid://d1nwnlpap5h8l" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/left/07.png" id="28_fvhy3"]
+[ext_resource type="Texture2D" uid="uid://cf61tfmtomi31" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/right/00.png" id="29_w1n16"]
+[ext_resource type="Texture2D" uid="uid://c6cuqkycb60jf" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/right/01.png" id="30_ca423"]
+[ext_resource type="Texture2D" uid="uid://dr4xiuw2sv0ar" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/right/02.png" id="31_wev0q"]
+[ext_resource type="Texture2D" uid="uid://ddp2sk0kbsuau" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/right/03.png" id="32_6uds6"]
+[ext_resource type="Texture2D" uid="uid://devxx2qxlfokr" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/right/04.png" id="33_6j0hd"]
+[ext_resource type="Texture2D" uid="uid://n4qkw5l2ramd" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/right/05.png" id="34_onron"]
+[ext_resource type="Texture2D" uid="uid://dsmi8gnr6an4t" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/right/06.png" id="35_cfkhg"]
+[ext_resource type="Texture2D" uid="uid://bmtp5g742l4vq" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/right/07.png" id="36_b4oad"]
+[ext_resource type="Texture2D" uid="uid://cxh8fm8sqib47" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/00.png" id="37_8t88s"]
+[ext_resource type="Texture2D" uid="uid://ws08eqbp6uab" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/01.png" id="38_l6d3u"]
+[ext_resource type="Texture2D" uid="uid://dc6j2vek02qv0" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/02.png" id="39_mx4cc"]
+[ext_resource type="Texture2D" uid="uid://dr1vajrbwm3jw" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/03.png" id="40_n32dj"]
+[ext_resource type="Texture2D" uid="uid://bdy4cscty60gg" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/04.png" id="41_l7tvq"]
+[ext_resource type="Texture2D" uid="uid://cdu56f1w4sp4s" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/05.png" id="42_7roph"]
+[ext_resource type="Texture2D" uid="uid://c8dyn63e23d25" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/06.png" id="43_2ql8m"]
+[ext_resource type="Texture2D" uid="uid://c053hbkes3c2k" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/07.png" id="44_1h8t5"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_fn8dg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_8b066")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_2vb5j")
+}],
+"loop": 0,
+"name": &"hurt_down",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_fpjo3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_nrfpm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_evtce")
+}],
+"loop": 0,
+"name": &"hurt_left",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_po5wn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_tsp3u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_s2gw8")
+}],
+"loop": 0,
+"name": &"hurt_right",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_46efw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_mhgt2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_h4otb")
+}],
+"loop": 0,
+"name": &"hurt_up",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_2lvxi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_0anxy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_x1maf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_7vlxw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_cgnc3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_cokjh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_qqa1e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_58wuh")
+}],
+"loop": 1,
+"name": &"walk_down",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_qwtfc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_apcae")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_nvo17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_x3uoa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_3uobm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_uw5qa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_4fbkw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_fvhy3")
+}],
+"loop": 1,
+"name": &"walk_left",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_w1n16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ca423")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_wev0q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_6uds6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_6j0hd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_onron")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_cfkhg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_b4oad")
+}],
+"loop": 1,
+"name": &"walk_right",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_8t88s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_l6d3u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_mx4cc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_n32dj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_l7tvq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_7roph")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_2ql8m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_1h8t5")
+}],
+"loop": 1,
+"name": &"walk_up",
+"speed": 10.0
+}]

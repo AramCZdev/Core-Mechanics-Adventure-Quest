@@ -31,6 +31,7 @@ func save_player(player: CharacterBody2D) -> void:
 	)
 	_prompt.text = "Game saved!" if saved else "Save failed"
 	var save_sfx := get_node_or_null("SaveSfx") as AudioStreamPlayer2D
+	AchievementManager.unlockachievement("save")
 	if save_sfx != null:
 		save_sfx.play()
 	await get_tree().create_timer(1.5).timeout

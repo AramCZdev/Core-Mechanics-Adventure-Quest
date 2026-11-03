@@ -139,8 +139,8 @@ rotation = -0.12391838
 z_index = 10
 offset_left = 302.0
 offset_top = -22.0
-offset_right = 357.99738
-offset_bottom = 34.000244
+offset_right = 357.99683
+offset_bottom = 34.000347
 color = Color(1, 0.81, 0.81, 1)
 
 [node name="Huh" type="Sprite2D" parent="Tut" unique_id=993759154]

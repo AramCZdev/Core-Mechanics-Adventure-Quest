@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/strength_crystal.tscn" id="5_strength"]
 [ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/shop_npc.tscn" id="6_shop_npc"]
 [ext_resource type="PackedScene" path="res://scenes/shop.tscn" id="7_shop"]
-[ext_resource type="PackedScene" uid="uid://cp0fwly3o2eqh" path="res://addons/SimpleAchievement/ui/AchievementPopup.tscn" id="9_7s2eo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gfvsb"]
 size = Vector2(54, 54)
@@ -55,8 +54,6 @@ visible = false
 visible = false
 auto_start = false
 items_enabled = true
-
-[node name="AchievementPopup" parent="CanvasLayer" unique_id=1716209527 instance=ExtResource("9_7s2eo")]
 
 [node name="dialogue" type="Area2D" parent="." unique_id=352898752]
 position = Vector2(451, 201)

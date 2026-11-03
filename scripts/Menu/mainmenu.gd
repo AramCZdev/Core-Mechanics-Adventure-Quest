@@ -71,7 +71,6 @@ func _start_new_game(hero_name: String) -> void:
 
 
 func _on_reset_pressed() -> void:
-	AchievementManager.reset()
 	if SaveManager.delete_save():
 		_refresh_save_buttons()
 

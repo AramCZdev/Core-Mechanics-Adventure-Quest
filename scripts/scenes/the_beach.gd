@@ -8,17 +8,23 @@ const DUMMY_ENEMY: BattleEnemy = preload("res://battle/enemies/dummy/dummy.tres"
 @onready var old_man_sprite: AnimatedSprite2D = $"Old Man/AnimatedSprite2D"
 @onready var battle_ui: BattleUI = $CanvasLayer/BattleUI
 @onready var dummy: Area2D = $Dummy
+@onready var barrier_collision: CollisionShape2D = $"Barrier/CollisionShape2D"
 
 var _old_man_last_position: Vector2
 var _dummy_battle_started: bool = false
 var _dummy_battle_completed: bool = false
 
 func _ready() -> void:
+	_dummy_battle_completed = SaveManager.has_defeated_dummy_boss()
+	if _dummy_battle_completed:
+		dummy.queue_free()
+		barrier_collision.disabled = true
 	_old_man_last_position = old_man.global_position
-	player.begin_hurt_cutscene()
-	animation_player.animation_finished.connect(_on_animation_finished)
-	battle_ui.battle_finished.connect(_on_battle_finished)
-	animation_player.play("start")
+	if not _dummy_battle_completed:
+		player.begin_hurt_cutscene()
+		animation_player.animation_finished.connect(_on_animation_finished)
+		battle_ui.battle_finished.connect(_on_battle_finished)
+		animation_player.play("start")
 
 
 func _process(_delta: float) -> void:
@@ -49,8 +55,9 @@ func _on_dummy_body_entered(body: Node2D) -> void:
 
 func _on_battle_finished(victory: bool) -> void:
 	if victory and not _dummy_battle_completed:
-		dummy.queue_free()
-		$"Barrier/CollisionShape2D".disabled = true
 		_dummy_battle_completed = true
+		SaveManager.mark_dummy_boss_defeated()
+		dummy.queue_free()
+		barrier_collision.disabled = true
 	else:
 		_dummy_battle_started = false

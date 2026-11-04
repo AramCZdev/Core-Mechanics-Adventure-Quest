@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bjf1411bdcbyx"]
 
+[ext_resource type="Script" uid="uid://dhhvqyyfthe8r" path="res://scripts/scenes/the_beach.gd" id="1_4c3sh"]
 [ext_resource type="Texture2D" uid="uid://7u1ju5km1my5" path="res://assets/Textures/Gameplay/beach.svg" id="1_s14xq"]
-[ext_resource type="Script" uid="uid://b5ju542kmvt0b" path="res://scripts/the_beach.gd" id="1_v8vts"]
 [ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="2_bym0n"]
 [ext_resource type="Texture2D" uid="uid://bmv8xo7ysbp7y" path="res://assets/Textures/Emotions/Huh.png" id="3_bym0n"]
 [ext_resource type="Texture2D" uid="uid://dwvoulu47kxy7" path="res://assets/Free Asset Packs/old_man/48x48.png" id="4_oldman"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/shop.tscn" id="7_extdt"]
 [ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="8_4c3sh"]
 [ext_resource type="Texture2D" uid="uid://bit30xw6yckr" path="res://assets/Textures/Gameplay/Objects/dummy.svg" id="9_4c3sh"]
+[ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="10_4c3sh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle_0"]
 atlas = ExtResource("4_oldman")
@@ -201,7 +202,7 @@ size = Vector2(51, 86)
 size = Vector2(572.25, 40.875)
 
 [node name="TheBeach" type="Node2D" unique_id=1717501666]
-script = ExtResource("1_v8vts")
+script = ExtResource("1_4c3sh")
 
 [node name="Beach" type="Sprite2D" parent="." unique_id=909242022]
 position = Vector2(211, -289.00003)
@@ -288,6 +289,9 @@ polygon = PackedVector2Array(2827, 1019, -2405, 1019, -2405, -1597, -688.25, -15
 [node name="NorthEdge" type="CollisionShape2D" parent="Water" unique_id=338642064]
 position = Vector2(-402.125, -1617.4375)
 shape = SubResource("RectangleShape2D_shoretop")
+
+[node name="SavePoint" parent="." unique_id=1709967034 groups=["interactable"] instance=ExtResource("10_4c3sh")]
+position = Vector2(428, -51)
 
 [connection signal="body_entered" from="Dummy" to="." method="_on_dummy_body_entered"]
 

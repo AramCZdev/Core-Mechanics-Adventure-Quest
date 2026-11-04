@@ -309,6 +309,17 @@ func has_claimed_strength_crystal() -> bool:
 	return bool(_config.get_value("upgrades", "strength_crystal_claimed", false))
 
 
+## Marks the beach tutorial dummy as defeated and writes it immediately so the
+## result survives continuing from a save or reloading the room.
+func mark_dummy_boss_defeated() -> void:
+	_config.set_value("progress", "dummy_boss_defeated", true)
+	_save_config()
+
+
+func has_defeated_dummy_boss() -> bool:
+	return bool(_config.get_value("progress", "dummy_boss_defeated", false))
+
+
 func save_player_state(scene_path: String, player_position: Vector2, player_speed: float = 380.0) -> bool:
 	if scene_path.is_empty():
 		return false

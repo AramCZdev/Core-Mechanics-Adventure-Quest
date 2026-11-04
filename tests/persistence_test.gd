@@ -33,6 +33,7 @@ func _initialize() -> void:
 	_test_purchase()
 	await _test_persistence()
 	await _test_strength_crystal()
+	await _test_dummy_boss_progress()
 	await _test_battle_items()
 	_test_delete_resets_economy()
 
@@ -91,6 +92,17 @@ func _test_strength_crystal() -> void:
 	_check(_save.call("has_claimed_strength_crystal"), "strength crystal status persists across reload once saved")
 
 
+func _test_dummy_boss_progress() -> void:
+	_check(not _save.call("has_defeated_dummy_boss"), "dummy boss initially undefeated")
+	_save.call("mark_dummy_boss_defeated")
+	_check(_save.call("has_defeated_dummy_boss"), "dummy boss marked defeated")
+
+	# The flag must survive a reload without needing another manual save.
+	_save.call("set_save_path", TEST_SAVE_PATH)
+	await process_frame
+	_check(_save.call("has_defeated_dummy_boss"), "dummy boss status persists across reload")
+
+
 func _test_battle_items() -> void:
 	var manager: BattleManager = load("res://scripts/battle/battle_manager.gd").new()
 	manager.name = "BattleManager"
@@ -141,6 +153,7 @@ func _test_delete_resets_economy() -> void:
 	_check(_save.call("get_gold") == EXPECTED_STARTING_GOLD, "delete resets gold")
 	_check(_save.call("get_inventory").is_empty(), "delete clears inventory")
 	_check(not _save.call("has_claimed_strength_crystal"), "delete resets strength crystal")
+	_check(not _save.call("has_defeated_dummy_boss"), "delete resets dummy boss progress")
 	_check(not _save.call("has_save"), "delete clears Continue state")
 
 

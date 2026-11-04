@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_SCENE := "res://scenes/Gameplay/game_test_scene.tscn"
+const GAME_SCENE := "res://scenes/Gameplay/Rooms/TheBeach.tscn"
 
 @onready var _main_options: VBoxContainer = $MainMenuOptions
 @onready var _play_options: VBoxContainer = $PlayOptions
@@ -9,8 +9,11 @@ const GAME_SCENE := "res://scenes/Gameplay/game_test_scene.tscn"
 @onready var _hero_name_panel: VBoxContainer = $HeroNamePanel
 @onready var _hero_name_input: LineEdit = $HeroNamePanel/HeroNameInput
 
+var saved_id: int = SaveManager.LOCATION_NONE
+
 
 func _ready() -> void:
+	_refresh_saved_location()
 	_main_options.show()
 	_play_options.hide()
 	_hero_name_panel.hide()
@@ -22,11 +25,6 @@ func _ready() -> void:
 	$HeroNamePanel/Cancel.pressed.connect(_on_name_cancel_pressed)
 	_hero_name_input.text_submitted.connect(_on_name_submitted)
 	_refresh_save_buttons()
-
-
-
-func _on_achievements_pressed() -> void:
-	get_tree().change_scene_to_file("res://addons/SimpleAchievement/ui/AchievementViewer.tscn")
 
 
 func _on_play_pressed() -> void:
@@ -73,6 +71,13 @@ func _start_new_game(hero_name: String) -> void:
 func _on_reset_pressed() -> void:
 	if SaveManager.delete_save():
 		_refresh_save_buttons()
+		_refresh_saved_location()
+
+
+func _refresh_saved_location() -> void:
+	# Re-read on every menu load so the location survives quitting the game.
+	saved_id = SaveManager.get_saved_location_id()
+	$Beach.visible = saved_id == SaveManager.LOCATION_BEACH
 
 
 func _on_back_pressed() -> void:

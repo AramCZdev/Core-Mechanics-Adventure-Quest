@@ -9,6 +9,34 @@ const STARTING_ITEMS := {"health_potion": 2}
 const DEFAULT_PLAYER_HP := 40
 const DEFAULT_PLAYER_ATTACK := 12
 
+# Location IDs. 0 means the run has not started or the room is unknown.
+const LOCATION_NONE := 0
+const LOCATION_BEACH := 1
+const LOCATION_FOREST := 2
+const LOCATION_CASTLE := 3
+const LOCATION_END := 4
+
+const LOCATION_NAMES := {
+	LOCATION_NONE: "Not Started",
+	LOCATION_BEACH: "The Beach",
+	LOCATION_FOREST: "Forest",
+	LOCATION_CASTLE: "Castle",
+	LOCATION_END: "The End",
+}
+
+# Scene filenames are normalized by removing digits, spaces, underscores, and
+# hyphens before lookup. So TheBeach, The_Beach, and TheBeach2 all match here.
+const LOCATION_SCENE_ALIASES := {
+	"beach": LOCATION_BEACH,
+	"thebeach": LOCATION_BEACH,
+	"forest": LOCATION_FOREST,
+	"theforest": LOCATION_FOREST,
+	"castle": LOCATION_CASTLE,
+	"thecastle": LOCATION_CASTLE,
+	"end": LOCATION_END,
+	"theend": LOCATION_END,
+}
+
 signal inventory_changed(inventory: Dictionary)
 signal gold_changed(gold: int)
 
@@ -23,10 +51,26 @@ var _player_attack: int = DEFAULT_PLAYER_ATTACK
 var _hero_name := "Hero"
 var _inventory: Dictionary = {}
 var _gold: int = STARTING_GOLD
+var _last_tracked_scene_path := ""
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_load()
+
+
+func _process(_delta: float) -> void:
+	if not is_inside_tree():
+		return
+
+	var current_scene := get_tree().current_scene
+	if current_scene == null or current_scene.scene_file_path.is_empty():
+		return
+	if current_scene.scene_file_path == _last_tracked_scene_path:
+		return
+
+	_last_tracked_scene_path = current_scene.scene_file_path
+	set_location_from_scene(_last_tracked_scene_path)
 
 
 ## Switches to a different save file and reloads it immediately.
@@ -102,6 +146,95 @@ func get_saved_scene_path() -> String:
 	return str(_config.get_value("progress", "scene_path", ""))
 
 
+## Returns the location ID for a scene path/name. Digits are ignored, so
+## "TheBeach2.tscn" and "1_TheBeach.tscn" still resolve to The Beach (1).
+func location_id_from_scene(scene_path: String) -> int:
+	var key := _scene_name_key(scene_path)
+	return int(LOCATION_SCENE_ALIASES.get(key, LOCATION_NONE))
+
+
+## Converts a scene filename into a readable location name.
+## "TheBeach.tscn" -> "The Beach", "TheBeach2.tscn" -> "The Beach".
+func location_name_from_scene(scene_path: String) -> String:
+	var location_id := location_id_from_scene(scene_path)
+	if location_id != LOCATION_NONE and LOCATION_NAMES.has(location_id):
+		return str(LOCATION_NAMES[location_id])
+	if scene_path.strip_edges().is_empty():
+		return location_name_for_id(LOCATION_NONE)
+	return _scene_display_name(scene_path)
+
+
+func location_name_for_id(location_id: int) -> String:
+	return str(LOCATION_NAMES.get(location_id, "Unknown"))
+
+
+## Records the last visited location immediately so it survives quitting.
+## Unknown scenes (menus, test rooms) are ignored so they cannot overwrite the
+## last real location. This does not change the location stored by a save point.
+func set_location_from_scene(scene_path: String) -> void:
+	var location_id := location_id_from_scene(scene_path)
+	if location_id == LOCATION_NONE:
+		return
+
+	_config.set_value("progress", "last_location_id", location_id)
+	_config.set_value("progress", "last_location_name", location_name_from_scene(scene_path))
+	_save_config()
+
+
+## Location of the currently loaded scene. Returns 0 before gameplay starts or
+## when the scene is not one of the known locations.
+func get_current_location_id() -> int:
+	if not is_inside_tree() or get_tree().current_scene == null:
+		return LOCATION_NONE
+	return location_id_from_scene(get_tree().current_scene.scene_file_path)
+
+
+func get_current_location_name() -> String:
+	if not is_inside_tree() or get_tree().current_scene == null:
+		return location_name_for_id(LOCATION_NONE)
+	return location_name_from_scene(get_tree().current_scene.scene_file_path)
+
+
+## Location stored by the last save point. If no save exists yet, falls back to
+## the last visited location so the main menu still remembers where you were.
+func get_saved_location_id() -> int:
+	if _has_save:
+		if _config.has_section_key("progress", "saved_location_id"):
+			return int(_config.get_value("progress", "saved_location_id", LOCATION_NONE))
+		# Backward compatibility: older saves only stored the scene path.
+		return location_id_from_scene(get_saved_scene_path())
+	return get_last_location_id()
+
+
+func get_saved_location_name() -> String:
+	if _has_save:
+		if _config.has_section_key("progress", "saved_location_name"):
+			return str(_config.get_value("progress", "saved_location_name", ""))
+		return location_name_from_scene(get_saved_scene_path())
+	return get_last_location_name()
+
+
+## Last location the player visited, even if they have not saved there.
+func get_last_location_id() -> int:
+	if _config.has_section_key("progress", "last_location_id"):
+		return int(_config.get_value("progress", "last_location_id", LOCATION_NONE))
+	# Backward compatibility with the previous auto-tracking field.
+	return int(_config.get_value("progress", "location_id", LOCATION_NONE))
+
+
+func get_last_location_name() -> String:
+	if _config.has_section_key("progress", "last_location_name"):
+		return str(_config.get_value("progress", "last_location_name", ""))
+	var location_id := get_last_location_id()
+	if location_id != LOCATION_NONE:
+		return location_name_for_id(location_id)
+	# Backward compatibility with the previous auto-tracking field.
+	var stored_name := str(_config.get_value("progress", "location_name", ""))
+	if not stored_name.is_empty():
+		return stored_name
+	return location_name_for_id(LOCATION_NONE)
+
+
 func get_saved_player_position() -> Vector2:
 	if not _has_save:
 		return Vector2.ZERO
@@ -112,6 +245,18 @@ func get_saved_player_speed(default_speed: float = 380.0) -> float:
 	if not _has_save:
 		return default_speed
 	return float(_config.get_value("progress", "player_speed", default_speed))
+
+
+func get_saved_player_rotation(default_rotation: float = 0.0) -> float:
+	if not _has_save:
+		return default_rotation
+	return float(_config.get_value("progress", "player_rotation", default_rotation))
+
+
+func get_saved_sprite_rotation(default_rotation: float = 0.0) -> float:
+	if not _has_save:
+		return default_rotation
+	return float(_config.get_value("progress", "sprite_rotation", default_rotation))
 
 
 func get_player_health(default_hp: int, default_max_hp: int) -> Vector2i:
@@ -277,6 +422,25 @@ func _reset_state() -> void:
 	_gold = STARTING_GOLD
 
 
+func _scene_name_key(scene_path: String) -> String:
+	var base := _strip_digits(scene_path.get_file().get_basename())
+	return base.to_lower().replace("_", "").replace("-", "").replace(" ", "")
+
+
+func _scene_display_name(scene_path: String) -> String:
+	var base := _strip_digits(scene_path.get_file().get_basename())
+	return base.replace("-", " ").capitalize()
+
+
+func _strip_digits(value: String) -> String:
+	var result := ""
+	for character in value:
+		var code := character.unicode_at(0)
+		if code < 48 or code > 57:
+			result += character
+	return result
+
+
 func _sanitize_hero_name(hero_name: String) -> String:
 	var sanitized := hero_name.strip_edges().left(20)
 	return sanitized if not sanitized.is_empty() else "Hero"
@@ -320,13 +484,28 @@ func has_defeated_dummy_boss() -> bool:
 	return bool(_config.get_value("progress", "dummy_boss_defeated", false))
 
 
-func save_player_state(scene_path: String, player_position: Vector2, player_speed: float = 380.0) -> bool:
+func save_player_state(
+	scene_path: String,
+	player_position: Vector2,
+	player_speed: float = 380.0,
+	player_rotation: float = 0.0,
+	sprite_rotation: float = 0.0
+) -> bool:
 	if scene_path.is_empty():
 		return false
 
+	var saved_location_id := location_id_from_scene(scene_path)
+	var saved_location_name := location_name_from_scene(scene_path)
 	_config.set_value("progress", "scene_path", scene_path)
+	_config.set_value("progress", "saved_location_id", saved_location_id)
+	_config.set_value("progress", "saved_location_name", saved_location_name)
+	# Saving here also makes this the last visited location.
+	_config.set_value("progress", "last_location_id", saved_location_id)
+	_config.set_value("progress", "last_location_name", saved_location_name)
 	_config.set_value("progress", "player_position", player_position)
 	_config.set_value("progress", "player_speed", player_speed)
+	_config.set_value("progress", "player_rotation", player_rotation)
+	_config.set_value("progress", "sprite_rotation", sprite_rotation)
 	_config.set_value("player", "hp", _player_hp)
 	_config.set_value("player", "max_hp", _player_max_hp)
 	_config.set_value("player", "attack", _player_attack)

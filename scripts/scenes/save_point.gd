@@ -25,10 +25,14 @@ func save_player(player: CharacterBody2D) -> void:
 	if not is_player_in_range(player):
 		return
 
+	var sprite := player.get_node_or_null("AnimatedSprite2D") as Node2D
+	var sprite_rotation := sprite.rotation if sprite != null else 0.0
 	var saved := SaveManager.save_player_state(
 		get_tree().current_scene.scene_file_path,
 		player.global_position,
-		float(player.get("speed"))
+		float(player.get("speed")),
+		player.rotation,
+		sprite_rotation
 	)
 	_prompt.text = "Game saved!" if saved else "Save failed"
 	var save_sfx := get_node_or_null("SaveSfx") as AudioStreamPlayer2D

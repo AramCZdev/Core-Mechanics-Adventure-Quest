@@ -30,12 +30,16 @@ func _initialize() -> void:
 	await process_frame
 
 	_test_starting_economy()
+	_test_location_lookup()
 	_test_purchase()
 	await _test_persistence()
 	await _test_strength_crystal()
+	await _test_saved_location()
+	await _test_saved_rotation()
 	await _test_dummy_boss_progress()
 	await _test_battle_items()
 	_test_delete_resets_economy()
+	await _test_location_persists_without_save()
 
 	_remove_test_save()
 	_save.call("set_save_path", REAL_SAVE_PATH)
@@ -53,6 +57,23 @@ func _test_starting_economy() -> void:
 	_check(_save.call("get_gold") == EXPECTED_STARTING_GOLD, "new save starts with gold")
 	_check(_save.call("get_inventory").is_empty(), "new save starts with an empty inventory")
 	_check(not _save.call("has_save"), "new save does not offer Continue")
+	_check(_save.call("get_saved_location_id") == 0, "no saved location before a save")
+	_check(_save.call("get_saved_location_name") == "Not Started", "unsaved location name is Not Started")
+	_check(is_zero_approx(float(_save.call("get_saved_player_rotation"))), "no player rotation before a save")
+	_check(is_zero_approx(float(_save.call("get_saved_sprite_rotation"))), "no sprite rotation before a save")
+
+
+func _test_location_lookup() -> void:
+	_check(_save.call("location_id_from_scene", "res://scenes/Gameplay/Rooms/TheBeach.tscn") == 1, "TheBeach maps to location 1")
+	_check(_save.call("location_id_from_scene", "res://scenes/Gameplay/Rooms/TheBeach2.tscn") == 1, "trailing digits are ignored")
+	_check(_save.call("location_id_from_scene", "res://scenes/Gameplay/Rooms/1_TheBeach.tscn") == 1, "leading digits are ignored")
+	_check(_save.call("location_id_from_scene", "res://scenes/Gameplay/Rooms/Forest.tscn") == 2, "Forest maps to location 2")
+	_check(_save.call("location_id_from_scene", "res://scenes/Gameplay/Rooms/Castle.tscn") == 3, "Castle maps to location 3")
+	_check(_save.call("location_id_from_scene", "res://scenes/Gameplay/Rooms/TheEnd.tscn") == 4, "TheEnd maps to location 4")
+	_check(_save.call("location_name_from_scene", "res://scenes/Gameplay/Rooms/TheBeach.tscn") == "The Beach", "TheBeach becomes The Beach")
+	_check(_save.call("location_name_from_scene", "res://scenes/Gameplay/Rooms/TheBeach2.tscn") == "The Beach", "location name ignores digits")
+	_check(_save.call("location_name_from_scene", "res://scenes/Gameplay/Rooms/TheEnd.tscn") == "The End", "TheEnd becomes The End")
+	_check(_save.call("location_name_from_scene", "res://scenes/Gameplay/Rooms/SecretCave2.tscn") == "Secret Cave", "unknown names are humanized and digits ignored")
 
 
 func _test_purchase() -> void:
@@ -90,6 +111,35 @@ func _test_strength_crystal() -> void:
 	_save.call("set_save_path", TEST_SAVE_PATH)
 	await process_frame
 	_check(_save.call("has_claimed_strength_crystal"), "strength crystal status persists across reload once saved")
+
+
+func _test_saved_location() -> void:
+	_save.call("save_player_state", "res://scenes/Gameplay/Rooms/TheBeach.tscn", Vector2(100, 100), 380.0)
+	_check(_save.call("get_saved_location_id") == 1, "save point records The Beach location")
+	_check(_save.call("get_saved_location_name") == "The Beach", "save point records The Beach name")
+
+	_save.call("set_save_path", TEST_SAVE_PATH)
+	await process_frame
+	_check(_save.call("get_saved_location_id") == 1, "saved location persists across reload")
+	_check(_save.call("get_saved_location_name") == "The Beach", "saved location name persists across reload")
+
+	# Walking into another room must not change where the save file points.
+	_save.call("set_location_from_scene", "res://scenes/Gameplay/Rooms/Forest.tscn")
+	_check(_save.call("get_saved_location_id") == 1, "saved location stays The Beach after visiting Forest")
+	_check(_save.call("get_saved_location_name") == "The Beach", "saved location name stays The Beach")
+	_check(_save.call("get_last_location_id") == 2, "last visited location is Forest")
+	_check(_save.call("get_last_location_name") == "Forest", "last visited location name is Forest")
+
+
+func _test_saved_rotation() -> void:
+	_save.call("save_player_state", "res://scenes/Gameplay/Rooms/Castle.tscn", Vector2(64, 32), 380.0, 0.75, -0.4)
+	_check(is_equal_approx(float(_save.call("get_saved_player_rotation")), 0.75), "save point records player rotation")
+	_check(is_equal_approx(float(_save.call("get_saved_sprite_rotation")), -0.4), "save point records sprite rotation")
+
+	_save.call("set_save_path", TEST_SAVE_PATH)
+	await process_frame
+	_check(is_equal_approx(float(_save.call("get_saved_player_rotation")), 0.75), "player rotation persists across reload")
+	_check(is_equal_approx(float(_save.call("get_saved_sprite_rotation")), -0.4), "sprite rotation persists across reload")
 
 
 func _test_dummy_boss_progress() -> void:
@@ -154,7 +204,29 @@ func _test_delete_resets_economy() -> void:
 	_check(_save.call("get_inventory").is_empty(), "delete clears inventory")
 	_check(not _save.call("has_claimed_strength_crystal"), "delete resets strength crystal")
 	_check(not _save.call("has_defeated_dummy_boss"), "delete resets dummy boss progress")
+	_check(_save.call("get_saved_location_id") == 0, "delete resets saved location")
+	_check(_save.call("get_last_location_id") == 0, "delete resets last location")
 	_check(not _save.call("has_save"), "delete clears Continue state")
+
+
+func _test_location_persists_without_save() -> void:
+	_save.call("set_location_from_scene", "res://scenes/Gameplay/Rooms/TheBeach.tscn")
+	_check(_save.call("get_saved_location_id") == 1, "location is recorded immediately")
+	_check(_save.call("get_saved_location_name") == "The Beach", "location name is recorded immediately")
+	_check(not _save.call("has_save"), "recording location does not create a resumable save")
+
+	# Simulate quitting and launching the game again.
+	_save.call("set_save_path", TEST_SAVE_PATH)
+	await process_frame
+	_check(_save.call("get_saved_location_id") == 1, "location survives quitting without a save point")
+	_check(_save.call("get_saved_location_name") == "The Beach", "location name survives quitting without a save point")
+	_check(not _save.call("has_save"), "location-only progress still has no Continue")
+
+	# Menus and unknown rooms must not overwrite the last real location.
+	_save.call("set_location_from_scene", "res://scenes/mainmenu.tscn")
+	_check(_save.call("get_saved_location_id") == 1, "unknown scenes do not overwrite the location")
+
+	_check(_save.call("delete_save"), "location test cleanup deletes save")
 
 
 func _remove_test_save() -> void:

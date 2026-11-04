@@ -27,6 +27,9 @@ func _ready() -> void:
 	if SaveManager.has_save() and get_tree().current_scene != null and SaveManager.get_saved_scene_path() == get_tree().current_scene.scene_file_path:
 		global_position = SaveManager.get_saved_player_position()
 		speed = SaveManager.get_saved_player_speed(speed)
+		rotation = SaveManager.get_saved_player_rotation(rotation)
+		if animated_sprite != null:
+			animated_sprite.rotation = SaveManager.get_saved_sprite_rotation(animated_sprite.rotation)
 	$"CanvasLayer/PauseMenu/Resume".pressed.connect(_on_resume_pressed)
 	$"CanvasLayer/PauseMenu/Menu".pressed.connect(_on_menu_pressed)
 	$"CanvasLayer/StatsMenu/Content/Close".pressed.connect(_toggle_stats_menu)

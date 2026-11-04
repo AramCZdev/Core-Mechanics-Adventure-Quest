@@ -197,17 +197,8 @@ size = Vector2(4362, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5d2y"]
 size = Vector2(51, 86)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_38c1d"]
-size = Vector2(6681, 1244)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_fdkjl"]
-size = Vector2(601, 1502.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_extdt"]
-size = Vector2(4285.75, 666.625)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4c3sh"]
-size = Vector2(960.5, 2981.25)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shoretop"]
+size = Vector2(572.25, 40.875)
 
 [node name="TheBeach" type="Node2D" unique_id=1717501666]
 script = ExtResource("1_v8vts")
@@ -228,6 +219,9 @@ color = Color(0.23137255, 0.3137255, 0.80784315, 1)
 [node name="Player" parent="." unique_id=520382692 instance=ExtResource("2_bym0n")]
 position = Vector2(1085, 764)
 rotation = -0.12391838
+
+[node name="Camera2D" parent="Player" index="2" unique_id=2100815544]
+limit_top = -1597
 
 [node name="Old Man" type="Node2D" parent="." unique_id=1626114850]
 z_index = 10
@@ -288,24 +282,13 @@ texture = ExtResource("9_4c3sh")
 
 [node name="Water" type="StaticBody2D" parent="." unique_id=1101501403]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Water" unique_id=1987610891]
-position = Vector2(861.5, 1212)
-shape = SubResource("RectangleShape2D_38c1d")
+[node name="Shoreline" type="CollisionPolygon2D" parent="Water" unique_id=1987610891]
+polygon = PackedVector2Array(2827, 1019, -2405, 1019, -2405, -1597, -688.25, -1597, -688.25, -1351.75, -770, -1351.75, -770, -1310.875, -1056.125, -1310.875, -1056.125, -1270, -2159.75, -1270, -2159.75, -1229.125, -2200.625, -1229.125, -2200.625, -1106.5, -2241.5, -1106.5, -2241.5, -738.625, -2200.625, -738.625, -2200.625, -656.875, -2159.75, -656.875, -2159.75, -616, -2118.875, -616, -2118.875, -575.125, -2078, -575.125, -2078, -534.25, -2037.125, -534.25, -2037.125, -493.375, -1996.25, -493.375, -1996.25, -452.5, -1955.375, -452.5, -1955.375, -411.625, -1914.5, -411.625, -1914.5, -329.875, -1873.625, -329.875, -1873.625, -248.125, -1832.75, -248.125, -1832.75, -166.375, -1791.875, -166.375, -1791.875, -84.625, -1751, -84.625, -1751, -43.75, -1710.125, -43.75, -1710.125, 38, -1669.25, 38, -1669.25, 119.75, -1628.375, 119.75, -1628.375, 160.625, -1587.5, 160.625, -1587.5, 201.5, -1546.625, 201.5, -1546.625, 283.25, -1505.75, 283.25, -1505.75, 324.125, -1464.875, 324.125, -1464.875, 365, -1424, 365, -1424, 405.875, -1383.125, 405.875, -1383.125, 446.75, -1342.25, 446.75, -1342.25, 487.625, -1301.375, 487.625, -1301.375, 528.5, -1219.625, 528.5, -1219.625, 569.375, -1097, 569.375, -1097, 610.25, -851.75, 610.25, -851.75, 651.125, -729.125, 651.125, -729.125, 692, -279.5, 692, -279.5, 732.875, 6.625, 732.875, 6.625, 773.75, 1151.125, 773.75, 1151.125, 732.875, 1886.875, 732.875, 1886.875, 692, 2009.5, 692, 2009.5, 651.125, 2132.125, 651.125, 2132.125, 610.25, 2254.75, 610.25, 2255, 570, 2418.25, 569.375, 2418.25, 528.5, 2459.125, 528.5, 2459.125, 487.625, 2500, 487.625, 2500, -1106.5, 2459.125, -1106.5, 2459.125, -1270, 1682.5, -1270, 1682.5, -1310.875, 6.625, -1310.875, 6.625, -1351.75, -75.125, -1351.75, -75.125, -1392.625, -116, -1392.625, -116, -1597, 2827, -1597)
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Water" unique_id=338642064]
-position = Vector2(-1651.5, 584.75)
-shape = SubResource("RectangleShape2D_fdkjl")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Water" unique_id=131799695]
-position = Vector2(-2107, -705)
-shape = SubResource("RectangleShape2D_fdkjl")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Water" unique_id=958411739]
-position = Vector2(220.125, -1601.3125)
-shape = SubResource("RectangleShape2D_extdt")
-
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Water" unique_id=653147027]
-position = Vector2(2827.75, -413.625)
-shape = SubResource("RectangleShape2D_4c3sh")
+[node name="NorthEdge" type="CollisionShape2D" parent="Water" unique_id=338642064]
+position = Vector2(-402.125, -1617.4375)
+shape = SubResource("RectangleShape2D_shoretop")
 
 [connection signal="body_entered" from="Dummy" to="." method="_on_dummy_body_entered"]
+
+[editable path="Player"]

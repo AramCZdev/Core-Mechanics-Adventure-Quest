@@ -11,6 +11,7 @@ const DUMMY_ENEMY: BattleEnemy = preload("res://battle/enemies/dummy/dummy.tres"
 
 var _old_man_last_position: Vector2
 var _dummy_battle_started: bool = false
+var _dummy_battle_completed: bool = false
 
 func _ready() -> void:
 	_old_man_last_position = old_man.global_position
@@ -47,7 +48,9 @@ func _on_dummy_body_entered(body: Node2D) -> void:
 
 
 func _on_battle_finished(victory: bool) -> void:
-	if victory:
+	if victory and not _dummy_battle_completed:
 		dummy.queue_free()
+		$"Barrier/CollisionShape2D".disabled = true
+		_dummy_battle_completed = true
 	else:
 		_dummy_battle_started = false

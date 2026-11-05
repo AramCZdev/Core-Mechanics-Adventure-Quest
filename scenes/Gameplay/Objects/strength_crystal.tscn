@@ -5,18 +5,18 @@
 [ext_resource type="AudioStream" uid="uid://caseepgrsqlgq" path="res://assets/Sound Effects/Stronger.wav" id="2_strong"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_strength"]
-size = Vector2(16, 53)
+size = Vector2(19, 64)
 
 [node name="StrengthCrystal" type="Area2D" unique_id=1989369830 groups=["interactable"]]
 script = ExtResource("1_strength")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=332240739]
-position = Vector2(0, 2.5)
+position = Vector2(-1.9073486e-06, -0.17307854)
 shape = SubResource("RectangleShape2D_strength")
 
 [node name="Crystal" type="Sprite2D" parent="." unique_id=1554034018]
-position = Vector2(5.9604645e-08, -1.4901161e-08)
-scale = Vector2(0.515625, 0.46604565)
+position = Vector2(0.24999785, -3.3942327)
+scale = Vector2(0.63281244, 0.5719651)
 texture = ExtResource("2_3x3wn")
 
 [node name="Prompt" type="Label" parent="." unique_id=27596413]

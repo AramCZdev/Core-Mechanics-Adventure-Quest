@@ -41,13 +41,11 @@ func _process(_delta: float) -> void:
 
 
 func _on_animation_finished(anim_name: StringName) -> void:
-	if anim_name != &"start":
-		return
-	player.end_hurt_cutscene()
-	DialogueManager.start_dialogue("res://dialogue/oldman.json")
-	if anim_name == &"entrance":
-		return
-	get_tree().change_scene_to_file("res://scenes/Gameplay/game_test_scene.tscn")
+	if anim_name == "start":
+		player.end_hurt_cutscene()
+		DialogueManager.start_dialogue("res://dialogue/oldman.json")
+	if anim_name == "entrance":
+		get_tree().change_scene_to_file("res://scenes/Gameplay/game_test_scene.tscn")
 
 func _on_dummy_body_entered(body: Node2D) -> void:
 	if _dummy_battle_started or body != player:

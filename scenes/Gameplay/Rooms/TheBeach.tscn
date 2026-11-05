@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bit30xw6yckr" path="res://assets/Textures/Gameplay/Objects/dummy.svg" id="9_4c3sh"]
 [ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="10_4c3sh"]
 [ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/ice_cream_machine.tscn" id="11_ice_cream_machine"]
+[ext_resource type="PackedScene" uid="uid://b07fuw8kgs2rg" path="res://scenes/Gameplay/Objects/strength_crystal.tscn" id="12_vhfw7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle_0"]
 atlas = ExtResource("4_oldman")
@@ -383,6 +384,9 @@ offset_left = -2535.0
 offset_top = -1821.0
 offset_right = 2916.0
 offset_bottom = 1150.0
+
+[node name="StrengthCrystal" parent="." unique_id=1989369830 instance=ExtResource("12_vhfw7")]
+position = Vector2(-165, -1200)
 
 [connection signal="body_entered" from="Dummy" to="." method="_on_dummy_body_entered"]
 [connection signal="shop_requested" from="IceCreamMachine" to="." method="_on_shop_requested"]

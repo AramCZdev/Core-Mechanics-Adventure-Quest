@@ -134,6 +134,57 @@ tracks/3/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ColorRect:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ColorRect:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_o6t5m"]
+resource_name = "entrance"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.53333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_bym0n"]
 resource_name = "start"
@@ -205,6 +256,7 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v8vts"]
 _data = {
 &"RESET": SubResource("Animation_s14xq"),
+&"entrance": SubResource("Animation_o6t5m"),
 &"start": SubResource("Animation_bym0n"),
 &"training_done": SubResource("Animation_4c3sh")
 }
@@ -217,6 +269,9 @@ size = Vector2(51, 86)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_shoretop"]
 size = Vector2(572.25, 40.875)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vhfw7"]
+size = Vector2(563, 86)
 
 [node name="TheBeach" type="Node2D" unique_id=1717501666]
 script = ExtResource("1_4c3sh")
@@ -313,7 +368,24 @@ position = Vector2(428, -51)
 [node name="IceCreamMachine" parent="." unique_id=2065618173 groups=["interactable"] instance=ExtResource("11_ice_cream_machine")]
 position = Vector2(139, -596)
 
+[node name="Entrance" type="Area2D" parent="." unique_id=2091713049]
+position = Vector2(-1731, -1988)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entrance" unique_id=1456435956]
+position = Vector2(1327.5, 438)
+shape = SubResource("RectangleShape2D_vhfw7")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1132296225]
+visible = false
+modulate = Color(1, 1, 1, 0)
+z_index = 15
+offset_left = -2535.0
+offset_top = -1821.0
+offset_right = 2916.0
+offset_bottom = 1150.0
+
 [connection signal="body_entered" from="Dummy" to="." method="_on_dummy_body_entered"]
 [connection signal="shop_requested" from="IceCreamMachine" to="." method="_on_shop_requested"]
+[connection signal="body_entered" from="Entrance" to="." method="_on_entrance_body_entered"]
 
 [editable path="Player"]

@@ -289,12 +289,13 @@ func reward_battle_victory(current_hp: int, max_hp: int, attack: int) -> Vector3
 	_player_attack = maxi(0, attack) + 1
 	_gold += BATTLE_VICTORY_GOLD
 
+	# Only non-economy progress is written here. Gold and inventory stay in
+	# memory until the player uses a save point.
 	if _has_save:
 		_config.set_value("player", "hp", _player_hp)
 		_config.set_value("player", "max_hp", _player_max_hp)
 		_config.set_value("player", "attack", _player_attack)
-	_config.set_value("player", "gold", _gold)
-	_save_config()
+		_save_config()
 	gold_changed.emit(_gold)
 	return Vector3i(_player_hp, _player_max_hp, _player_attack)
 
@@ -303,27 +304,20 @@ func get_battle_victory_gold() -> int:
 	return BATTLE_VICTORY_GOLD
 
 
-## Adds quantity copies of an item and saves the inventory immediately.
-## Returns false for invalid IDs, non-positive quantities, or save failures.
+## Adds quantity copies of an item. Changes are kept in memory until the player
+## uses a save point. Returns false for invalid IDs or non-positive quantities.
 func add_item(item_id: String, quantity: int = 1) -> bool:
 	var normalized_id := item_id.strip_edges().to_lower()
 	if not _is_valid_item_id(normalized_id) or quantity <= 0:
 		return false
 
-	var previous_quantity := get_item_count(normalized_id)
-	_inventory[normalized_id] = previous_quantity + quantity
-	if not _save_inventory():
-		if previous_quantity == 0:
-			_inventory.erase(normalized_id)
-		else:
-			_inventory[normalized_id] = previous_quantity
-		return false
-
+	_inventory[normalized_id] = get_item_count(normalized_id) + quantity
 	inventory_changed.emit(get_inventory())
 	return true
 
 
 ## Removes quantity copies of an item. Does not change inventory if insufficient.
+## Changes are kept in memory until the player uses a save point.
 func remove_item(item_id: String, quantity: int = 1) -> bool:
 	var normalized_id := item_id.strip_edges().to_lower()
 	if not _is_valid_item_id(normalized_id) or quantity <= 0:
@@ -338,10 +332,6 @@ func remove_item(item_id: String, quantity: int = 1) -> bool:
 		_inventory.erase(normalized_id)
 	else:
 		_inventory[normalized_id] = remaining
-
-	if not _save_inventory():
-		_inventory[normalized_id] = previous_quantity
-		return false
 
 	inventory_changed.emit(get_inventory())
 	return true
@@ -361,7 +351,7 @@ func get_inventory() -> Dictionary:
 	return _inventory.duplicate()
 
 
-## Currency is stored in the same save file as player progress and inventory.
+## Currency stays in memory until the player uses a save point.
 func get_gold() -> int:
 	return _gold
 
@@ -370,9 +360,6 @@ func add_gold(amount: int) -> bool:
 	if amount <= 0:
 		return false
 	_gold += amount
-	if not _save_gold():
-		_gold -= amount
-		return false
 	gold_changed.emit(_gold)
 	return true
 
@@ -381,26 +368,17 @@ func spend_gold(amount: int) -> bool:
 	if amount <= 0 or _gold < amount:
 		return false
 	_gold -= amount
-	if not _save_gold():
-		_gold += amount
-		return false
 	gold_changed.emit(_gold)
 	return true
 
 
-func _save_gold() -> bool:
-	_config.set_value("player", "gold", _gold)
-	return _save_config()
-
-
-func _save_inventory() -> bool:
+func _write_inventory_to_config() -> void:
 	if _config.has_section("inventory"):
 		_config.erase_section("inventory")
 	for item_id in _inventory:
 		var quantity := int(_inventory[item_id])
 		if quantity > 0:
 			_config.set_value("inventory", item_id, quantity)
-	return _save_config()
 
 
 func _save_config() -> bool:
@@ -511,6 +489,7 @@ func save_player_state(
 	_config.set_value("player", "attack", _player_attack)
 	_config.set_value("player", "hero_name", _hero_name)
 	_config.set_value("player", "gold", _gold)
+	_write_inventory_to_config()
 	var saved := _save_config()
 	_has_save = saved
 	return saved

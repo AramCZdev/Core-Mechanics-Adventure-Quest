@@ -82,6 +82,7 @@ func _test_purchase() -> void:
 	_check(_shop.call("buy_item", "general_store", "health_potion", 1), "purchase succeeds")
 	_check(_save.call("get_gold") == starting_gold - 25, "purchase deducts gold")
 	_check(_save.call("get_item_count", "health_potion") == 1, "purchase adds item")
+	_check(not _save.call("has_save"), "purchase does not create a save")
 
 
 func _test_ice_cream_shop() -> void:
@@ -94,27 +95,48 @@ func _test_ice_cream_shop() -> void:
 
 
 func _test_persistence() -> void:
+	# Purchases made before a save point must be discarded on reload.
 	_save.call("set_save_path", TEST_SAVE_PATH)
 	await process_frame
 
-	_check(_save.call("get_gold") == 75, "gold persists across reload")
-	_check(_save.call("get_item_count", "health_potion") == 1, "inventory persists across reload")
+	_check(_save.call("get_gold") == EXPECTED_STARTING_GOLD, "unsaved purchase is discarded on reload")
+	_check(_save.call("get_item_count", "health_potion") == 0, "unsaved inventory is discarded on reload")
+	_check(not _save.call("has_save"), "unsaved purchase still does not offer Continue")
+
+	# Buy again and persist through a save point.
+	_check(_shop.call("buy_item", "general_store", "health_potion", 1), "purchase after reload succeeds")
+	_check(_save.call("save_player_state", "res://scenes/Gameplay/game_test_scene.tscn", Vector2(100, 100), 380.0), "save point writes the economy")
+	_check(_save.call("has_save"), "save point creates a resumable save")
+
+	_save.call("set_save_path", TEST_SAVE_PATH)
+	await process_frame
+
+	_check(_save.call("get_gold") == 75, "gold persists once saved at a save point")
+	_check(_save.call("get_item_count", "health_potion") == 1, "inventory persists once saved at a save point")
 
 
 func _test_strength_crystal() -> void:
+	_save.call("set_save_path", TEST_SAVE_PATH)
+	await process_frame
+
 	_check(not _save.call("has_claimed_strength_crystal"), "strength crystal initially unclaimed")
 	var hp_before: Vector2i = _save.call("get_player_health", 40, 40)
 	var atk_before: int = _save.call("get_player_attack", 12)
 	_check(_save.call("claim_strength_crystal"), "claim strength crystal succeeds")
 	_check(_save.call("has_claimed_strength_crystal"), "strength crystal marked as claimed")
 	_check(not _save.call("claim_strength_crystal"), "strength crystal cannot be claimed twice")
-	_check(not _save.call("has_save"), "strength crystal does not save the game")
 	var hp_after: Vector2i = _save.call("get_player_health", 40, 40)
 	var atk_after: int = _save.call("get_player_attack", 12)
 	_check(hp_after.y == hp_before.y + 10, "strength crystal adds 10 max HP")
 	_check(atk_after == atk_before + 3, "strength crystal adds 3 attack")
 
+	# The claim is not written to disk until a save point is used.
+	_save.call("set_save_path", TEST_SAVE_PATH)
+	await process_frame
+	_check(not _save.call("has_claimed_strength_crystal"), "strength crystal is not saved until a save point")
+
 	# Save manually as a SavePoint would:
+	_check(_save.call("claim_strength_crystal"), "strength crystal can be claimed again after reload")
 	_save.call("save_player_state", "res://scenes/Gameplay/game_test_scene.tscn", Vector2(100, 100), 380.0)
 
 	# Persistence check across reload once saved at a save point

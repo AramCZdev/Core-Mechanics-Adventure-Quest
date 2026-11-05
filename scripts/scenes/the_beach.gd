@@ -45,7 +45,9 @@ func _on_animation_finished(anim_name: StringName) -> void:
 		return
 	player.end_hurt_cutscene()
 	DialogueManager.start_dialogue("res://dialogue/oldman.json")
-
+	if anim_name == &"entrance":
+		return
+	get_tree().change_scene_to_file("res://scenes/Gameplay/game_test_scene.tscn")
 
 func _on_dummy_body_entered(body: Node2D) -> void:
 	if _dummy_battle_started or body != player:
@@ -76,3 +78,7 @@ func _on_dialogue_finished(file_path: String, _last_node_id: String) -> void:
 		return
 	_path_shown = false
 	animation_player.play("training_done")
+
+
+func _on_entrance_body_entered(_body: Node2D) -> void:
+	animation_player.play("entrance")

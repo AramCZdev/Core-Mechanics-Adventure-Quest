@@ -15,7 +15,8 @@ The project autoloads `SaveManager` and `ShopManager`. Item definitions live in 
 The catalog stores item descriptions and effect metadata. Choosing the Item action
 in battle opens a picker of every owned consumable with a supported effect (heal,
 temporary attack boost, or temporary defense boost). The chosen item is removed
-from the persistent inventory and its effect is applied for that turn.
+from the inventory immediately in memory; both the removal and any gold changes
+are written when the player uses a Save Point.
 
 A new game starts with **100 gold** and **2 Health Potions**. Winning a battle
 awards **25 gold** in addition to the stat increases.
@@ -104,6 +105,12 @@ After creating a shop, use the same reusable scene: `$Shop.open_shop("blacksmith
 
 ## Save behavior
 
-Inventory and currency are written to `user://savegame.cfg` immediately. Inventory-only data does not count as a gameplay progress save, so it will not make the main menu show Continue before a Save Point records a scene.
+Gold and inventory changes stay in memory until the player uses a Save Point.
+Purchases made without saving are discarded when the game is reloaded. A save
+point writes the current gold, inventory, player stats, and location together.
+
+Recording the last visited location does not count as a gameplay progress save,
+so it will not make the main menu show Continue before a Save Point records a
+scene.
 
 Deleting the save through `SaveManager.delete_save()` clears the inventory, currency, player progress, and upgrades.

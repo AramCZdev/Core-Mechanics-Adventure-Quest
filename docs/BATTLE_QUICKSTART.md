@@ -46,9 +46,7 @@ func _on_enemy_body_entered(body: Node2D) -> void:
 
 
 func _on_battle_finished(victory: bool) -> void:
-	# Combat is over. Put rewards / defeat logic here.
-	# On victory, BattleUI hides itself after victory_exit_delay (2 s by default),
-	# so do not call battle_ui.hide() here.
+	# The battle and its win presentation are over. Put rewards / dialogue here.
 	if victory:
 		print("Enemy defeated!")
 
@@ -62,9 +60,11 @@ Connect `BattleUI.battle_finished` in the editor or from code. BattleUI pauses
 the scene tree during combat by default, so player movement stops automatically.
 Set `Pause Gameplay` to off if your game manages pause state itself.
 
-On victory, BattleUI shows the result for `victory_exit_delay` seconds (default
-**2**), then hides itself and emits `battle_exited`. Set `Auto Exit On Victory`
-to off if you want to close the battle screen yourself with `exit_battle()`.
+On victory, BattleUI shows the win presentation for `victory_exit_delay` seconds
+(default **2**) while gameplay stays paused. It then hides itself, resumes
+gameplay, and emits `battle_finished` and `battle_exited`. Set
+`Auto Exit On Victory` to off if you want to close the battle screen yourself
+with `exit_battle()`.
 
 ## 3. Make an enemy
 
@@ -260,9 +260,10 @@ auto_exit_on_victory = true
 victory_exit_delay   = 2.0
 ```
 
-On victory, the result text stays on screen for `victory_exit_delay` seconds,
-then BattleUI hides itself and emits `battle_exited`. Turn `auto_exit_on_victory`
-off if you want to control that yourself with `exit_battle()`.
+On victory, the win presentation stays on screen for `victory_exit_delay`
+seconds, then BattleUI hides itself, resumes gameplay, and emits
+`battle_finished` followed by `battle_exited`. Turn `auto_exit_on_victory` off
+if you want to control that yourself with `exit_battle()`.
 
 ## 5. Controls
 
@@ -307,8 +308,9 @@ func _on_battle_exited(_victory: bool) -> void:
 	print("Battle screen closed.")
 ```
 
-`battle_finished` fires as soon as combat ends. `battle_exited` fires when
-BattleUI hides itself after the victory delay (or when you call `exit_battle()`).
+`battle_finished` fires after the victory presentation ends (or immediately on
+defeat). `battle_exited` fires when BattleUI hides itself after the victory delay
+(or when you call `exit_battle()`).
 
 For per-hit events, connect to the `BattleManager` child directly:
 

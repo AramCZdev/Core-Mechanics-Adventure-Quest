@@ -6,6 +6,7 @@ The project autoloads `SaveManager` and `ShopManager`. Item definitions live in 
 
 | ID | Item | Effect | Base price |
 | --- | --- | --- | ---: |
+| `ice_cream` | Ice Cream | Restores 15 HP | 15 |
 | `health_potion` | Health Potion | Restores 20 HP | 25 |
 | `greater_health_potion` | Greater Health Potion | Restores 50 HP | 60 |
 | `strength_potion` | Strength Potion | +5 attack for 3 turns | 45 |
@@ -52,7 +53,7 @@ Gold persists in the save file and cannot be spent below zero.
 
 ## Shop API
 
-Two example shops are included: `general_store` and `traveling_merchant`. Each shop has its own offer list and prices.
+Three example shops are included: `general_store`, `traveling_merchant`, and `ice_cream_shop`. The ice cream shop sells only `ice_cream`. Each shop has its own offer list and prices.
 
 ```gdscript
 var offers: Array[Dictionary] = ShopManager.get_shop_inventory("general_store")
@@ -65,12 +66,14 @@ if ShopManager.buy_item("general_store", "health_potion", 2):
 
 Purchases check the shop's offers, validate the item and quantity, deduct gold, and add the purchased items. If adding the item fails, the gold deduction is refunded.
 
-The reusable shop screen is `scenes/shop.tscn`, driven by `scripts/shop_ui.gd`. Instance it and set `shop_id` to `general_store` or `traveling_merchant`; call `open_shop(shop_id)` to show a different shop. The scene builds its offer list, displays the player's gold, handles purchases, and reports success or failure.
+The reusable shop screen is `scenes/shop.tscn`, driven by `scripts/shop_ui.gd`. Instance it and set `shop_id` to `general_store`, `traveling_merchant`, or `ice_cream_shop`; call `open_shop(shop_id)` to show a different shop. The scene builds its offer list, displays the player's gold, handles purchases, and reports success or failure.
 
 `scenes/Gameplay/Objects/shop_npc.tscn` is a ready-made shopkeeper. It shows a
 prompt when the player is in range, emits `shop_requested(shop_id)` on interact,
 and is already placed in `scenes/Gameplay/game_test_scene.tscn` alongside the
-shop window. The test scene opens the shop when the signal fires.
+shop window. The test scene opens the shop when the signal fires. The Beach also
+has an `IceCreamMachine` using the `ice_cream_shop` definition and its
+`IceCreamMachine.png` artwork.
 
 
 ### Creating your own shop

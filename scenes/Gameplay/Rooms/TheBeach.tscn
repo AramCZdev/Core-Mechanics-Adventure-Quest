@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="8_4c3sh"]
 [ext_resource type="Texture2D" uid="uid://bit30xw6yckr" path="res://assets/Textures/Gameplay/Objects/dummy.svg" id="9_4c3sh"]
 [ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="10_4c3sh"]
+[ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/ice_cream_machine.tscn" id="11_ice_cream_machine"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle_0"]
 atlas = ExtResource("4_oldman")
@@ -186,10 +187,26 @@ tracks/3/keys = {
 "values": [false, true, false]
 }
 
+[sub_resource type="Animation" id="Animation_4c3sh"]
+resource_name = "training_done"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Old Man:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(834, 418), Vector2(302, -22)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v8vts"]
 _data = {
 &"RESET": SubResource("Animation_s14xq"),
-&"start": SubResource("Animation_bym0n")
+&"start": SubResource("Animation_bym0n"),
+&"training_done": SubResource("Animation_4c3sh")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d03v7"]
@@ -293,6 +310,10 @@ shape = SubResource("RectangleShape2D_shoretop")
 [node name="SavePoint" parent="." unique_id=1709967034 groups=["interactable"] instance=ExtResource("10_4c3sh")]
 position = Vector2(428, -51)
 
+[node name="IceCreamMachine" parent="." unique_id=2065618173 groups=["interactable"] instance=ExtResource("11_ice_cream_machine")]
+position = Vector2(139, -596)
+
 [connection signal="body_entered" from="Dummy" to="." method="_on_dummy_body_entered"]
+[connection signal="shop_requested" from="IceCreamMachine" to="." method="_on_shop_requested"]
 
 [editable path="Player"]

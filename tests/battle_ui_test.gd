@@ -7,11 +7,14 @@ extends SceneTree
 var _ui: BattleUI
 var _manager: BattleManager
 var _failures: Array[String] = []
+var _battle_finished_count: int = 0
+var _last_finished_victory: Variant = null
 
 
 func _initialize() -> void:
 	_ui = load("res://scenes/battle/battle_ui.tscn").instantiate() as BattleUI
 	_manager = _ui.get_node("BattleManager") as BattleManager
+	_ui.battle_finished.connect(_on_battle_finished)
 	# Keep the test isolated from the player's real save file.
 	_manager.use_persistent_progress = false
 	_manager.use_persistent_items = false
@@ -125,11 +128,12 @@ func _test_victory() -> void:
 	_attack_timing().submit_now()
 
 	_check(_manager.phase == BattleManager.Phase.VICTORY, "UI reaches victory")
-	_check(not paused, "battle restores pause state on victory")
+	_check(paused, "gameplay stays paused during the win cutscene")
 	_check(_battle_over_panel().visible, "battle over panel shown")
 	_check(_battle_over_label().text == "VICTORY!", "victory label shown")
 	_check(_attack_button().disabled, "actions disabled after victory")
 	_check(_ui.get_node_or_null("%RestartButton") == null, "restart button removed")
+	_check(_battle_finished_count == 0, "battle_finished waits for the win cutscene")
 
 
 func _test_victory_auto_exit() -> void:
@@ -142,8 +146,17 @@ func _test_victory_auto_exit() -> void:
 	_attack_timing().submit_now()
 
 	_check(_ui.visible, "battle stays visible immediately after victory")
+	_check(_battle_finished_count == 0, "battle does not finish before the win cutscene ends")
 	await create_timer(0.15).timeout
 	_check(not _ui.visible, "battle hides after the victory exit delay")
+	_check(not paused, "gameplay resumes when the battle ends")
+	_check(_battle_finished_count == 1, "battle_finished fires after the win cutscene")
+	_check(_last_finished_victory == true, "battle_finished reports victory")
+
+
+func _on_battle_finished(victory: bool) -> void:
+	_battle_finished_count += 1
+	_last_finished_victory = victory
 
 
 func _attack_button() -> Button:

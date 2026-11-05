@@ -3,6 +3,13 @@ extends RefCounted
 ## Shared item definitions used by inventories and shops.
 
 const ITEMS := {
+	"ice_cream": {
+		"name": "Ice Cream",
+		"description": "A cool treat. Restores 15 HP.",
+		"type": "consumable",
+		"effect": {"kind": "heal", "amount": 15},
+		"price": 15
+	},
 	"health_potion": {
 		"name": "Health Potion",
 		"description": "Restores 20 HP.",

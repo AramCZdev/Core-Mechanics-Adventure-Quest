@@ -20,6 +20,13 @@ const SHOPS := {
 			"strength_potion": 40,
 			"defense_potion": 40
 		}
+	},
+	"ice_cream_shop": {
+		"name": "Ice Cream Stand",
+		"description": "Cool treats for a warm day at the beach.",
+		"offers": {
+			"ice_cream": 15
+		}
 	}
 }
 

@@ -11,6 +11,8 @@ const DEFAULT_ENEMY: BattleEnemy = preload("res://battle/enemies/mossling/mossli
 ## Re-emitted when a battle starts or ends so gameplay code can listen to
 ## BattleUI without reaching into its child BattleManager.
 signal battle_started(enemy: BattleEnemy)
+## Emitted once the battle is completely over. On victory this waits for the
+## victory presentation (the win cutscene) to finish before firing.
 signal battle_finished(victory: bool)
 ## Emitted after BattleUI hides itself following an automatic exit.
 signal battle_exited(victory: bool)
@@ -29,7 +31,8 @@ signal battle_exited(victory: bool)
 @export_group("End of battle")
 ## Hide the battle screen automatically after a victory.
 @export var auto_exit_on_victory: bool = true
-## Seconds the victory text stays visible before the battle screen closes.
+## Seconds the victory presentation (win cutscene) stays on screen before the
+## battle ends, resumes gameplay, and emits battle_finished.
 @export_range(0.0, 10.0, 0.1, "suffix:s") var victory_exit_delay: float = 3.0
 
 @onready var _manager: BattleManager = get_node_or_null(battle_manager_path) as BattleManager
@@ -56,6 +59,7 @@ signal battle_exited(victory: bool)
 @onready var _battle_over_label: Label = %BattleOverLabel
 
 var _paused_by_battle: bool = false
+var _battle_finished_emitted: bool = false
 var _exit_timer: Timer
 var _item_panel: VBoxContainer
 var _item_menu_open: bool = false
@@ -157,6 +161,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_battle_started(started_enemy: BattleEnemy) -> void:
 	_exit_timer.stop()
+	_battle_finished_emitted = false
 	show()
 
 	if pause_gameplay and not get_tree().paused:
@@ -178,10 +183,6 @@ func _on_battle_started(started_enemy: BattleEnemy) -> void:
 
 
 func _on_battle_ended(victory: bool) -> void:
-	if _paused_by_battle:
-		get_tree().paused = false
-		_paused_by_battle = false
-
 	_hide_timing_bars()
 	_hide_item_menu()
 	_battle_over_label.text = "VICTORY!" if victory else "DEFEAT..."
@@ -189,10 +190,13 @@ func _on_battle_ended(victory: bool) -> void:
 	_battle_over_panel.show()
 	_actions.hide()
 	_refresh_actions()
-	battle_finished.emit(victory)
 
 	if victory and auto_exit_on_victory:
+		# Keep everything frozen while the victory presentation plays. The
+		# battle only finishes once the win cutscene timer runs out.
 		_exit_timer.start(victory_exit_delay)
+	else:
+		_finish_battle(victory)
 
 
 ## Closes the battle screen immediately. Use this if you disabled automatic exit.
@@ -201,8 +205,24 @@ func exit_battle() -> void:
 		return
 	_exit_timer.stop()
 	var victory: bool = _manager.phase == BattleManager.Phase.VICTORY
+	_resume_gameplay()
 	hide()
+	_finish_battle(victory)
 	battle_exited.emit(victory)
+
+
+func _finish_battle(victory: bool) -> void:
+	_resume_gameplay()
+	if _battle_finished_emitted:
+		return
+	_battle_finished_emitted = true
+	battle_finished.emit(victory)
+
+
+func _resume_gameplay() -> void:
+	if _paused_by_battle:
+		get_tree().paused = false
+		_paused_by_battle = false
 
 
 func _on_exit_timer_timeout() -> void:

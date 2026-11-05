@@ -32,6 +32,7 @@ func _initialize() -> void:
 	_test_starting_economy()
 	_test_location_lookup()
 	_test_purchase()
+	_test_ice_cream_shop()
 	await _test_persistence()
 	await _test_strength_crystal()
 	await _test_saved_location()
@@ -81,6 +82,15 @@ func _test_purchase() -> void:
 	_check(_shop.call("buy_item", "general_store", "health_potion", 1), "purchase succeeds")
 	_check(_save.call("get_gold") == starting_gold - 25, "purchase deducts gold")
 	_check(_save.call("get_item_count", "health_potion") == 1, "purchase adds item")
+
+
+func _test_ice_cream_shop() -> void:
+	var offers: Array = _shop.call("get_shop_inventory", "ice_cream_shop")
+	_check(offers.size() == 1, "ice cream shop only sells one item")
+	_check(str(offers[0].get("id", "")) == "ice_cream", "ice cream shop sells ice cream")
+	var item := ItemDatabase.get_item("ice_cream")
+	_check(str(item.get("name", "")) == "Ice Cream", "ice cream item is registered")
+	_check(int(item.get("effect", {}).get("amount", 0)) == 15, "ice cream heals 15 HP")
 
 
 func _test_persistence() -> void:

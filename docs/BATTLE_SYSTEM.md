@@ -227,9 +227,9 @@ same Mossling resource.
    an enemy's `*_battle.tscn` and set its `enemy`).
 2. Set `BattleUI.auto_start = false`.
 3. Keep the instance hidden (`visible = false`) until an encounter starts.
-4. Call `begin_battle()` from a trigger. On victory, BattleUI closes itself after
-   a short delay; use `battle_finished` for rewards and `battle_exited` to resume
-   map movement.
+4. Call `begin_battle()` from a trigger. On victory, BattleUI plays the victory
+   presentation, then finishes the battle; use `battle_finished` for rewards and
+   `battle_exited` to resume map movement.
 
 ```gdscript
 extends Node2D
@@ -246,12 +246,12 @@ func _on_enemy_body_entered(body: Node2D) -> void:
 		battle_ui.begin_battle(enemy)
 
 func _on_battle_finished(victory: bool) -> void:
-	# Combat is over. Do not hide the UI here if auto-exit is enabled.
+	# The battle and its win presentation are over.
 	if victory:
 		queue_free() # or open a reward / dialogue node
 
 func _on_battle_exited(_victory: bool) -> void:
-	# The battle screen is closed. Resume map movement here.
+	# The battle screen has closed. Resume map movement here.
 	pass
 ```
 
@@ -276,16 +276,17 @@ auto_exit_on_victory = true
 victory_exit_delay   = 2.0
 ```
 
-When enabled, the victory text stays on screen for `victory_exit_delay` seconds,
-then BattleUI hides itself and emits `battle_exited(true)`. The delay uses a timer
-that runs while the tree is paused, so it works even if your game keeps the tree
-paused after combat.
+When enabled, the victory presentation stays on screen for `victory_exit_delay`
+seconds. Gameplay stays paused during the win cutscene. When the timer ends,
+BattleUI hides itself, resumes gameplay, emits `battle_finished(true)`, and then
+emits `battle_exited(true)`. The delay uses a timer that runs while the tree is
+paused, so it works even if your game keeps the tree paused after combat.
 
-`battle_finished(victory)` still fires immediately when combat ends. Use it for
-rewards or defeat handling. Use `battle_exited` when you need to know the screen
-has actually closed. To close the screen yourself, set `auto_exit_on_victory` to
-false and call `battle_ui.exit_battle()`. Defeat does not auto-exit by default,
-so your game can show a game-over flow.
+Use `battle_finished` for rewards or post-battle dialogue. Use `battle_exited`
+when you only need to know the screen has closed. With `auto_exit_on_victory`
+off, the battle finishes immediately and you call `battle_ui.exit_battle()`
+yourself when ready. Defeat does not auto-exit by default, so your game can show
+a game-over flow.
 
 ### Custom enemy
 
@@ -396,8 +397,9 @@ signal player_healed(amount: int, hp: int, items_left: int)
 signal battle_error(text: String)
 ```
 
-`BattleUI` re-emits `battle_finished(victory)` when combat ends and
-`battle_exited(victory)` when the battle screen hides itself. The manager's phases are
+`BattleUI` re-emits `battle_finished(victory)` when the battle is fully over
+(including the win presentation) and `battle_exited(victory)` when the battle
+screen hides itself. The manager's phases are
 available as `BattleManager.Phase.PLAYER_TURN`, `ATTACK_TIMING`,
 `RESOLVE_PLAYER`, `ENEMY_WINDUP`, `BLOCK_TIMING`, `RESOLVE_ENEMY`, `VICTORY`,
 and `DEFEAT`.
@@ -439,7 +441,8 @@ The battle tests cover:
 - Shared stop keys: both bars accept Z, X, and Enter.
 - Hidden Item button while `items_enabled` is false.
 - Enemy artwork / placeholder wiring and the compact panel layout.
-- Victory auto-exit: result stays visible briefly, then the UI hides.
+- Victory auto-exit: gameplay stays paused during the win presentation, then
+  the battle finishes and the UI hides.
 
 Manual checklist:
 

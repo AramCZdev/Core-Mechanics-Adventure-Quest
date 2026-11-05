@@ -1,0 +1,23 @@
+{
+	"start_node": "oldman_intro",
+	"nodes": {
+		"oldman_intro": {
+			"speaker": "Old Man",
+			"portrait": "",
+			"text": "Nice one.",
+			"next": "natural",
+			"typing_speed": 40.0
+		},
+		"natural": {
+			"speaker": "Old Man",
+			"portrait": "",
+			"text": "You're a natural",
+			"next": "path"
+		},
+		"path": {
+			"speaker": "Old Man",
+			"portrait": "",
+			"text": "Lemme show you a path to go. Follow me"
+		}
+	}
+}

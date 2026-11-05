@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dhktrogv6ee27"]
+
+[ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="1_e1xel"]
+
+[node name="Forest" type="Node2D" unique_id=1818823234]
+
+[node name="Forest" type="Node2D" parent="." unique_id=1629896592]
+
+[node name="Grass" type="ColorRect" parent="Forest" unique_id=1094126300]
+offset_left = -1312.0
+offset_top = -3185.0
+offset_right = 1743.0
+offset_bottom = 187.0
+color = Color(0.031500045, 0.63, 0, 1)
+
+[node name="Path" type="ColorRect" parent="Forest" unique_id=1378119166]
+offset_left = -57.0
+offset_top = -3102.0
+offset_right = 52.0
+offset_bottom = 98.0
+color = Color(0.75, 0.6, 0, 1)
+
+[node name="Player" parent="." unique_id=520382692 instance=ExtResource("1_e1xel")]
+
+[node name="Camera2D" parent="Player" index="2" unique_id=2100815544]
+limit_top = -1597
+
+[editable path="Player"]

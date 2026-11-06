@@ -5,6 +5,7 @@
 [ext_resource type="Theme" uid="uid://b3d0wtk288b5d" path="res://default_theme.tres" id="2_sjy77"]
 [ext_resource type="Texture2D" uid="uid://dp1gv5q55ljmr" path="res://assets/Textures/UI/Resume.png" id="3_wadm0"]
 [ext_resource type="Texture2D" uid="uid://c2qn3bvuv2j5k" path="res://assets/Textures/UI/Menu.png" id="4_tcfe6"]
+[ext_resource type="Texture2D" uid="uid://bmv8xo7ysbp7y" path="res://assets/Textures/Emotions/Huh.png" id="5_huh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_76dhe"]
 size = Vector2(46, 76)
@@ -102,6 +103,12 @@ sprite_frames = ExtResource("2_frames")
 animation = &"walk_down"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2100815544]
+
+[node name="Huh" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(13, -88)
+scale = Vector2(1.1875, 1.1875)
+texture = ExtResource("5_huh")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1176010347]
 

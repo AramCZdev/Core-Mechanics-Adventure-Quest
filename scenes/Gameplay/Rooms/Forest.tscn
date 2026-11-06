@@ -23,6 +23,9 @@ color = Color(0.75, 0.6, 0, 1)
 [node name="Player" parent="." unique_id=520382692 instance=ExtResource("1_e1xel")]
 
 [node name="Camera2D" parent="Player" index="2" unique_id=2100815544]
-limit_top = -1597
+limit_left = -1312
+limit_top = -3185
+limit_right = 1743
+limit_bottom = 187
 
 [editable path="Player"]

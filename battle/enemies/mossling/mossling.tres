@@ -1,6 +1,9 @@
-[gd_resource type="Resource" script_class="BattleEnemy" load_steps=2 format=3]
+[gd_resource type="Resource" format=3 uid="uid://c7o887t2efrwg"]
 
-[ext_resource type="Script" path="res://battle/enemies/mossling/mossling_enemy.gd" id="1_enemy"]
+[ext_resource type="Script" uid="uid://b4xmkgu0iwx6l" path="res://battle/enemies/mossling/mossling_enemy.gd" id="1_enemy"]
 
 [resource]
 script = ExtResource("1_enemy")
+talk_lines = null
+turn_lines = null
+turn_action_restrictions = null

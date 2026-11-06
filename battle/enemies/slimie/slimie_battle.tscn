@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dnfcrta7334rj"]
+
+[ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="1_battle"]
+[ext_resource type="Resource" path="res://battle/enemies/slimie/slimie.tres" id="2_enemy"]
+[ext_resource type="Texture2D" uid="uid://cpvmna2ads7qg" path="res://assets/Textures/Enemies/Slimie.png.png" id="3_0citx"]
+
+[node name="MosslingBattle" unique_id=827911230 instance=ExtResource("1_battle")]
+enemy = ExtResource("2_enemy")
+
+[node name="EnemyTexture" parent="Margin/Layout/EnemyStage" parent_id_path=PackedInt32Array(517288878) index="0" unique_id=1633413427]
+texture = ExtResource("3_0citx")
+
+[node name="EnemyNameLabel" parent="Margin/Layout/BattlePanel/PanelMargin/Content/EnemyPanel" parent_id_path=PackedInt32Array(844688832) index="0" unique_id=954290451]
+text = "Slimie"
+
+[node name="MessageLabel" parent="Margin/Layout/BattlePanel/PanelMargin/Content" parent_id_path=PackedInt32Array(103723324) index="1" unique_id=1786948874]
+text = "A Slimie blocks your path!"

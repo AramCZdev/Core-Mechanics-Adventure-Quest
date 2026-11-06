@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="1_e1xel"]
 [ext_resource type="Texture2D" uid="uid://demchf2dqs3bu" path="res://assets/Textures/Gameplay/Objects/Tree.png" id="2_28142"]
 [ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="2_battle"]
-[ext_resource type="Texture2D" uid="uid://bmv8xo7ysbp7y" path="res://assets/Textures/Emotions/Huh.png" id="2_oek4d"]
 [ext_resource type="Script" uid="uid://bqlsk0txk4qav" path="res://scripts/battle/random_encounter.gd" id="3_random"]
 
 [node name="Forest" type="Node2D" unique_id=1818823234]
@@ -46,10 +45,8 @@ limit_top = -3185
 limit_right = 1743
 limit_bottom = 187
 
-[node name="Huh" type="Sprite2D" parent="Player" unique_id=1679886831]
-visible = false
-position = Vector2(0, -73)
-texture = ExtResource("2_oek4d")
+[node name="Huh" parent="Player" index="3"]
+position = Vector2(-3, -76)
 
 [node name="Trees" type="Node2D" parent="." unique_id=413535190]
 
@@ -196,5 +193,7 @@ auto_start = false
 
 [node name="RandomEncounter" type="Node" parent="." unique_id=1979184167]
 script = ExtResource("3_random")
+min_distance = 500.0
+max_distance = 3000.0
 
 [editable path="Player"]

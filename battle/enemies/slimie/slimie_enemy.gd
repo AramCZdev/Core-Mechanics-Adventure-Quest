@@ -6,23 +6,23 @@ extends BattleEnemy
 ## .tscn is a ready-to-run battle scene for this enemy.
 
 func _init() -> void:
-	display_name = "Mossling"
+	display_name = "Slimie"
 	max_hp = 60
 	attack_damage = 12
 	damage_variance = 2
 	talk_lines = PackedStringArray([
-		"The Mossling tilts its head.",
-		"You compliment the Mossling's moss. It seems pleased.",
-		"The Mossling is not much of a conversationalist.",
+		"The Slimie tilts its head.",
+		"You compliment the Slimie stickines. It seems pleased.",
+		"The Slimie wants to talk more.",
 	])
-	description = "A damp little creature guarding the forest path."
+	description = "Just a cute slime."
 	can_win_by_talking = true
 	talks_to_win = 3
-	talk_victory_text = "The Mossling decides you are friendly and lets you pass."
+	talk_victory_text = "The Slimie likes to talk with you."
 	turn_lines = PackedStringArray([
-		"The Mossling eyes you warily.",
-		"The Mossling's leaves rustle.",
-		"The Mossling seems to be listening.",
-		"The Mossling is still not attacking.",
+		"The Slimie is scared.",
+		"The Slimie is standing.",
+		"The Slimie is remembering of how they attacked a tower.",
+		"The Slimie is wobbly.",
 	])
-	# texture = preload("res://path/to/mossling.png")
+	texture = preload("res://assets/Textures/Enemies/Slimie.png")

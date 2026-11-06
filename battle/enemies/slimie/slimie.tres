@@ -1,6 +1,13 @@
-[gd_resource type="Resource" script_class="BattleEnemy" format=3]
+[gd_resource type="Resource" format=3 uid="uid://53k26rl2klf6"]
 
 [ext_resource type="Script" uid="uid://b7f6axpchmspr" path="res://battle/enemies/slimie/slimie_enemy.gd" id="1_enemy"]
 
 [resource]
 script = ExtResource("1_enemy")
+max_hp = 120
+attack_damage = 20
+talk_lines = null
+can_win_by_talking = true
+talks_to_win = 5
+turn_lines = null
+turn_action_restrictions = null

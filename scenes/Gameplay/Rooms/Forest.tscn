@@ -3,9 +3,23 @@
 [ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="1_e1xel"]
 [ext_resource type="Texture2D" uid="uid://demchf2dqs3bu" path="res://assets/Textures/Gameplay/Objects/Tree.png" id="2_28142"]
 [ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="2_battle"]
+[ext_resource type="Script" uid="uid://crinrrx3traf6" path="res://scripts/battle/battle_enemy.gd" id="2_inb7v"]
+[ext_resource type="Resource" uid="uid://c7o887t2efrwg" path="res://battle/enemies/mossling/mossling.tres" id="3_cfxgj"]
 [ext_resource type="Script" uid="uid://bqlsk0txk4qav" path="res://scripts/battle/random_encounter.gd" id="3_random"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d03v7"]
+size = Vector2(271, 3297)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_inb7v"]
+size = Vector2(592.5, 3052.5)
+
 [node name="Forest" type="Node2D" unique_id=1818823234]
+
+[node name="RandomEncounter" type="Node" parent="." unique_id=1979184167]
+script = ExtResource("3_random")
+enemies = Array[ExtResource("2_inb7v")]([ExtResource("3_cfxgj")])
+min_distance = 500.0
+max_distance = 3000.0
 
 [node name="Forest" type="Node2D" parent="." unique_id=1629896592]
 
@@ -185,15 +199,25 @@ position = Vector2(549.9999, -2679)
 scale = Vector2(5.3125, 5.3125)
 texture = ExtResource("2_28142")
 
+[node name="Tree28" type="Sprite2D" parent="Trees" unique_id=1800074072]
+position = Vector2(-248.00003, -2990)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1931271597]
 
 [node name="BattleUI" parent="CanvasLayer" unique_id=1165195054 instance=ExtResource("2_battle")]
 visible = false
 auto_start = false
 
-[node name="RandomEncounter" type="Node" parent="." unique_id=1979184167]
-script = ExtResource("3_random")
-min_distance = 500.0
-max_distance = 3000.0
+[node name="Barrier" type="StaticBody2D" parent="." unique_id=1341619016]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Barrier" unique_id=1970887722]
+position = Vector2(-219.5, -1512.5)
+shape = SubResource("RectangleShape2D_d03v7")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Barrier" unique_id=1213971682]
+position = Vector2(429.75, -1430.25)
+shape = SubResource("RectangleShape2D_inb7v")
 
 [editable path="Player"]

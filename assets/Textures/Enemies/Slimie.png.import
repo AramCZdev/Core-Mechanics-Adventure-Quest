@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cpvmna2ads7qg"
-path="res://.godot/imported/Slimie.png.png-e7560bdab40bf5adfccc20868639f012.ctex"
+path="res://.godot/imported/Slimie.png-630d052611ab83e4f6eeea8871bfdb49.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Textures/Enemies/Slimie.png.png"
-dest_files=["res://.godot/imported/Slimie.png.png-e7560bdab40bf5adfccc20868639f012.ctex"]
+source_file="res://assets/Textures/Enemies/Slimie.png"
+dest_files=["res://.godot/imported/Slimie.png-630d052611ab83e4f6eeea8871bfdb49.ctex"]
 
 [params]
 

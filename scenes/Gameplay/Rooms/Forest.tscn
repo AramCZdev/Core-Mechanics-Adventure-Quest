@@ -39,7 +39,7 @@ size = Vector2(546, 1031.75)
 size = Vector2(1532, 396.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o4efc"]
-size = Vector2(1532, 396.5)
+size = Vector2(6155, 396.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mq66y"]
 size = Vector2(10797, 277)
@@ -225,7 +225,7 @@ color = Color(0.75, 0.6, 0, 1)
 [node name="Path10" type="ColorRect" parent="Forest" unique_id=54561458]
 offset_left = 4598.0
 offset_top = -1983.0
-offset_right = 6328.0
+offset_right = 9981.0
 offset_bottom = -1591.0
 color = Color(0.75, 0.6, 0, 1)
 
@@ -1066,7 +1066,7 @@ position = Vector2(5565, -2296.25)
 shape = SubResource("RectangleShape2D_8ao2d")
 
 [node name="CollisionShape2D9" type="CollisionShape2D" parent="Barrier" unique_id=1455862271]
-position = Vector2(4596, -1354)
+position = Vector2(6907.5, -1354)
 shape = SubResource("RectangleShape2D_o4efc")
 
 [node name="CollisionShape2D10" type="CollisionShape2D" parent="Barrier" unique_id=891023276]
@@ -1113,8 +1113,15 @@ offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
-color = Color(1, 0, 0, 1)
+color = Color(0.52, 0, 0, 1)
 metadata/_edit_use_anchors_ = true
+
+[node name="MonkeyIdle1" type="Sprite2D" parent="Button" unique_id=127285802]
+texture_filter = 3
+position = Vector2(391.9999, 1300)
+scale = Vector2(5.781244, 5.781244)
+texture = ExtResource("8_lfryq")
+flip_h = true
 
 [node name="Tree" type="StaticBody2D" parent="." unique_id=1756289215]
 position = Vector2(-12, -245)
@@ -1143,6 +1150,9 @@ offset_right = 2127.0
 offset_bottom = 66.0
 color = Color(0.56, 0.56, 0.56, 1)
 metadata/_edit_use_anchors_ = true
+
+[node name="SavePoint2" parent="." unique_id=1028937572 groups=["interactable"] instance=ExtResource("11_glmur")]
+position = Vector2(5256, -1955)
 
 [connection signal="body_entered" from="Start Cutscene" to="." method="_on_start_cutscene_body_entered"]
 [connection signal="body_entered" from="Button" to="." method="_on_button_body_entered"]

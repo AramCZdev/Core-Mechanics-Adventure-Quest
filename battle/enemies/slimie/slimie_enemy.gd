@@ -1,15 +1,10 @@
 extends BattleEnemy
-## Mossling enemy definition.
-##
-## To make another enemy, duplicate this folder, rename the three files, then
-## edit the defaults below. The .tres keeps the script reference, and the
-## .tscn is a ready-to-run battle scene for this enemy.
 
 func _init() -> void:
 	display_name = "Slimie"
-	max_hp = 60
-	attack_damage = 12
-	damage_variance = 2
+	max_hp = 120
+	attack_damage = 20
+	damage_variance = 3
 	talk_lines = PackedStringArray([
 		"The Slimie tilts its head.",
 		"You compliment the Slimie stickines. It seems pleased.",

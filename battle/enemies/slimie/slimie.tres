@@ -6,6 +6,7 @@
 script = ExtResource("1_enemy")
 max_hp = 120
 attack_damage = 20
+damage_variance = 3
 talk_lines = null
 can_win_by_talking = true
 talks_to_win = 5

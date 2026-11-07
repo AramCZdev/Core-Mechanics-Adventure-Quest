@@ -1,0 +1,23 @@
+{
+  "start_node": "monkey_intro",
+  "nodes": {
+	"monkey_intro": {
+	  "speaker": "Monkey",
+	  "portrait": "res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png",
+	  "text": "OOOOH a human.",
+	  "next": "monkey_info",
+	  "typing_speed": 40
+	},
+	"monkey_info": {
+	  "speaker": "Monkey",
+	  "portrait": "res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png",
+	  "text": "I heard you guys are made of tons of bananas.",
+	  "next": "feel",
+	},
+	"feel": {
+	  "speaker": "Monkey",
+	  "portrait": "res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png",
+	  "text": "OOOH I can just feel the bannas",
+	}
+  }
+}

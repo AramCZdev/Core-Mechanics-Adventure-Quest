@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://c7o887t2efrwg" path="res://battle/enemies/mossling/mossling.tres" id="3_cfxgj"]
 [ext_resource type="Script" uid="uid://bqlsk0txk4qav" path="res://scripts/battle/random_encounter.gd" id="3_random"]
 [ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="4_dialogue"]
+[ext_resource type="Resource" uid="uid://53k26rl2klf6" path="res://battle/enemies/slimie/slimie.tres" id="5_ixn8a"]
 [ext_resource type="Texture2D" uid="uid://dp8pprw825b2s" path="res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png" id="8_lfryq"]
 [ext_resource type="Texture2D" uid="uid://uaqtej7s16wg" path="res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Walk 2.png" id="10_x2bre"]
 [ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="11_glmur"]
@@ -24,6 +25,9 @@ size = Vector2(592.5, 3147.25)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wm6bp"]
 size = Vector2(939, 2789)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ixn8a"]
+size = Vector2(546, 3144.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_glmur"]
 size = Vector2(546, 3207.5)
@@ -121,7 +125,7 @@ script = ExtResource("1_ammgf")
 
 [node name="RandomEncounter" type="Node" parent="." unique_id=1979184167]
 script = ExtResource("3_random")
-enemies = Array[ExtResource("2_inb7v")]([ExtResource("3_cfxgj")])
+enemies = Array[ExtResource("2_inb7v")]([ExtResource("3_cfxgj"), ExtResource("5_ixn8a")])
 min_distance = 500.0
 max_distance = 3000.0
 
@@ -130,7 +134,7 @@ max_distance = 3000.0
 [node name="Grass" type="ColorRect" parent="Forest" unique_id=1094126300]
 offset_left = -1312.0
 offset_top = -3185.0
-offset_right = 4619.0
+offset_right = 10444.0
 offset_bottom = 187.0
 color = Color(0.031500045, 0.63, 0, 1)
 
@@ -174,6 +178,13 @@ offset_left = 3143.0
 offset_top = -3114.0
 offset_right = 3232.0
 offset_bottom = 106.0
+color = Color(0.75, 0.6, 0, 1)
+
+[node name="Path7" type="ColorRect" parent="Forest" unique_id=1421738708]
+offset_left = 3146.0
+offset_top = -3113.0
+offset_right = 5591.0
+offset_bottom = -3042.0
 color = Color(0.75, 0.6, 0, 1)
 
 [node name="Player" parent="." unique_id=520382692 instance=ExtResource("1_e1xel")]
@@ -765,6 +776,114 @@ position = Vector2(2414, -993.00024)
 scale = Vector2(5.3125, 5.3125)
 texture = ExtResource("2_28142")
 
+[node name="Tree65" type="Sprite2D" parent="Trees" unique_id=746805000]
+texture_filter = 3
+position = Vector2(3417, -63.999542)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree98" type="Sprite2D" parent="Trees" unique_id=275382486]
+texture_filter = 3
+position = Vector2(3417, -390.99954)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree99" type="Sprite2D" parent="Trees" unique_id=1656355533]
+texture_filter = 3
+position = Vector2(3417, -721.999)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree100" type="Sprite2D" parent="Trees" unique_id=1415780333]
+texture_filter = 3
+position = Vector2(3417, -1025)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree101" type="Sprite2D" parent="Trees" unique_id=1155359640]
+texture_filter = 3
+position = Vector2(3417, -1352)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree102" type="Sprite2D" parent="Trees" unique_id=1847753198]
+texture_filter = 3
+position = Vector2(3417, -1683)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree103" type="Sprite2D" parent="Trees" unique_id=1872889174]
+texture_filter = 3
+position = Vector2(3417, -2008)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree104" type="Sprite2D" parent="Trees" unique_id=1412008857]
+texture_filter = 3
+position = Vector2(3417, -2335)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree105" type="Sprite2D" parent="Trees" unique_id=1447589214]
+texture_filter = 3
+position = Vector2(3417, -2666)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree106" type="Sprite2D" parent="Trees" unique_id=20542186]
+texture_filter = 3
+position = Vector2(3702, -390.99954)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree107" type="Sprite2D" parent="Trees" unique_id=906769595]
+texture_filter = 3
+position = Vector2(3702, -1025)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree108" type="Sprite2D" parent="Trees" unique_id=265877187]
+texture_filter = 3
+position = Vector2(3702, -1352)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree109" type="Sprite2D" parent="Trees" unique_id=183000920]
+texture_filter = 3
+position = Vector2(3702, -1683)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree110" type="Sprite2D" parent="Trees" unique_id=316222032]
+texture_filter = 3
+position = Vector2(3702, -2008)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree111" type="Sprite2D" parent="Trees" unique_id=172449434]
+texture_filter = 3
+position = Vector2(3702, -2335)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree112" type="Sprite2D" parent="Trees" unique_id=569087096]
+texture_filter = 3
+position = Vector2(3702, -2666)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree113" type="Sprite2D" parent="Trees" unique_id=1026015047]
+texture_filter = 3
+position = Vector2(3703, -718)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree114" type="Sprite2D" parent="Trees" unique_id=1887623463]
+texture_filter = 3
+position = Vector2(3703, -65.00006)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1931271597]
 
 [node name="DialogueBox" parent="CanvasLayer" unique_id=1662593204 instance=ExtResource("4_dialogue")]
@@ -793,7 +912,11 @@ position = Vector2(2063.5, -1790.5)
 shape = SubResource("RectangleShape2D_wm6bp")
 
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="Barrier" unique_id=469595550]
-position = Vector2(2803, -1580.75)
+position = Vector2(2803, -1612.25)
+shape = SubResource("RectangleShape2D_ixn8a")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Barrier" unique_id=14178042]
+position = Vector2(3566, -1248)
 shape = SubResource("RectangleShape2D_glmur")
 
 [node name="Monkey" type="Sprite2D" parent="." unique_id=248307242]
@@ -815,7 +938,7 @@ libraries/ = SubResource("AnimationLibrary_ixn8a")
 position = Vector2(1753, -215)
 
 [node name="IceCreamMachine" parent="." unique_id=1255283054 groups=["interactable"] instance=ExtResource("12_ixn8a")]
-position = Vector2(2396, -166)
+position = Vector2(2399, -168)
 
 [connection signal="body_entered" from="Start Cutscene" to="." method="_on_start_cutscene_body_entered"]
 

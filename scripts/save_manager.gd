@@ -484,6 +484,8 @@ func save_player_state(
 	_config.set_value("progress", "player_speed", player_speed)
 	_config.set_value("progress", "player_rotation", player_rotation)
 	_config.set_value("progress", "sprite_rotation", sprite_rotation)
+	# Using a save point restores the player to full health.
+	_player_hp = _player_max_hp
 	_config.set_value("player", "hp", _player_hp)
 	_config.set_value("player", "max_hp", _player_max_hp)
 	_config.set_value("player", "attack", _player_attack)

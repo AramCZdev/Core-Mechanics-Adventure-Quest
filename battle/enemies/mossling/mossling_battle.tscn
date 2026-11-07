@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://dprf7a2g724o1"]
 
-[ext_resource type="PackedScene" path="res://scenes/battle/battle_ui.tscn" id="1_battle"]
-[ext_resource type="Resource" path="res://battle/enemies/mossling/mossling.tres" id="2_enemy"]
+[ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="1_battle"]
+[ext_resource type="Resource" uid="uid://c7o887t2efrwg" path="res://battle/enemies/mossling/mossling.tres" id="2_enemy"]
+[ext_resource type="Texture2D" uid="uid://m2lna4tnginp" path="res://assets/Textures/Enemies/Moosling.png" id="3_8jgfa"]
 
-[node name="MosslingBattle" instance=ExtResource("1_battle")]
+[node name="MosslingBattle" unique_id=2113194603 instance=ExtResource("1_battle")]
 enemy = ExtResource("2_enemy")
+
+[node name="EnemyTexture" parent="Margin/Layout/EnemyStage" parent_id_path=PackedInt32Array(517288878) index="0" unique_id=1633413427]
+texture = ExtResource("3_8jgfa")

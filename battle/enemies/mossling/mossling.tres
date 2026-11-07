@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_enemy")
+display_name = "Mossling"
 talk_lines = null
 turn_lines = null
 turn_action_restrictions = null

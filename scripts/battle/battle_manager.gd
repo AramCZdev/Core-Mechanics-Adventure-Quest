@@ -498,7 +498,7 @@ func _talk_to_enemy() -> void:
 			var win_text := enemy.talk_victory_text.strip_edges()
 			if win_text.is_empty():
 				win_text = "You talked the %s down. Victory!" % enemy.display_name
-			_end_battle(true, win_text)
+			_end_battle(true, win_text, true)
 			return
 
 	message_changed.emit(line)
@@ -565,7 +565,7 @@ func _action_restriction_message() -> String:
 			return "You cannot do that right now."
 
 
-func _end_battle(victory: bool, custom_message: String = "") -> void:
+func _end_battle(victory: bool, custom_message: String = "", peaceful: bool = false) -> void:
 	_battle_active = false
 	_defending = false
 	_phase_time_left = 0.0
@@ -575,19 +575,26 @@ func _end_battle(victory: bool, custom_message: String = "") -> void:
 	var save := _resolve_save_manager() if use_persistent_progress else null
 	var victory_gold := 0
 	if victory and save != null:
-		var upgraded_stats: Vector3i = save.call(
-			"reward_battle_victory",
-			player_hp,
-			player_max_hp,
-			player_attack
-		)
-		player_hp = upgraded_stats.x
-		player_max_hp = upgraded_stats.y
-		player_attack = upgraded_stats.z
-		victory_gold = int(save.call("get_battle_victory_gold"))
+		if peaceful:
+			# Talking the enemy down only rewards gold; it never increases stats.
+			victory_gold = int(save.call("get_battle_victory_gold"))
+			save.call("add_gold", victory_gold)
+		else:
+			var upgraded_stats: Vector3i = save.call(
+				"reward_battle_victory",
+				player_hp,
+				player_max_hp,
+				player_attack
+			)
+			player_hp = upgraded_stats.x
+			player_max_hp = upgraded_stats.y
+			player_attack = upgraded_stats.z
+			victory_gold = int(save.call("get_battle_victory_gold"))
 		player_stats_changed.emit(player_hp, player_max_hp, items)
 
 	if not custom_message.is_empty():
+		if peaceful and victory_gold > 0:
+			custom_message += "  +%d gold." % victory_gold
 		message_changed.emit(custom_message)
 	elif victory and save != null:
 		message_changed.emit("Victory! +5 Max HP, +1 Attack, +%d gold." % victory_gold)

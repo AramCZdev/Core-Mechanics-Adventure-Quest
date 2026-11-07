@@ -25,4 +25,4 @@ func _init() -> void:
 		"The Mossling seems to be listening.",
 		"The Mossling is still not attacking.",
 	])
-	# texture = preload("res://path/to/mossling.png")
+	texture = preload("res://assets/Textures/Enemies/Moosling.png")

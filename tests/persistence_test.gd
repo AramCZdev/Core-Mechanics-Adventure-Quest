@@ -39,6 +39,8 @@ func _initialize() -> void:
 	await _test_saved_rotation()
 	await _test_dummy_boss_progress()
 	await _test_battle_items()
+	await _test_talk_victory_reward()
+	_test_save_heals()
 	_test_delete_resets_economy()
 	await _test_location_persists_without_save()
 
@@ -227,6 +229,56 @@ func _test_battle_items() -> void:
 
 	manager.queue_free()
 	await process_frame
+
+
+func _test_talk_victory_reward() -> void:
+	var manager: BattleManager = load("res://scripts/battle/battle_manager.gd").new()
+	manager.name = "TalkVictoryManager"
+	manager.transition_delay = 0.0
+	manager.random_seed = 12345
+	root.add_child(manager)
+	await process_frame
+
+	var enemy := BattleEnemy.new()
+	enemy.display_name = "Talkling"
+	enemy.max_hp = 100
+	enemy.attack_damage = 0
+	enemy.damage_variance = 0
+	enemy.can_win_by_talking = true
+	enemy.talks_to_win = 1
+	enemy.talk_victory_text = "Calmed."
+
+	var hp_before: Vector2i = _save.call("get_player_health", 40, 40)
+	var attack_before: int = _save.call("get_player_attack", 12)
+	var gold_before: int = _save.call("get_gold")
+
+	_check(manager.start_battle(enemy), "talk reward battle starts")
+	_check(manager.select_action(BattleManager.ACTION_TALK), "talk accepted")
+	_check(manager.phase == BattleManager.Phase.VICTORY, "talk reaches victory")
+	_check(
+		_save.call("get_gold") == gold_before + EXPECTED_VICTORY_GOLD,
+		"talk victory awards gold"
+	)
+	var hp_after: Vector2i = _save.call("get_player_health", 40, 40)
+	_check(hp_after == hp_before, "talk victory does not change HP or max HP")
+	_check(
+		_save.call("get_player_attack", 12) == attack_before,
+		"talk victory does not increase attack"
+	)
+
+	manager.queue_free()
+	await process_frame
+
+
+func _test_save_heals() -> void:
+	var max_hp: int = int(_save.call("get_player_health", 40, 40).y)
+	_save.call("set_player_health", 1, max_hp)
+	_check(
+		_save.call("save_player_state", "res://scenes/Gameplay/game_test_scene.tscn", Vector2(100, 100), 380.0),
+		"healing save point writes the save"
+	)
+	var healed: Vector2i = _save.call("get_player_health", 40, 40)
+	_check(healed.x == max_hp, "saving heals the player to max HP")
 
 
 func _test_delete_resets_economy() -> void:

@@ -15,3 +15,6 @@ func _on_dialogue_finished(file_path: String, _last_node_id: String) -> void:
 		return
 	animation_player.play("monkey_jumps")
 	$"Start Cutscene".queue_free() 
+
+func _on_button_body_entered(body: Node2D) -> void:
+	$"Wall".queue_free()

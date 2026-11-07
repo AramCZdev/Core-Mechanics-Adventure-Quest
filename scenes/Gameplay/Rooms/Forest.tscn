@@ -27,7 +27,7 @@ size = Vector2(592.5, 3147.25)
 size = Vector2(939, 2789)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ixn8a"]
-size = Vector2(546, 3144.5)
+size = Vector2(546, 3049.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_glmur"]
 size = Vector2(546, 3207.5)
@@ -40,6 +40,9 @@ size = Vector2(1532, 396.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o4efc"]
 size = Vector2(1532, 396.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mq66y"]
+size = Vector2(10797, 277)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5d2y"]
 size = Vector2(199, 20)
@@ -135,6 +138,9 @@ size = Vector2(40, 39)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_38c1d"]
 size = Vector2(88, 297)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w1yd7"]
+size = Vector2(102, 511)
+
 [node name="Forest" type="Node2D" unique_id=1818823234]
 script = ExtResource("1_ammgf")
 
@@ -203,21 +209,21 @@ offset_bottom = -3042.0
 color = Color(0.75, 0.6, 0, 1)
 
 [node name="Path8" type="ColorRect" parent="Forest" unique_id=2003282072]
-offset_left = 3962.0
+offset_left = 4071.0
 offset_top = -3113.0
-offset_right = 4752.0
+offset_right = 4617.0
 offset_bottom = -1588.0
 color = Color(0.75, 0.6, 0, 1)
 
 [node name="Path9" type="ColorRect" parent="Forest" unique_id=1734536651]
-offset_left = 3962.0
+offset_left = 4071.0
 offset_top = -3113.0
 offset_right = 5751.0
-offset_bottom = -2532.0
+offset_bottom = -2665.0
 color = Color(0.75, 0.6, 0, 1)
 
 [node name="Path10" type="ColorRect" parent="Forest" unique_id=54561458]
-offset_left = 4722.0
+offset_left = 4598.0
 offset_top = -1983.0
 offset_right = 6328.0
 offset_bottom = -1591.0
@@ -1044,7 +1050,7 @@ position = Vector2(2063.5, -1790.5)
 shape = SubResource("RectangleShape2D_wm6bp")
 
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="Barrier" unique_id=469595550]
-position = Vector2(2803, -1612.25)
+position = Vector2(2803, -1659.75)
 shape = SubResource("RectangleShape2D_ixn8a")
 
 [node name="CollisionShape2D6" type="CollisionShape2D" parent="Barrier" unique_id=14178042]
@@ -1062,6 +1068,18 @@ shape = SubResource("RectangleShape2D_8ao2d")
 [node name="CollisionShape2D9" type="CollisionShape2D" parent="Barrier" unique_id=1455862271]
 position = Vector2(4596, -1354)
 shape = SubResource("RectangleShape2D_o4efc")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Barrier" unique_id=891023276]
+position = Vector2(5043.5, 274.5)
+shape = SubResource("RectangleShape2D_mq66y")
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="Barrier" unique_id=906752399]
+position = Vector2(5043, -3296)
+shape = SubResource("RectangleShape2D_mq66y")
+
+[node name="CollisionShape2D12" type="CollisionShape2D" parent="Barrier" unique_id=1963124787]
+position = Vector2(10288, -1524)
+shape = SubResource("RectangleShape2D_d03v7")
 
 [node name="Monkey" type="Sprite2D" parent="." unique_id=248307242]
 texture_filter = 3
@@ -1085,7 +1103,7 @@ position = Vector2(1753, -215)
 position = Vector2(2399, -168)
 
 [node name="Button" type="Area2D" parent="." unique_id=1998327687]
-position = Vector2(5629, -2631)
+position = Vector2(5650, -3057)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Button" unique_id=1086474047]
 shape = SubResource("RectangleShape2D_jkn65")
@@ -1096,20 +1114,37 @@ offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
 color = Color(1, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1756289215]
+[node name="Tree" type="StaticBody2D" parent="." unique_id=1756289215]
 position = Vector2(-12, -245)
 
-[node name="Tree" type="Sprite2D" parent="StaticBody2D" unique_id=1711720055]
+[node name="Tree" type="Sprite2D" parent="Tree" unique_id=1711720055]
 texture_filter = 3
 position = Vector2(2073.0002, -203.00003)
 scale = Vector2(6.84375, 6.84375)
 texture = ExtResource("2_28142")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=421555982]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tree" unique_id=421555982]
 position = Vector2(2069, -132.5)
 shape = SubResource("RectangleShape2D_38c1d")
 
+[node name="Wall" type="StaticBody2D" parent="." unique_id=480610320]
+position = Vector2(2888, -1633)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall" unique_id=1290044879]
+position = Vector2(2076, -189.5)
+shape = SubResource("RectangleShape2D_w1yd7")
+
+[node name="ColorRect" type="ColorRect" parent="Wall" unique_id=1070717711]
+offset_left = 2026.0
+offset_top = -445.0
+offset_right = 2127.0
+offset_bottom = 66.0
+color = Color(0.56, 0.56, 0.56, 1)
+metadata/_edit_use_anchors_ = true
+
 [connection signal="body_entered" from="Start Cutscene" to="." method="_on_start_cutscene_body_entered"]
+[connection signal="body_entered" from="Button" to="." method="_on_button_body_entered"]
 
 [editable path="Player"]

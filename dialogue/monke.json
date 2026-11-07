@@ -18,6 +18,12 @@
 	  "speaker": "Monkey",
 	  "portrait": "res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png",
 	  "text": "OOOH I can just feel the bannas",
+	  "next": "die",
+	},
+	"die": {
+	  "speaker": "Monkey",
+	  "portrait": "res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png",
+	  "text": "Prepare to die in a while",
 	}
   }
 }

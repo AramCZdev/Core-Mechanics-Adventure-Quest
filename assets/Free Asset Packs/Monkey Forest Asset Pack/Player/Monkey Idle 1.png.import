@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dp8pprw825b2s"
-path="res://.godot/imported/Monkey Idle 1.png-f5adbb248ee3c9f6ac1fc2d693de0f39.ctex"
+path.bptc="res://.godot/imported/Monkey Idle 1.png-f5adbb248ee3c9f6ac1fc2d693de0f39.bptc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png"
-dest_files=["res://.godot/imported/Monkey Idle 1.png-f5adbb248ee3c9f6ac1fc2d693de0f39.ctex"]
+dest_files=["res://.godot/imported/Monkey Idle 1.png-f5adbb248ee3c9f6ac1fc2d693de0f39.bptc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0

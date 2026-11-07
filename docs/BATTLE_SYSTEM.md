@@ -128,10 +128,29 @@ Enemy (`battle/enemies/mossling/mossling.tres`, driven by
 large dim label with the enemy's name fills the stage instead. No artwork ships
 with the project.
 
-## Talk victory and per-turn text
+## Talk victory, survival victory, and per-turn text
 
-Both are configured per enemy on the `BattleEnemy` resource, so different battles
-can behave differently without changing the manager or UI.
+All of these are configured per enemy on the `BattleEnemy` resource, so
+different battles can behave differently without changing the manager or UI.
+
+### Winning by surviving
+
+Some enemies cannot be beaten by damage or talking. Set a turn limit to end the
+fight in victory once the player has survived that many full turns:
+
+```text
+survive_turns_to_win  = 20
+survival_victory_text = "You survived 20 turns. The Monkey lets you pass."
+```
+
+The check runs after the enemy's action on the final turn. A player who is still
+alive at that point wins, with the normal victory rewards. Only the completed
+turns count: with `survive_turns_to_win = 20`, turn 20 plays out normally and the
+battle ends as soon as the enemy's action resolves. Leave it at `0` to disable
+the limit.
+
+The Monkey under `battle/enemies/monkey/` uses this: it has too much HP to defeat
+normally and cannot be talked down, so the only way out is to survive.
 
 ### Winning by talking
 

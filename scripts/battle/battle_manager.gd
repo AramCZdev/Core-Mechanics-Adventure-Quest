@@ -12,6 +12,8 @@ class_name BattleManager
 ##   -> BLOCK_TIMING -> RESOLVE_ENEMY -> PLAYER_TURN
 ## Defend / Item / Talk skip straight from RESOLVE_PLAYER to ENEMY_WINDUP.
 ## Item opens a choice of owned consumables through get_usable_items().
+## Enemies with survive_turns_to_win > 0 end the battle in victory after the
+## enemy's action on that turn if the player is still alive.
 
 signal battle_started(enemy: BattleEnemy)
 signal battle_ended(victory: bool)
@@ -524,6 +526,14 @@ func _begin_block_timing() -> void:
 func _begin_player_turn() -> void:
 	if not _battle_active:
 		return
+
+	if enemy != null and enemy.survive_turns_to_win > 0 and turn_number >= enemy.survive_turns_to_win:
+		var victory_text := enemy.survival_victory_text.strip_edges()
+		if victory_text.is_empty():
+			victory_text = "You survived %d turns. Victory!" % enemy.survive_turns_to_win
+		_end_battle(true, victory_text)
+		return
+
 	_defending = false
 	turn_number += 1
 	_set_phase(Phase.PLAYER_TURN)

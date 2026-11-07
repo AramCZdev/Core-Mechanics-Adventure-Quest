@@ -179,6 +179,20 @@ cannot be talked down, even if `talks_to_win` has a value.
 The included Mossling has this enabled with `talks_to_win = 3`, so you can test
 it immediately.
 
+### Winning by surviving
+
+Set a turn limit when the enemy should be outlasted rather than defeated:
+
+```text
+survive_turns_to_win  = 20
+survival_victory_text = "You survived 20 turns. The Monkey lets you pass."
+```
+
+The battle ends in victory after the enemy's action on turn 20, provided the
+player is still alive. Normal victory rewards are granted. Leave
+`survive_turns_to_win` at `0` to disable the limit. The included Monkey
+(`battle/enemies/monkey/`) uses `survive_turns_to_win = 20`.
+
 ### Changing the talk text
 
 `talk_lines` is the text shown when you choose Talk. The manager uses them in
@@ -186,7 +200,7 @@ order, one per Talk action:
 
 ```text
 talk_lines = [
-    "The Mossling tilts its head.",
+	"The Mossling tilts its head.",
 	"You compliment the Mossling's moss.",
 	"The Mossling rustles its leaves.",
 ]

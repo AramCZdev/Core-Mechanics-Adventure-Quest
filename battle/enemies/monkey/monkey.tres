@@ -1,0 +1,7 @@
+[gd_resource type="Resource" format=3 uid="uid://dmnp6yu7pxj4r"]
+
+[ext_resource type="Script" uid="uid://bveerjjo23ip4" path="res://battle/enemies/monkey/monkey_enemy.gd" id="1_huwwg"]
+
+[resource]
+script = ExtResource("1_huwwg")
+display_name = "Monkey"

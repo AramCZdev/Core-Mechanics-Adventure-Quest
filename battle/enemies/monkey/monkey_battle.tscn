@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cncvqgnpro6tl"]
+
+[ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="1_64aqk"]
+[ext_resource type="Resource" uid="uid://dmnp6yu7pxj4r" path="res://battle/enemies/monkey/monkey.tres" id="2_t8tan"]
+[ext_resource type="Texture2D" uid="uid://dp8pprw825b2s" path="res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png" id="3_monkey"]
+
+[node name="MonkeyBattle" unique_id=2113194603 instance=ExtResource("1_64aqk")]
+enemy = ExtResource("2_t8tan")
+
+[node name="EnemyTexture" parent="Margin/Layout/EnemyStage" parent_id_path=PackedInt32Array(517288878) index="0" unique_id=1633413427]
+texture_filter = 3
+texture = ExtResource("3_monkey")

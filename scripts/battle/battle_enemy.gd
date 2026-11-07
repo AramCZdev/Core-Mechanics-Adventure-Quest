@@ -48,6 +48,15 @@ class_name BattleEnemy
 
 @export_multiline var description: String = ""
 
+@export_group("Survival")
+## When above 0, the battle ends in victory once the player survives this many
+## full turns. The check runs after the enemy's action on the final turn.
+## Leave at 0 for enemies that can only be defeated by damage or talking.
+@export_range(0, 999, 1) var survive_turns_to_win: int = 0
+
+## Optional message shown when surviving wins. Leave empty for a default line.
+@export_multiline var survival_victory_text: String = ""
+
 @export_group("Turn restrictions")
 ## Optional action allowed on each player turn, in order. Use BattleManager
 ## action names: "attack", "defend", "item", "talk". An empty list allows every

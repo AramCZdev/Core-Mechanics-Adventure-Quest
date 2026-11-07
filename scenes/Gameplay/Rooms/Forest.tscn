@@ -141,6 +141,9 @@ size = Vector2(88, 297)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w1yd7"]
 size = Vector2(102, 511)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5ntm"]
+size = Vector2(103.5, 511)
+
 [node name="Forest" type="Node2D" unique_id=1818823234]
 script = ExtResource("1_ammgf")
 
@@ -1030,6 +1033,7 @@ visible = false
 [node name="BattleUI" parent="CanvasLayer" unique_id=1165195054 instance=ExtResource("2_battle")]
 visible = false
 auto_start = false
+items_enabled = true
 
 [node name="Barrier" type="StaticBody2D" parent="." unique_id=1341619016]
 
@@ -1116,13 +1120,6 @@ offset_bottom = 20.0
 color = Color(0.52, 0, 0, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="MonkeyIdle1" type="Sprite2D" parent="Button" unique_id=127285802]
-texture_filter = 3
-position = Vector2(391.9999, 1300)
-scale = Vector2(5.781244, 5.781244)
-texture = ExtResource("8_lfryq")
-flip_h = true
-
 [node name="Tree" type="StaticBody2D" parent="." unique_id=1756289215]
 position = Vector2(-12, -245)
 
@@ -1154,7 +1151,29 @@ metadata/_edit_use_anchors_ = true
 [node name="SavePoint2" parent="." unique_id=1028937572 groups=["interactable"] instance=ExtResource("11_glmur")]
 position = Vector2(5256, -1955)
 
+[node name="Monkey2" type="Sprite2D" parent="." unique_id=127285802]
+texture_filter = 3
+position = Vector2(5895.9995, -1794)
+scale = Vector2(5.781244, 5.781244)
+texture = ExtResource("8_lfryq")
+flip_h = true
+
+[node name="Start Cutscene2" type="Area2D" parent="." unique_id=785931470]
+position = Vector2(5505, 197)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Start Cutscene2" unique_id=511123317]
+position = Vector2(153, -2020)
+shape = SubResource("RectangleShape2D_t5ntm")
+
+[node name="Start Cutscene2" type="Area2D" parent="Start Cutscene2" unique_id=2021838401]
+position = Vector2(5505, 197)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Start Cutscene2/Start Cutscene2" unique_id=12691129]
+position = Vector2(153, -2020)
+shape = SubResource("RectangleShape2D_t5ntm")
+
 [connection signal="body_entered" from="Start Cutscene" to="." method="_on_start_cutscene_body_entered"]
 [connection signal="body_entered" from="Button" to="." method="_on_button_body_entered"]
+[connection signal="body_entered" from="Start Cutscene2" to="." method="_on_start_cutscene_2_body_entered"]
 
 [editable path="Player"]

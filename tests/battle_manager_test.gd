@@ -40,6 +40,9 @@ func _initialize() -> void:
 	_test_talk_victory()
 	_test_intro_text()
 	_test_turn_lines()
+	_test_survival_victory()
+	_test_survival_does_not_end_early()
+	_test_survival_disabled()
 	_test_victory()
 	_test_defeat()
 	_test_restart()
@@ -223,6 +226,55 @@ func _test_turn_lines() -> void:
 	_check(_last_message == "Second turn.", "second custom turn line shown")
 
 
+func _test_survival_victory() -> void:
+	_last_victory = null
+	var enemy := _make_enemy(100, 0)
+	enemy.survive_turns_to_win = 3
+	enemy.survival_victory_text = "You outlasted the Testling."
+	_start(enemy)
+
+	for i in 3:
+		_run_round()
+
+	_check(_manager.phase == BattleManager.Phase.VICTORY, "surviving the turn limit wins")
+	_check(_last_victory == true, "survival victory emits battle_ended(true)")
+	_check(_manager.turn_number == 3, "survival victory ends on the final turn")
+	_check(_last_message == "You outlasted the Testling.", "custom survival victory text shown")
+	_check(not _manager.is_battle_active(), "battle inactive after survival victory")
+	_check(_manager.restart_battle(), "restart after survival victory accepted")
+	_check(_manager.turn_number == 1, "restart resets survival progress")
+	_check(_manager.phase == BattleManager.Phase.PLAYER_TURN, "restart returns to player turn")
+
+	var default_enemy := _make_enemy(100, 0)
+	default_enemy.survive_turns_to_win = 2
+	_start(default_enemy)
+	_run_round()
+	_run_round()
+	_check(_last_message == "You survived 2 turns. Victory!", "default survival victory text shown")
+
+
+func _test_survival_does_not_end_early() -> void:
+	var enemy := _make_enemy(100, 0)
+	enemy.survive_turns_to_win = 3
+	_start(enemy)
+	_run_round()
+	_run_round()
+	_check(_manager.is_battle_active(), "battle stays active before the turn limit")
+	_check(_manager.phase == BattleManager.Phase.PLAYER_TURN, "survival limit keeps the turn loop going")
+	_check(_manager.turn_number == 3, "two rounds completed before the three-turn limit")
+
+
+func _test_survival_disabled() -> void:
+	var enemy := _make_enemy(100, 0)
+	enemy.survive_turns_to_win = 0
+	_start(enemy)
+	for i in 3:
+		_run_round()
+	_check(_manager.is_battle_active(), "survival limit of zero never ends the battle")
+	_check(_manager.phase == BattleManager.Phase.PLAYER_TURN, "no survival victory when disabled")
+	_check(_manager.turn_number == 4, "turn counter keeps advancing without a limit")
+
+
 func _test_victory() -> void:
 	_last_victory = null
 	_start(_make_enemy(10, 10))
@@ -266,6 +318,15 @@ func _start(enemy: BattleEnemy) -> void:
 
 func _advance() -> void:
 	_manager.advance_time(1.0)
+
+
+func _run_round() -> void:
+	_manager.select_action(BattleManager.ACTION_ATTACK)
+	_manager.submit_attack("Good", 1.0)
+	_advance()
+	_advance()
+	_manager.submit_block("Perfect", 1.0)
+	_advance()
 
 
 func _make_enemy(max_hp: int, damage: int) -> BattleEnemy:

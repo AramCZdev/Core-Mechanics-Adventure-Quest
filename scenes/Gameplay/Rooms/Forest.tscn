@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="4_dialogue"]
 [ext_resource type="Texture2D" uid="uid://dp8pprw825b2s" path="res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png" id="8_lfryq"]
 [ext_resource type="Texture2D" uid="uid://uaqtej7s16wg" path="res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Walk 2.png" id="10_x2bre"]
+[ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="11_glmur"]
+[ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/ice_cream_machine.tscn" id="12_ixn8a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d03v7"]
 size = Vector2(271, 3297)
@@ -24,7 +26,7 @@ size = Vector2(592.5, 3147.25)
 size = Vector2(939, 2789)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_glmur"]
-size = Vector2(1037.5, 3207.5)
+size = Vector2(546, 3207.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5d2y"]
 size = Vector2(199, 20)
@@ -156,7 +158,7 @@ color = Color(0.75, 0.6, 0, 1)
 [node name="Path4" type="ColorRect" parent="Forest" unique_id=1561484359]
 offset_left = 786.0
 offset_top = 35.0
-offset_right = 3109.0
+offset_right = 3231.0
 offset_bottom = 106.0
 color = Color(0.75, 0.6, 0, 1)
 
@@ -164,6 +166,13 @@ color = Color(0.75, 0.6, 0, 1)
 offset_left = 1617.0
 offset_top = -369.0
 offset_right = 2502.0
+offset_bottom = 106.0
+color = Color(0.75, 0.6, 0, 1)
+
+[node name="Path6" type="ColorRect" parent="Forest" unique_id=1506435477]
+offset_left = 3143.0
+offset_top = -3114.0
+offset_right = 3232.0
 offset_bottom = 106.0
 color = Color(0.75, 0.6, 0, 1)
 
@@ -564,6 +573,198 @@ position = Vector2(2969.0002, -340.00027)
 scale = Vector2(5.3125, 5.3125)
 texture = ExtResource("2_28142")
 
+[node name="Tree66" type="Sprite2D" parent="Trees" unique_id=560258829]
+texture_filter = 3
+position = Vector2(1635, -665.99976)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree67" type="Sprite2D" parent="Trees" unique_id=1367096755]
+texture_filter = 3
+position = Vector2(1635, -996.999)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree68" type="Sprite2D" parent="Trees" unique_id=163168991]
+texture_filter = 3
+position = Vector2(1635, -1300)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree69" type="Sprite2D" parent="Trees" unique_id=266179086]
+texture_filter = 3
+position = Vector2(1635, -1627)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree70" type="Sprite2D" parent="Trees" unique_id=1457872356]
+texture_filter = 3
+position = Vector2(1635, -1958)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree71" type="Sprite2D" parent="Trees" unique_id=1423241076]
+texture_filter = 3
+position = Vector2(1635, -2283)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree72" type="Sprite2D" parent="Trees" unique_id=752314451]
+texture_filter = 3
+position = Vector2(1635, -2610)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree73" type="Sprite2D" parent="Trees" unique_id=1983857067]
+texture_filter = 3
+position = Vector2(1635, -2941)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree74" type="Sprite2D" parent="Trees" unique_id=1881375205]
+texture_filter = 3
+position = Vector2(1920, -665.99976)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree75" type="Sprite2D" parent="Trees" unique_id=404526348]
+texture_filter = 3
+position = Vector2(1920, -1300)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree76" type="Sprite2D" parent="Trees" unique_id=1670645041]
+texture_filter = 3
+position = Vector2(1920, -1627)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree77" type="Sprite2D" parent="Trees" unique_id=1515642812]
+texture_filter = 3
+position = Vector2(1920, -1958)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree78" type="Sprite2D" parent="Trees" unique_id=2099846416]
+texture_filter = 3
+position = Vector2(1920, -2283)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree79" type="Sprite2D" parent="Trees" unique_id=1295444318]
+texture_filter = 3
+position = Vector2(1920, -2610)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree80" type="Sprite2D" parent="Trees" unique_id=2124753067]
+texture_filter = 3
+position = Vector2(1920, -2941)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree81" type="Sprite2D" parent="Trees" unique_id=1858379752]
+texture_filter = 3
+position = Vector2(1921, -993)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree82" type="Sprite2D" parent="Trees" unique_id=1279830298]
+texture_filter = 3
+position = Vector2(2128, -665.99976)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree83" type="Sprite2D" parent="Trees" unique_id=1027436734]
+texture_filter = 3
+position = Vector2(2128, -996.99927)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree84" type="Sprite2D" parent="Trees" unique_id=1383340221]
+texture_filter = 3
+position = Vector2(2128, -1300.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree85" type="Sprite2D" parent="Trees" unique_id=1722543018]
+texture_filter = 3
+position = Vector2(2128, -1627.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree86" type="Sprite2D" parent="Trees" unique_id=212316997]
+texture_filter = 3
+position = Vector2(2128, -1958.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree87" type="Sprite2D" parent="Trees" unique_id=1455909810]
+texture_filter = 3
+position = Vector2(2128, -2283.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree88" type="Sprite2D" parent="Trees" unique_id=136087035]
+texture_filter = 3
+position = Vector2(2128, -2610.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree89" type="Sprite2D" parent="Trees" unique_id=2018859020]
+texture_filter = 3
+position = Vector2(2128, -2941.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree90" type="Sprite2D" parent="Trees" unique_id=2088751333]
+texture_filter = 3
+position = Vector2(2413, -665.99976)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree91" type="Sprite2D" parent="Trees" unique_id=916529399]
+texture_filter = 3
+position = Vector2(2413, -1300.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree92" type="Sprite2D" parent="Trees" unique_id=1006420013]
+texture_filter = 3
+position = Vector2(2413, -1627.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree93" type="Sprite2D" parent="Trees" unique_id=979433374]
+texture_filter = 3
+position = Vector2(2413, -1958.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree94" type="Sprite2D" parent="Trees" unique_id=1442176454]
+texture_filter = 3
+position = Vector2(2413, -2283.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree95" type="Sprite2D" parent="Trees" unique_id=334490540]
+texture_filter = 3
+position = Vector2(2413, -2610.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree96" type="Sprite2D" parent="Trees" unique_id=2042748076]
+texture_filter = 3
+position = Vector2(2413, -2941.0002)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
+[node name="Tree97" type="Sprite2D" parent="Trees" unique_id=770942515]
+texture_filter = 3
+position = Vector2(2414, -993.00024)
+scale = Vector2(5.3125, 5.3125)
+texture = ExtResource("2_28142")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1931271597]
 
 [node name="DialogueBox" parent="CanvasLayer" unique_id=1662593204 instance=ExtResource("4_dialogue")]
@@ -574,7 +775,6 @@ visible = false
 auto_start = false
 
 [node name="Barrier" type="StaticBody2D" parent="." unique_id=1341619016]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Barrier" unique_id=1970887722]
 position = Vector2(-219.5, -1512.5)
@@ -593,7 +793,7 @@ position = Vector2(2063.5, -1790.5)
 shape = SubResource("RectangleShape2D_wm6bp")
 
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="Barrier" unique_id=469595550]
-position = Vector2(3048.75, -1580.75)
+position = Vector2(2803, -1580.75)
 shape = SubResource("RectangleShape2D_glmur")
 
 [node name="Monkey" type="Sprite2D" parent="." unique_id=248307242]
@@ -610,6 +810,12 @@ shape = SubResource("RectangleShape2D_i5d2y")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=423537986]
 libraries/ = SubResource("AnimationLibrary_ixn8a")
+
+[node name="SavePoint" parent="." unique_id=1709967034 groups=["interactable"] instance=ExtResource("11_glmur")]
+position = Vector2(1753, -215)
+
+[node name="IceCreamMachine" parent="." unique_id=1255283054 groups=["interactable"] instance=ExtResource("12_ixn8a")]
+position = Vector2(2396, -166)
 
 [connection signal="body_entered" from="Start Cutscene" to="." method="_on_start_cutscene_body_entered"]
 

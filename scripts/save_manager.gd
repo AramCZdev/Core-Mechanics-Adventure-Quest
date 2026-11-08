@@ -351,6 +351,19 @@ func get_inventory() -> Dictionary:
 	return _inventory.duplicate()
 
 
+## Replaces the in-memory inventory with a previous snapshot. Used to refund
+## items consumed during a battle the player lost. Changes stay in memory until
+## the player uses a save point.
+func restore_inventory(inventory: Dictionary) -> void:
+	_inventory.clear()
+	for item_id in inventory:
+		var normalized_id := str(item_id).strip_edges().to_lower()
+		var quantity := int(inventory[item_id])
+		if _is_valid_item_id(normalized_id) and quantity > 0:
+			_inventory[normalized_id] = quantity
+	inventory_changed.emit(get_inventory())
+
+
 ## Currency stays in memory until the player uses a save point.
 func get_gold() -> int:
 	return _gold

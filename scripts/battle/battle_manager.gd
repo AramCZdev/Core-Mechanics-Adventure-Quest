@@ -100,6 +100,10 @@ var _attack_buff_turns: int = 0
 var _defense_buff: int = 0
 var _defense_buff_turns: int = 0
 var _rng := RandomNumberGenerator.new()
+## Inventory as it was before the battle. Restored on defeat so items used
+## during a lost fight are not lost for good.
+var _inventory_before_battle: Dictionary = {}
+var _inventory_snapshot_valid: bool = false
 
 
 func _ready() -> void:
@@ -137,6 +141,7 @@ func start_battle(enemy_override: BattleEnemy = null) -> bool:
 
 	enemy_hp = maxi(1, enemy.max_hp)
 	_refresh_items()
+	_snapshot_battle_inventory()
 	_defending = false
 	_talk_index = 0
 	_talks_used = 0
@@ -437,6 +442,38 @@ func _refresh_items() -> void:
 	items = maxi(0, starting_items)
 
 
+## Remembers the persistent inventory so a lost battle can refund anything the
+## player consumed during the fight.
+func _snapshot_battle_inventory() -> void:
+	_inventory_before_battle.clear()
+	_inventory_snapshot_valid = false
+	if not use_persistent_items:
+		return
+	var save := _resolve_save_manager()
+	if save == null:
+		return
+	var inventory: Dictionary = save.call("get_inventory")
+	_inventory_before_battle = inventory
+	_inventory_snapshot_valid = true
+
+
+func _restore_battle_inventory() -> void:
+	if not _inventory_snapshot_valid:
+		return
+	_inventory_snapshot_valid = false
+	var save := _resolve_save_manager()
+	if save == null:
+		return
+	save.call("restore_inventory", _inventory_before_battle)
+	_inventory_before_battle.clear()
+	_refresh_items()
+
+
+func _clear_battle_inventory_snapshot() -> void:
+	_inventory_before_battle.clear()
+	_inventory_snapshot_valid = false
+
+
 func _is_supported_effect(effect: Dictionary) -> bool:
 	return str(effect.get("kind", "")) in [
 		"heal",
@@ -582,6 +619,12 @@ func _end_battle(victory: bool, custom_message: String = "", peaceful: bool = fa
 	set_process(false)
 
 	phase = Phase.VICTORY if victory else Phase.DEFEAT
+	# A defeat rewinds item consumption; a victory keeps whatever was used.
+	if victory:
+		_clear_battle_inventory_snapshot()
+	else:
+		_restore_battle_inventory()
+		player_stats_changed.emit(player_hp, player_max_hp, items)
 	var save := _resolve_save_manager() if use_persistent_progress else null
 	var victory_gold := 0
 	if victory and save != null:

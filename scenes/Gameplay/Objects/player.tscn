@@ -87,7 +87,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="Player" type="CharacterBody2D" unique_id=520382692]
+[node name="Player" type="CharacterBody2D" unique_id=520382692 groups=["player"]]
 z_index = 10
 script = ExtResource("1_kgyvy")
 

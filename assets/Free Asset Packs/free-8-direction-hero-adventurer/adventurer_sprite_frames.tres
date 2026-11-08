@@ -44,9 +44,125 @@
 [ext_resource type="Texture2D" uid="uid://cdu56f1w4sp4s" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/05.png" id="42_7roph"]
 [ext_resource type="Texture2D" uid="uid://c8dyn63e23d25" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/06.png" id="43_2ql8m"]
 [ext_resource type="Texture2D" uid="uid://c053hbkes3c2k" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/walk/up/07.png" id="44_1h8t5"]
+[ext_resource type="Texture2D" uid="uid://dfn3uhjf8s4dl" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/down/00.png" id="45_d0"]
+[ext_resource type="Texture2D" uid="uid://b2u4byqvuj8yb" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/down/01.png" id="46_d1"]
+[ext_resource type="Texture2D" uid="uid://jinin6avkfh8" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/down/02.png" id="47_d2"]
+[ext_resource type="Texture2D" uid="uid://b5xu1bgkf7850" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/down/03.png" id="48_d3"]
+[ext_resource type="Texture2D" uid="uid://h5tlh0w3i32s" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/down/04.png" id="49_d4"]
+[ext_resource type="Texture2D" uid="uid://cj6s43hnl23bm" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/down/05.png" id="50_d5"]
+[ext_resource type="Texture2D" uid="uid://c73vgqby5efwi" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/up/00.png" id="51_u0"]
+[ext_resource type="Texture2D" uid="uid://df1oduuyl8rhf" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/up/01.png" id="52_u1"]
+[ext_resource type="Texture2D" uid="uid://dxw45ddg0o4tn" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/up/02.png" id="53_u2"]
+[ext_resource type="Texture2D" uid="uid://btqi3kqyp1evv" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/up/03.png" id="54_u3"]
+[ext_resource type="Texture2D" uid="uid://bt48j2fug5u6i" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/up/04.png" id="55_u4"]
+[ext_resource type="Texture2D" uid="uid://dpj2og860kaad" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/up/05.png" id="56_u5"]
+[ext_resource type="Texture2D" uid="uid://bx726563b3nb2" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/left/00.png" id="57_l0"]
+[ext_resource type="Texture2D" uid="uid://dsp0npjvlrcv5" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/left/01.png" id="58_l1"]
+[ext_resource type="Texture2D" uid="uid://bm6en5ulvl7t4" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/left/02.png" id="59_l2"]
+[ext_resource type="Texture2D" uid="uid://wp15mgyp13he" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/left/03.png" id="60_l3"]
+[ext_resource type="Texture2D" uid="uid://ct7ldodd3lvgk" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/left/04.png" id="61_l4"]
+[ext_resource type="Texture2D" uid="uid://c6d8hrevdfimf" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/left/05.png" id="62_l5"]
+[ext_resource type="Texture2D" uid="uid://xkkyvdro7fep" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/right/00.png" id="63_r0"]
+[ext_resource type="Texture2D" uid="uid://b2jbixnv2qer7" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/right/01.png" id="64_r1"]
+[ext_resource type="Texture2D" uid="uid://c4yd1bgtnu05j" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/right/02.png" id="65_r2"]
+[ext_resource type="Texture2D" uid="uid://c3irma3wqbhg2" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/right/03.png" id="66_r3"]
+[ext_resource type="Texture2D" uid="uid://dvt3t6w7jip55" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/right/04.png" id="67_r4"]
+[ext_resource type="Texture2D" uid="uid://sgv8ae2knpnn" path="res://assets/Free Asset Packs/free-8-direction-hero-adventurer/frames/death/right/05.png" id="68_r5"]
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_d0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_d1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_d2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_d3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_d4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_d5")
+}],
+"loop": 0,
+"name": &"death_down",
+"speed": 8.3
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("57_l0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_l1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_l2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_l3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_l4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_l5")
+}],
+"loop": 0,
+"name": &"death_left",
+"speed": 8.3
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_r0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_r1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_r2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_r4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_r3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_r5")
+}],
+"loop": 0,
+"name": &"death_right",
+"speed": 8.3
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_u0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_u1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_u2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_u3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_u4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_u5")
+}],
+"loop": 0,
+"name": &"death_up",
+"speed": 8.3
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("3_fn8dg")

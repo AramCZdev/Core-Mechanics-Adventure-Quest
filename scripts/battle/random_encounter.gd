@@ -73,6 +73,8 @@ func _ready() -> void:
 
 	_huh = get_node_or_null(huh_path) as CanvasItem
 	_battle_ui.battle_finished.connect(_on_battle_finished)
+	if _player.has_signal("respawned"):
+		_player.connect("respawned", _on_player_respawned)
 	_last_position = _player.global_position
 	_roll_next_check()
 
@@ -151,6 +153,14 @@ func _roll_next_check(extra_distance: float = 0.0) -> void:
 
 
 func _on_battle_finished(_victory: bool) -> void:
+	_battle_in_progress = false
+	_last_position = _player.global_position
+	_roll_next_check(post_battle_distance)
+
+
+## Respawn can teleport the player a long way from where the battle ended.
+## Treat that jump as a fresh start instead of walked distance.
+func _on_player_respawned() -> void:
 	_battle_in_progress = false
 	_last_position = _player.global_position
 	_roll_next_check(post_battle_distance)

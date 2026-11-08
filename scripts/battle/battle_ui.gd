@@ -34,6 +34,12 @@ signal battle_exited(victory: bool)
 ## Seconds the victory presentation (win cutscene) stays on screen before the
 ## battle ends, resumes gameplay, and emits battle_finished.
 @export_range(0.0, 10.0, 0.1, "suffix:s") var victory_exit_delay: float = 3.0
+## Hide the battle screen automatically after a defeat so the player's death
+## animation is visible in the world.
+@export var auto_exit_on_defeat: bool = true
+## Seconds the defeat result stays on screen before closing the battle and
+## playing the player's death animation.
+@export_range(0.0, 10.0, 0.1, "suffix:s") var defeat_exit_delay: float = 1.5
 
 @onready var _manager: BattleManager = get_node_or_null(battle_manager_path) as BattleManager
 @onready var _enemy_texture: TextureRect = %EnemyTexture
@@ -195,6 +201,10 @@ func _on_battle_ended(victory: bool) -> void:
 		# Keep everything frozen while the victory presentation plays. The
 		# battle only finishes once the win cutscene timer runs out.
 		_exit_timer.start(victory_exit_delay)
+	elif not victory and auto_exit_on_defeat:
+		# Show the defeat result briefly, then reveal the world so the player
+		# can play the death animation.
+		_exit_timer.start(defeat_exit_delay)
 	else:
 		_finish_battle(victory)
 
@@ -207,6 +217,8 @@ func exit_battle() -> void:
 	var victory: bool = _manager.phase == BattleManager.Phase.VICTORY
 	_resume_gameplay()
 	hide()
+	if not victory:
+		_play_player_death()
 	_finish_battle(victory)
 	battle_exited.emit(victory)
 
@@ -226,9 +238,20 @@ func _resume_gameplay() -> void:
 
 
 func _on_exit_timer_timeout() -> void:
-	if _manager == null or _manager.phase != BattleManager.Phase.VICTORY:
+	if _manager == null:
+		return
+	if _manager.phase != BattleManager.Phase.VICTORY and _manager.phase != BattleManager.Phase.DEFEAT:
 		return
 	exit_battle()
+
+
+## Finds the world player after a lost battle and lets it play its death
+## animation. Players expose play_death() and join the "player" group.
+func _play_player_death() -> void:
+	for player in get_tree().get_nodes_in_group("player"):
+		if player.has_method("play_death"):
+			player.call("play_death")
+			return
 
 
 func _on_phase_changed(new_phase: int) -> void:

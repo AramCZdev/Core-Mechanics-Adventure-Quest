@@ -1,6 +1,12 @@
 extends CharacterBody2D
 
+signal respawned
+
 @export var speed: float = 380.0
+
+@export_group("Death")
+## Seconds to hold the fallen pose before respawning at the last save point.
+@export_range(0.0, 10.0, 0.1, "suffix:s") var respawn_delay: float = 1.5
 
 @onready var pause_menu = $"CanvasLayer/PauseMenu"
 @onready var stats_menu = $"CanvasLayer/StatsMenu"
@@ -14,8 +20,15 @@ extends CharacterBody2D
 var _facing_direction: String = "down"
 var _is_hurting: bool = false
 var _cutscene_locked: bool = false
+var _is_dead: bool = false
+var _respawn_timer: Timer
 
 func _ready() -> void:
+	_respawn_timer = Timer.new()
+	_respawn_timer.one_shot = true
+	_respawn_timer.timeout.connect(_on_respawn_timer_timeout)
+	add_child(_respawn_timer)
+
 	pause_menu.visible = false
 	stats_menu.visible = false
 	get_tree().paused = false
@@ -35,6 +48,11 @@ func _ready() -> void:
 	$"CanvasLayer/StatsMenu/Content/Close".pressed.connect(_toggle_stats_menu)
 
 func _physics_process(_delta: float) -> void:
+	if _is_dead:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
 	if _cutscene_locked:
 		velocity = Vector2.ZERO
 		move_and_slide()
@@ -63,7 +81,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _update_movement_animation(direction: Vector2) -> void:
-	if animated_sprite == null or _is_hurting or _cutscene_locked:
+	if animated_sprite == null or _is_hurting or _cutscene_locked or _is_dead:
 		return
 
 	if direction == Vector2.ZERO:
@@ -87,7 +105,7 @@ func _update_movement_animation(direction: Vector2) -> void:
 
 
 func _update_idle_animation() -> void:
-	if animated_sprite == null or _is_hurting or _cutscene_locked:
+	if animated_sprite == null or _is_hurting or _cutscene_locked or _is_dead:
 		return
 	var anim_name := "walk_" + _facing_direction
 	if animated_sprite.animation != anim_name:
@@ -97,7 +115,7 @@ func _update_idle_animation() -> void:
 
 
 func play_hurt(direction_override: String = "") -> void:
-	if animated_sprite == null:
+	if animated_sprite == null or _is_dead:
 		return
 	var dir := direction_override if not direction_override.is_empty() else _facing_direction
 	if not dir in ["up", "down", "left", "right"]:
@@ -131,12 +149,118 @@ func show_hurt_pose(direction: String = "down") -> void:
 	animated_sprite.frame = animated_sprite.sprite_frames.get_frame_count(anim_name) - 1
 
 
+## Plays the death animation and locks the player in a fallen pose. Called by
+## BattleUI after a lost battle. Safe to call more than once.
+func play_death(direction_override: String = "") -> void:
+	if _is_dead:
+		return
+
+	_is_dead = true
+	_is_hurting = false
+	_cutscene_locked = true
+	velocity = Vector2.ZERO
+	stats_menu.visible = false
+
+	if animated_sprite == null:
+		_schedule_respawn()
+		return
+
+	var dir := direction_override if not direction_override.is_empty() else _facing_direction
+	if not dir in ["up", "down", "left", "right"]:
+		dir = "down"
+	_facing_direction = dir
+
+	var anim_name := "death_" + dir
+	if not animated_sprite.sprite_frames.has_animation(anim_name):
+		# Fallback for packs that do not ship death frames.
+		anim_name = "hurt_" + dir
+	animated_sprite.play(anim_name)
+	_schedule_respawn()
+
+
+func is_dead() -> bool:
+	return _is_dead
+
+
+## Waits for the death animation to finish (plus a short hold on the fallen
+## pose) before returning the player to the last save point.
+func _schedule_respawn() -> void:
+	if _respawn_timer == null or not _respawn_timer.is_stopped():
+		return
+
+	var delay := respawn_delay
+	if animated_sprite != null and animated_sprite.sprite_frames != null:
+		var anim_name := animated_sprite.animation
+		if not anim_name.is_empty() and animated_sprite.sprite_frames.has_animation(anim_name):
+			var frame_count := animated_sprite.sprite_frames.get_frame_count(anim_name)
+			var speed_scale := animated_sprite.sprite_frames.get_animation_speed(anim_name)
+			if speed_scale > 0.0:
+				delay += float(frame_count) / speed_scale
+	_respawn_timer.start(maxf(delay, 0.0))
+
+
+func _on_respawn_timer_timeout() -> void:
+	_respawn_at_last_save_point()
+
+
+## Puts the player back at the last save point with full HP. The pre-battle
+## inventory was already restored by BattleManager when the defeat was handled.
+func _respawn_at_last_save_point() -> void:
+	var health := SaveManager.get_player_health(40, 40)
+	SaveManager.set_player_health(health.y, health.y)
+
+	var saved_scene := SaveManager.get_saved_scene_path()
+	var current_scene := get_tree().current_scene
+	if (
+		SaveManager.has_save()
+		and not saved_scene.is_empty()
+		and current_scene != null
+		and saved_scene != current_scene.scene_file_path
+	):
+		# The save point is in another room. Reload it; the new player
+		# positions itself at the save point during _ready().
+		var error := get_tree().change_scene_to_file(saved_scene)
+		if error == OK:
+			return
+		# If the saved room cannot load, fall back to respawning in place.
+
+	_is_dead = false
+	_is_hurting = false
+	_cutscene_locked = false
+	velocity = Vector2.ZERO
+
+	if SaveManager.has_save():
+		global_position = SaveManager.get_saved_player_position()
+		speed = SaveManager.get_saved_player_speed(speed)
+		rotation = SaveManager.get_saved_player_rotation(rotation)
+		if animated_sprite != null:
+			animated_sprite.rotation = SaveManager.get_saved_sprite_rotation(animated_sprite.rotation)
+
+	if animated_sprite != null:
+		animated_sprite.modulate = Color.WHITE
+		_update_idle_animation()
+
+	respawned.emit()
+
+
 func _on_animation_finished() -> void:
-	if animated_sprite != null and animated_sprite.animation.begins_with("hurt_"):
+	if animated_sprite == null:
+		return
+	if _is_dead:
+		# Death animations are one-shot; hold the final frame.
+		return
+	if animated_sprite.animation.begins_with("hurt_"):
 		_is_hurting = false
 		_update_idle_animation()
 
+
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		get_tree().paused = true
+		pause_menu.visible = true
+		return
+	if _is_dead:
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_CTRL:
 		_toggle_stats_menu()
 		get_viewport().set_input_as_handled()
@@ -160,9 +284,6 @@ func _input(event: InputEvent) -> void:
 				save_point.call("save_player", self)
 			get_viewport().set_input_as_handled()
 			return
-	if event.is_action_pressed("pause"):
-		get_tree().paused = true
-		pause_menu.visible = true
 
 
 func _on_resume_pressed() -> void:

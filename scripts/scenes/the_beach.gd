@@ -87,5 +87,6 @@ func _on_dialogue_finished(file_path: String, _last_node_id: String) -> void:
 func _on_entrance_body_entered(body: Node2D) -> void:
 	if _transitioning or body != player:
 		return
+	$Player/AudioStreamPlayer2D.play()
 	_transitioning = true
 	animation_player.play("entrance")

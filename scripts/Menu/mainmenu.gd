@@ -52,6 +52,7 @@ func _on_start_pressed() -> void:
 
 
 func _on_begin_pressed() -> void:
+	$AudioStreamPlayer2D.play()
 	$"AnimationPlayer".play("start")
 	$"HeroNamePanel/Begin".disabled = true
 	$"HeroNamePanel/Cancel".disabled = true
@@ -105,3 +106,7 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 
 func _on_settings_pressed() -> void:
 	$"Settings".show()
+
+
+func _on_credits_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/credits.tscn")

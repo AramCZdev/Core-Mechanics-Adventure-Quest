@@ -66,6 +66,7 @@ func _on_attack_timing_finished(zone: String, multiplier: float) -> void:
 
 ## Stops glitching when the battle ends so other fights are unaffected.
 func _on_battle_ended(victory: bool) -> void:
+	$AudioStreamPlayer2D.play()
 	super._on_battle_ended(victory)
 	if _glitch_active:
 		_deactivate_glitch()

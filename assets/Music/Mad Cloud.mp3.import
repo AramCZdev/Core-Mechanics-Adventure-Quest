@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgdxmr8ak5oiw"
+path="res://.godot/imported/Mad Cloud.mp3-d4ae47c29ffee4b86d8c23e9d46cd9e4.mp3str"
+
+[deps]
+
+source_file="res://assets/Music/Mad Cloud.mp3"
+dest_files=["res://.godot/imported/Mad Cloud.mp3-d4ae47c29ffee4b86d8c23e9d46cd9e4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

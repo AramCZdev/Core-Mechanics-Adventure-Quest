@@ -184,6 +184,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_battle_started(started_enemy: BattleEnemy) -> void:
+	$AudioStreamPlayer2D.play()
 	_exit_timer.stop()
 	_battle_finished_emitted = false
 	show()
@@ -207,6 +208,7 @@ func _on_battle_started(started_enemy: BattleEnemy) -> void:
 
 
 func _on_battle_ended(victory: bool) -> void:
+	$AudioStreamPlayer2D.stop()
 	_hide_timing_bars()
 	_hide_item_menu()
 	_battle_over_label.text = "VICTORY!" if victory else "DEFEAT..."

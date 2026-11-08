@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b01jkut3y52c2"]
 
 [ext_resource type="PackedScene" path="res://scenes/battle/broken_tv_battle_ui.tscn" id="1_kt51k"]
+[ext_resource type="AudioStream" uid="uid://c2ear1mh6n41u" path="res://assets/Music/Questions.mp3" id="3_1kvvd"]
 [ext_resource type="Script" uid="uid://cvb1gsw5b53an" path="res://scripts/battle/broken_tv_attack_timing.gd" id="3_ef7qc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mhq8n"]
@@ -36,3 +37,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_mhq8n")
 
 [node name="AttackTiming" parent="Margin/Layout/BattlePanel/PanelMargin/Content/TimingArea/TimingHolder" parent_id_path=PackedInt32Array(1435697628) index="0" unique_id=70045993]
 script = ExtResource("3_ef7qc")
+
+[node name="AudioStreamPlayer2D" parent="." index="3"]
+stream = ExtResource("3_1kvvd")
+pitch_scale = 1.6

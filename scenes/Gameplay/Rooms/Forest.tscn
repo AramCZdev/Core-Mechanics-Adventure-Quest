@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bqlsk0txk4qav" path="res://scripts/battle/random_encounter.gd" id="3_random"]
 [ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="4_dialogue"]
 [ext_resource type="Resource" uid="uid://53k26rl2klf6" path="res://battle/enemies/slimie/slimie.tres" id="5_ixn8a"]
+[ext_resource type="AudioStream" uid="uid://dnrbi5sa5y0kc" path="res://assets/Music/Welcome to the Middle Heaven.mp3" id="7_h0hex"]
 [ext_resource type="Texture2D" uid="uid://dp8pprw825b2s" path="res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png" id="8_lfryq"]
 [ext_resource type="Texture2D" uid="uid://uaqtej7s16wg" path="res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Walk 2.png" id="10_x2bre"]
 [ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="11_glmur"]
@@ -212,9 +213,9 @@ max_distance = 3000.0
 
 [node name="Grass" type="ColorRect" parent="Forest" unique_id=1094126300]
 offset_left = -1322.0
-offset_top = -3219.0
+offset_top = -3388.0
 offset_right = 10434.0
-offset_bottom = 153.0
+offset_bottom = 368.0
 color = Color(0.031500045, 0.63, 0, 1)
 
 [node name="Path" type="ColorRect" parent="Forest" unique_id=1378119166]
@@ -297,6 +298,11 @@ limit_bottom = 187
 
 [node name="Huh" parent="Player" index="3"]
 position = Vector2(-3, -76)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Player" unique_id=1943084802]
+position = Vector2(-1, -1)
+stream = ExtResource("7_h0hex")
+autoplay = true
 
 [node name="Trees" type="Node2D" parent="." unique_id=413535190]
 

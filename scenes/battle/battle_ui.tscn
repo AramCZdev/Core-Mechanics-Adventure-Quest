@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://c1x8cn6d0hrpf" path="res://scripts/battle/battle_manager.gd" id="2_manager"]
 [ext_resource type="PackedScene" path="res://scenes/battle/attack_timing.tscn" id="3_attack"]
 [ext_resource type="PackedScene" path="res://scenes/battle/block_timing.tscn" id="4_block"]
-[ext_resource type="Resource" path="res://battle/enemies/mossling/mossling.tres" id="5_enemy"]
+[ext_resource type="Resource" uid="uid://c7o887t2efrwg" path="res://battle/enemies/mossling/mossling.tres" id="5_enemy"]
+[ext_resource type="AudioStream" uid="uid://bgdxmr8ak5oiw" path="res://assets/Music/Mad Cloud.mp3" id="6_keo60"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 bg_color = Color(0.83, 0.74, 0.56, 1)
@@ -340,3 +341,6 @@ vertical_alignment = 1
 [node name="BattleManager" type="Node" parent="." unique_id=376813476]
 script = ExtResource("2_manager")
 enemy = ExtResource("5_enemy")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1451798908]
+stream = ExtResource("6_keo60")

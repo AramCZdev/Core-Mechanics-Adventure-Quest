@@ -1,0 +1,9 @@
+[gd_scene format=3 load_steps=2]
+
+[ext_resource type="PackedScene" path="res://scenes/battle/attack_timing.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/battle/broken_tv_attack_timing.gd" id="2_script"]
+
+[node name="AttackTiming" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+triangle_squares_enabled = true
+triangle_multiplier = 1.5

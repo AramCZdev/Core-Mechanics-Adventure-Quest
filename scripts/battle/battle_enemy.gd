@@ -63,3 +63,22 @@ class_name BattleEnemy
 ## action. The last entry repeats if the battle runs longer than the list.
 ## Example: ["attack", "defend", "talk"].
 @export var turn_action_restrictions: PackedStringArray = PackedStringArray()
+
+@export_group("Fourth-wall overrides (Broken TV)")
+## Label shown on the Talk button. Defaults to "Talk" (e.g. "Cry" for Broken TV).
+## Other enemies are unaffected because the default is "Talk".
+@export var talk_action_label: String = "Talk"
+
+## When greater than 0, temporarily sets the player's HP and max HP to this
+## value during the battle (e.g. 20 for Broken TV). Zero = use normal stats.
+@export_range(0, 9999, 1) var player_hp_override: int = 0
+
+## When true, triggers visual CRT glitching and static jitter in the battle scene.
+@export var is_glitching: bool = false
+
+## When true, the attack timing bar displays squares with triangles that
+## multiply damage. Other enemies are unaffected because this defaults to false.
+@export var triangle_squares_enabled: bool = false
+
+## Multiplier applied to attack damage when stopping on a square with a triangle.
+@export_range(1.0, 10.0, 0.1) var triangle_multiplier: float = 1.5

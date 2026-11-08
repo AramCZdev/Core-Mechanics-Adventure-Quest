@@ -1,0 +1,19 @@
+[gd_resource type="Resource" format=3 uid="uid://dqvitiejmn7at"]
+
+[ext_resource type="Script" uid="uid://biopaf4yrgs5p" path="res://battle/enemies/broken tv/broken tv.gd" id="1_ihpqu"]
+
+[resource]
+script = ExtResource("1_ihpqu")
+display_name = "Broken TV"
+max_hp = 500
+attack_damage = 10
+damage_variance = 0
+talk_lines = null
+no_talk_lines_text = "You tried to cry but you have no eyes."
+turn_lines = null
+description = "A busted television that knows more about you than it should."
+turn_action_restrictions = null
+talk_action_label = "Cry"
+player_hp_override = 20
+is_glitching = true
+triangle_squares_enabled = true

@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://cesti1kghdpdj"]
 
 [ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="1_iom5i"]
+[ext_resource type="Script" uid="uid://cgkuqctph73eo" path="res://scripts/scenes/the_end.gd" id="1_nw4ue"]
 [ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="2_0r5ur"]
-[ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="3_ysboq"]
+[ext_resource type="PackedScene" uid="uid://b01jkut3y52c2" path="res://battle/enemies/broken tv/broken tv.tscn" id="4_nw4ue"]
 [ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/ice_cream_machine.tscn" id="4_ysboq"]
 [ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="5_3gfjq"]
+[ext_resource type="Texture2D" uid="uid://cy3r074iv34o" path="res://assets/Textures/Gameplay/Objects/TV.png" id="7_5gt7p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d03v7"]
 size = Vector2(85, 1008)
@@ -15,7 +17,11 @@ size = Vector2(85, 1008)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0r5ur"]
 size = Vector2(142, 111)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i5d2y"]
+size = Vector2(117, 30)
+
 [node name="Node2D" type="Node2D" unique_id=599027283]
+script = ExtResource("1_nw4ue")
 
 [node name="Player" parent="." unique_id=520382692 instance=ExtResource("1_iom5i")]
 
@@ -33,7 +39,7 @@ position = Vector2(-3, -76)
 [node name="DialogueBox" parent="CanvasLayer" unique_id=1662593204 instance=ExtResource("2_0r5ur")]
 visible = false
 
-[node name="BattleUI" parent="CanvasLayer" unique_id=203286054 instance=ExtResource("3_ysboq")]
+[node name="BattleUI" parent="CanvasLayer" unique_id=424070246 instance=ExtResource("4_nw4ue")]
 visible = false
 auto_start = false
 items_enabled = true
@@ -88,5 +94,19 @@ position = Vector2(81, -45)
 [node name="SavePoint" parent="." unique_id=1709967034 groups=["interactable"] instance=ExtResource("5_3gfjq")]
 z_index = 1
 position = Vector2(-87, -79)
+
+[node name="tv" type="Area2D" parent="." unique_id=1687057465]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="tv" unique_id=68947569]
+position = Vector2(-2.5, -480)
+shape = SubResource("RectangleShape2D_i5d2y")
+
+[node name="Tv" type="Sprite2D" parent="." unique_id=2127279261]
+z_index = 1
+position = Vector2(-1, -559)
+scale = Vector2(1.40625, 1.40625)
+texture = ExtResource("7_5gt7p")
+
+[connection signal="body_entered" from="tv" to="." method="_on_tv_body_entered"]
 
 [editable path="Player"]

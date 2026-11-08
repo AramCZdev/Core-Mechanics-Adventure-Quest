@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://b01jkut3y52c2"]
+
+[ext_resource type="PackedScene" path="res://scenes/battle/broken_tv_battle_ui.tscn" id="1_kt51k"]
+[ext_resource type="Script" uid="uid://cvb1gsw5b53an" path="res://scripts/battle/broken_tv_attack_timing.gd" id="3_ef7qc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mhq8n"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.1334, 0.08119999, 0.29, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[node name="DummyBattle" unique_id=424070246 instance=ExtResource("1_kt51k")]
+
+[node name="Backdrop" parent="." index="0" unique_id=1068639206]
+unique_name_in_owner = true
+color = Color(0.105, 0.105, 0.21, 1)
+
+[node name="Margin" parent="." index="1" unique_id=249127397]
+offset_left = 94.0
+offset_top = -79.0
+offset_right = 34.0
+offset_bottom = -127.0
+rotation = 0.13264503
+
+[node name="BattlePanel" parent="Margin/Layout" parent_id_path=PackedInt32Array(2067285313) index="1" unique_id=720978186]
+theme_override_styles/panel = SubResource("StyleBoxFlat_mhq8n")
+
+[node name="AttackTiming" parent="Margin/Layout/BattlePanel/PanelMargin/Content/TimingArea/TimingHolder" parent_id_path=PackedInt32Array(1435697628) index="0" unique_id=70045993]
+script = ExtResource("3_ef7qc")

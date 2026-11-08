@@ -1,0 +1,11 @@
+[gd_scene format=3 load_steps=2]
+
+[ext_resource type="PackedScene" path="res://scenes/battle/battle_ui.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/battle/broken_tv_battle_ui.gd" id="2_script"]
+[ext_resource type="Script" path="res://scripts/battle/broken_tv_block_timing.gd" id="3_block"]
+
+[node name="BattleUI" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+
+[node name="BlockTiming" parent="Margin/Layout/BattlePanel/PanelMargin/Content/TimingArea/TimingHolder" index="0"]
+script = ExtResource("3_block")

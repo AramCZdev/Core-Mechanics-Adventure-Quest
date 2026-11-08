@@ -85,6 +85,7 @@ offset_bottom = 393.4679
 color = Color(0.23137255, 0.3137255, 0.80784315, 1)
 
 [node name="Forest" type="Control" parent="." unique_id=1419533975]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -120,6 +121,41 @@ texture = ExtResource("4_s5g8n")
 
 [node name="Sprite2D" type="Sprite2D" parent="Forest" unique_id=2022682342]
 position = Vector2(22.99997, 222.00003)
+scale = Vector2(2.078719, 2.078719)
+texture = ExtResource("3_3vvtq")
+
+[node name="The end" type="Control" parent="." unique_id=1088033432]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Ground" type="ColorRect" parent="The end" unique_id=1329111806]
+layout_mode = 0
+offset_left = -1542.0
+offset_top = -660.0
+offset_right = 1968.0
+offset_bottom = 345.0
+color = Color(0.57, 0.57, 0.57, 1)
+
+[node name="Path" type="ColorRect" parent="The end" unique_id=1665583752]
+layout_mode = 0
+offset_left = -49.0
+offset_top = -660.0
+offset_right = 76.0
+offset_bottom = 345.0
+color = Color(0.41, 0.41, 0.41, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="The end" unique_id=79815725]
+position = Vector2(13.9999695, 263.00003)
 scale = Vector2(2.078719, 2.078719)
 texture = ExtResource("3_3vvtq")
 

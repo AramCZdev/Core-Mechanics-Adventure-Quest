@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://sx77cjs3p265"]
 
 [ext_resource type="Theme" uid="uid://b3d0wtk288b5d" path="res://default_theme.tres" id="1_0bpdh"]
+[ext_resource type="Script" uid="uid://ch3hvwomksqog" path="res://scripts/scenes/credits.gd" id="1_2ckv8"]
 
 [node name="Control" type="Control" unique_id=491412697]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_2ckv8")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1512832979]
 layout_mode = 1
@@ -32,7 +34,7 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 64
 text = "Credits"
 
-[node name="Credits title2" type="Label" parent="." unique_id=1355246391]
+[node name="Credits" type="Label" parent="." unique_id=1355246391]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -54,7 +56,7 @@ Made for the Core MEchanics Fall Game Jam
 licenced under: GPLv3"
 horizontal_alignment = 1
 
-[node name="Play" type="Button" parent="." unique_id=818959381]
+[node name="Back" type="Button" parent="." unique_id=818959381]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -71,3 +73,5 @@ size_flags_vertical = 3
 theme = ExtResource("1_0bpdh")
 theme_override_font_sizes/font_size = 41
 text = "Back"
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

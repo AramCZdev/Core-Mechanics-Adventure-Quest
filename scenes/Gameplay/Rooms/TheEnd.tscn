@@ -156,6 +156,7 @@ position = Vector2(27, 58)
 shape = SubResource("RectangleShape2D_jkn65")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2032994747]
+visible = false
 modulate = Color(1, 1, 1, 0)
 z_index = 10
 offset_left = -914.0

@@ -79,6 +79,7 @@ func _refresh_saved_location() -> void:
 	saved_id = SaveManager.get_saved_location_id()
 	$Beach.visible = saved_id == SaveManager.LOCATION_BEACH
 	$Forest.visible = saved_id == SaveManager.LOCATION_FOREST
+	$"The end".visible = saved_id == SaveManager.LOCATION_END
 
 
 func _on_back_pressed() -> void:

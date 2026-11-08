@@ -25,11 +25,13 @@ func _ready() -> void:
 	$HeroNamePanel/Cancel.pressed.connect(_on_name_cancel_pressed)
 	_hero_name_input.text_submitted.connect(_on_name_submitted)
 	_refresh_save_buttons()
+	$"Settings".hide()
 
 
 func _on_play_pressed() -> void:
 	_main_options.hide()
 	_play_options.show()
+	$"Settings".hide()
 
 
 func _on_start_pressed() -> void:
@@ -99,3 +101,7 @@ func _refresh_save_buttons() -> void:
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "start":
 		_start_new_game(_hero_name_input.text)
+
+
+func _on_settings_pressed() -> void:
+	$"Settings".show()

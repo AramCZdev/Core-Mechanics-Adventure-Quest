@@ -1,24 +1,19 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://q8fm5k8lshka"]
 
-[ext_resource type="Script" path="res://scripts/scenes/shop_npc.gd" id="1_shop_npc"]
+[ext_resource type="Script" uid="uid://bs3n0okm0fv3s" path="res://scripts/scenes/shop_npc.gd" id="1_shop_npc"]
+[ext_resource type="Texture2D" uid="uid://bdvtqlbj4vn3l" path="res://assets/Textures/Gameplay/Objects/dealer.png" id="2_macj3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_shop_npc"]
-size = Vector2(54, 54)
+size = Vector2(226, 136)
 
-[node name="ShopNpc" type="Area2D"]
+[node name="ShopNpc" type="Area2D" unique_id=1816609348]
 script = ExtResource("1_shop_npc")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1071301211]
+position = Vector2(4, 37)
 shape = SubResource("RectangleShape2D_shop_npc")
 
-[node name="Marker" type="ColorRect" parent="."]
-offset_left = -25.0
-offset_top = -25.0
-offset_right = 25.0
-offset_bottom = 25.0
-color = Color(0.96, 0.72, 0.16, 1)
-
-[node name="Prompt" type="Label" parent="."]
+[node name="Prompt" type="Label" parent="." unique_id=1277857730]
 offset_left = -120.0
 offset_top = -70.0
 offset_right = 120.0
@@ -27,3 +22,9 @@ theme_override_colors/font_color = Color(0.16, 0.1, 0.02, 1)
 theme_override_font_sizes/font_size = 18
 text = "Press E to shop"
 horizontal_alignment = 1
+
+[node name="Dealer" type="Sprite2D" parent="." unique_id=1620512170]
+texture_filter = 3
+position = Vector2(4, 29)
+scale = Vector2(2.4375, 2.4375)
+texture = ExtResource("2_macj3")

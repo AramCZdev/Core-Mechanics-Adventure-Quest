@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://cesti1kghdpdj"]
+
+[ext_resource type="PackedScene" uid="uid://uvwm4w0l60n1" path="res://scenes/Gameplay/Objects/player.tscn" id="1_iom5i"]
+[ext_resource type="PackedScene" uid="uid://bj3fwpjli07gj" path="res://scenes/dialogue/dialogue_box.tscn" id="2_0r5ur"]
+[ext_resource type="PackedScene" uid="uid://b8rdwnhh37oh1" path="res://scenes/battle/battle_ui.tscn" id="3_ysboq"]
+[ext_resource type="PackedScene" path="res://scenes/Gameplay/Objects/ice_cream_machine.tscn" id="4_ysboq"]
+[ext_resource type="PackedScene" uid="uid://biyqxnwtkkpag" path="res://scenes/Gameplay/Objects/save_point.tscn" id="5_3gfjq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d03v7"]
+size = Vector2(85, 1008)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iom5i"]
+size = Vector2(85, 1008)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0r5ur"]
+size = Vector2(142, 111)
+
+[node name="Node2D" type="Node2D" unique_id=599027283]
+
+[node name="Player" parent="." unique_id=520382692 instance=ExtResource("1_iom5i")]
+
+[node name="Camera2D" parent="Player" index="2" unique_id=2100815544]
+limit_left = -1557
+limit_top = -750
+limit_right = 1953
+limit_bottom = 255
+
+[node name="Huh" parent="Player" index="3"]
+position = Vector2(-3, -76)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1350271608]
+
+[node name="DialogueBox" parent="CanvasLayer" unique_id=1662593204 instance=ExtResource("2_0r5ur")]
+visible = false
+
+[node name="BattleUI" parent="CanvasLayer" unique_id=203286054 instance=ExtResource("3_ysboq")]
+visible = false
+auto_start = false
+items_enabled = true
+
+[node name="Ground" type="Node" parent="." unique_id=1825508198]
+
+[node name="Ground" type="ColorRect" parent="Ground" unique_id=1267702214]
+offset_left = -1557.0
+offset_top = -750.0
+offset_right = 1953.0
+offset_bottom = 255.0
+color = Color(0.57, 0.57, 0.57, 1)
+
+[node name="Path" type="ColorRect" parent="Ground" unique_id=1605300830]
+offset_left = -64.0
+offset_top = -750.0
+offset_right = 61.0
+offset_bottom = 255.0
+color = Color(0.41, 0.41, 0.41, 1)
+
+[node name="Wall" type="ColorRect" parent="Ground" unique_id=1676517051]
+offset_left = -64.0
+offset_top = -749.0
+offset_right = 61.0
+offset_bottom = -633.0
+color = Color(0.47, 0.47, 0.47, 1)
+
+[node name="Door" type="ColorRect" parent="Ground" unique_id=800040447]
+offset_left = -29.0
+offset_top = -749.0
+offset_right = 25.0
+offset_bottom = -633.0
+
+[node name="Barrier" type="StaticBody2D" parent="." unique_id=183651724]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Barrier" unique_id=479942805]
+position = Vector2(-107.5, -248)
+shape = SubResource("RectangleShape2D_d03v7")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Barrier" unique_id=812570204]
+position = Vector2(103.5, -248)
+shape = SubResource("RectangleShape2D_iom5i")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Barrier" unique_id=1794188371]
+position = Vector2(-10, 311.5)
+shape = SubResource("RectangleShape2D_0r5ur")
+
+[node name="IceCreamMachine" parent="." unique_id=498109624 groups=["interactable"] instance=ExtResource("4_ysboq")]
+z_index = 1
+position = Vector2(81, -45)
+
+[node name="SavePoint" parent="." unique_id=1709967034 groups=["interactable"] instance=ExtResource("5_3gfjq")]
+z_index = 1
+position = Vector2(-87, -79)
+
+[editable path="Player"]

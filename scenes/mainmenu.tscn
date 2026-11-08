@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://nrqo07kkv3r1" path="res://scripts/Menu/mainmenu.gd" id="1_natt5"]
 [ext_resource type="Texture2D" uid="uid://7u1ju5km1my5" path="res://assets/Textures/Gameplay/beach.svg" id="2_r3g3c"]
 [ext_resource type="Texture2D" uid="uid://bn1urh5rjwble" path="res://assets/Textures/Gameplay/Objects/Disk.png" id="3_3vvtq"]
+[ext_resource type="Texture2D" uid="uid://demchf2dqs3bu" path="res://assets/Textures/Gameplay/Objects/Tree.png" id="4_s5g8n"]
 
 [sub_resource type="Animation" id="Animation_natt5"]
 length = 0.001
@@ -51,6 +52,7 @@ grow_vertical = 2
 script = ExtResource("1_natt5")
 
 [node name="Beach" type="Control" parent="." unique_id=17707154]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -82,7 +84,47 @@ offset_right = 776.0245
 offset_bottom = 393.4679
 color = Color(0.23137255, 0.3137255, 0.80784315, 1)
 
+[node name="Forest" type="Control" parent="." unique_id=1419533975]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Forest" unique_id=1958612649]
+layout_mode = 0
+offset_left = -712.0
+offset_top = -484.0
+offset_right = 734.0
+offset_bottom = 495.0
+color = Color(0.03137255, 0.6313726, 0, 1)
+
+[node name="Tree" type="Sprite2D" parent="Forest" unique_id=218010896]
+texture_filter = 3
+position = Vector2(447.00012, 86.99991)
+scale = Vector2(6.84375, 6.84375)
+texture = ExtResource("4_s5g8n")
+
+[node name="Tree2" type="Sprite2D" parent="Forest" unique_id=2076295298]
+texture_filter = 3
+position = Vector2(-363.99994, 87)
+scale = Vector2(6.84375, 6.84375)
+texture = ExtResource("4_s5g8n")
+
+[node name="Sprite2D" type="Sprite2D" parent="Forest" unique_id=2022682342]
+position = Vector2(22.99997, 222.00003)
+scale = Vector2(2.078719, 2.078719)
+texture = ExtResource("3_3vvtq")
+
 [node name="ColorRect" type="ColorRect" parent="." unique_id=894997545]
+visible = false
 modulate = Color(1, 1, 1, 0)
 z_index = 10
 layout_mode = 0

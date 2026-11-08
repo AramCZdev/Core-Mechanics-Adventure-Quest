@@ -78,6 +78,7 @@ func _refresh_saved_location() -> void:
 	# Re-read on every menu load so the location survives quitting the game.
 	saved_id = SaveManager.get_saved_location_id()
 	$Beach.visible = saved_id == SaveManager.LOCATION_BEACH
+	$Forest.visible = saved_id == SaveManager.LOCATION_FOREST
 
 
 func _on_back_pressed() -> void:

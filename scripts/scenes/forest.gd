@@ -80,5 +80,5 @@ func _on_button_body_entered(_body: Node2D) -> void:
 	$"Button/ColorRect".color = 850000
 
 
-func _on_theend_body_entered(body: Node2D) -> void:
+func _on_theend_body_entered(_body: Node2D) -> void:
 	pass # Replace with function body.

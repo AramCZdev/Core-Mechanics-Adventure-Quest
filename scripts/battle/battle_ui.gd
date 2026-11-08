@@ -34,12 +34,9 @@ signal battle_exited(victory: bool)
 ## Seconds the victory presentation (win cutscene) stays on screen before the
 ## battle ends, resumes gameplay, and emits battle_finished.
 @export_range(0.0, 10.0, 0.1, "suffix:s") var victory_exit_delay: float = 3.0
-## Hide the battle screen automatically after a defeat so the player's death
-## animation is visible in the world.
-@export var auto_exit_on_defeat: bool = true
-## Seconds the defeat result stays on screen before closing the battle and
-## playing the player's death animation.
-@export_range(0.0, 10.0, 0.1, "suffix:s") var defeat_exit_delay: float = 1.5
+## Seconds the defeat result stays on screen before revealing the world to
+## play the player's death animation and restart the battle.
+@export_range(0.0, 10.0, 0.1, "suffix:s") var defeat_exit_delay: float = 1.0
 
 @onready var _manager: BattleManager = get_node_or_null(battle_manager_path) as BattleManager
 @onready var _enemy_texture: TextureRect = %EnemyTexture
@@ -127,12 +124,33 @@ func begin_battle(new_enemy: BattleEnemy = null) -> bool:
 	if new_enemy != null:
 		enemy = new_enemy
 		_manager.enemy = new_enemy
+	_battle_over_panel.hide()
 	show()
 	return _manager.start_battle(enemy)
 
 
+## Restarts the current battle from turn 1 with pre-battle items and stats restored.
+func restart_battle() -> bool:
+	if _manager == null:
+		return false
+	_exit_timer.stop()
+	_battle_finished_emitted = false
+	_battle_over_panel.hide()
+	show()
+	return _manager.restart_battle()
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if _manager == null or not _manager.is_battle_active():
+		if _manager != null and _manager.phase == BattleManager.Phase.DEFEAT:
+			if (
+				event.is_action_pressed("attack")
+				or event.is_action_pressed("block")
+				or event.is_action_pressed("ui_accept")
+			):
+				get_viewport().set_input_as_handled()
+				_play_defeat_sequence()
+				return
 		return
 	if _item_menu_open:
 		if event.is_action_pressed("ui_cancel"):
@@ -201,9 +219,9 @@ func _on_battle_ended(victory: bool) -> void:
 		# Keep everything frozen while the victory presentation plays. The
 		# battle only finishes once the win cutscene timer runs out.
 		_exit_timer.start(victory_exit_delay)
-	elif not victory and auto_exit_on_defeat:
+	elif not victory:
 		# Show the defeat result briefly, then reveal the world so the player
-		# can play the death animation.
+		# can play the death animation and the battle restarts.
 		_exit_timer.start(defeat_exit_delay)
 	else:
 		_finish_battle(victory)
@@ -218,7 +236,8 @@ func exit_battle() -> void:
 	_resume_gameplay()
 	hide()
 	if not victory:
-		_play_player_death()
+		_play_defeat_sequence()
+		return
 	_finish_battle(victory)
 	battle_exited.emit(victory)
 
@@ -240,18 +259,35 @@ func _resume_gameplay() -> void:
 func _on_exit_timer_timeout() -> void:
 	if _manager == null:
 		return
-	if _manager.phase != BattleManager.Phase.VICTORY and _manager.phase != BattleManager.Phase.DEFEAT:
-		return
-	exit_battle()
+	if _manager.phase == BattleManager.Phase.VICTORY:
+		exit_battle()
+	elif _manager.phase == BattleManager.Phase.DEFEAT:
+		_play_defeat_sequence()
 
 
-## Finds the world player after a lost battle and lets it play its death
-## animation. Players expose play_death() and join the "player" group.
-func _play_player_death() -> void:
+## Reveals the world so the player can play the death animation. Once the
+## player finishes the death animation and respawns in place, the battle restarts.
+func _play_defeat_sequence() -> void:
+	_exit_timer.stop()
+	_resume_gameplay()
+	hide()
+
+	var player_found := false
 	for player in get_tree().get_nodes_in_group("player"):
 		if player.has_method("play_death"):
+			player_found = true
+			if player.has_signal("respawned"):
+				if not player.is_connected("respawned", _on_player_respawned_restart_battle):
+					player.connect("respawned", _on_player_respawned_restart_battle, CONNECT_ONE_SHOT)
 			player.call("play_death")
-			return
+			break
+
+	if not player_found:
+		restart_battle()
+
+
+func _on_player_respawned_restart_battle() -> void:
+	restart_battle()
 
 
 func _on_phase_changed(new_phase: int) -> void:

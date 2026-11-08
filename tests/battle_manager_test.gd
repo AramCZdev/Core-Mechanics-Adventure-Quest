@@ -46,6 +46,7 @@ func _initialize() -> void:
 	_test_victory()
 	_test_defeat()
 	_test_restart()
+	_test_defeat_restart_restores_state()
 
 	if _failures.is_empty():
 		print("Battle manager test: PASS")
@@ -310,6 +311,23 @@ func _test_restart() -> void:
 	_check(_manager.phase == BattleManager.Phase.PLAYER_TURN, "restart returns to player turn")
 	_check(_manager.enemy_hp == 10, "restart restores enemy HP")
 	_check(_manager.player_hp == 40, "restart restores player HP")
+
+
+func _test_defeat_restart_restores_state() -> void:
+	_start(_make_enemy(100, 50))
+	_manager.starting_items = 3
+	_manager.items = 3
+	_manager.select_action(BattleManager.ACTION_ITEM)
+	_check(_manager.items == 2, "item consumed during battle")
+	_advance()
+	_advance()
+	_check(_manager.phase == BattleManager.Phase.BLOCK_TIMING, "advances to block")
+	_manager.submit_block("Miss", 0.0)
+	_check(_manager.phase == BattleManager.Phase.DEFEAT, "lethal hit triggers defeat")
+	_check(_manager.restart_battle(), "restart accepted after defeat")
+	_check(_manager.phase == BattleManager.Phase.PLAYER_TURN, "restart returns to player turn")
+	_check(_manager.player_hp == 40, "restart restores player HP")
+	_check(_manager.items == 3, "restart restores starting items")
 
 
 func _start(enemy: BattleEnemy) -> void:

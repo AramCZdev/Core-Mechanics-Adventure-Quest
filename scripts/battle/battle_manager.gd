@@ -104,6 +104,7 @@ var _rng := RandomNumberGenerator.new()
 ## during a lost fight are not lost for good.
 var _inventory_before_battle: Dictionary = {}
 var _inventory_snapshot_valid: bool = false
+var _hp_before_battle: int = 0
 
 
 func _ready() -> void:
@@ -133,11 +134,17 @@ func start_battle(enemy_override: BattleEnemy = null) -> bool:
 	if save != null:
 		var saved_health: Vector2i = save.call("get_player_health", player_max_hp, player_max_hp)
 		player_max_hp = saved_health.y
-		player_hp = maxi(1, saved_health.x)
+		if _hp_before_battle > 0:
+			player_hp = _hp_before_battle
+		else:
+			player_hp = maxi(1, saved_health.x)
 		player_attack = int(save.call("get_player_attack", player_attack))
 		save.call("set_player_health", player_hp, player_max_hp)
 	else:
-		player_hp = player_max_hp
+		player_hp = _hp_before_battle if _hp_before_battle > 0 else player_max_hp
+
+	if _hp_before_battle <= 0:
+		_hp_before_battle = player_hp
 
 	enemy_hp = maxi(1, enemy.max_hp)
 	_refresh_items()
@@ -166,6 +173,11 @@ func start_battle(enemy_override: BattleEnemy = null) -> bool:
 
 
 func restart_battle() -> bool:
+	if _hp_before_battle > 0:
+		player_hp = _hp_before_battle
+		var save := _resolve_save_manager() if use_persistent_progress else null
+		if save != null:
+			save.call("set_player_health", _hp_before_battle, player_max_hp)
 	return start_battle(enemy)
 
 
@@ -458,6 +470,11 @@ func _snapshot_battle_inventory() -> void:
 
 
 func _restore_battle_inventory() -> void:
+	if _hp_before_battle > 0:
+		var save_progress := _resolve_save_manager() if use_persistent_progress else null
+		if save_progress != null:
+			save_progress.call("set_player_health", _hp_before_battle, player_max_hp)
+
 	if not _inventory_snapshot_valid:
 		return
 	_inventory_snapshot_valid = false
@@ -472,6 +489,7 @@ func _restore_battle_inventory() -> void:
 func _clear_battle_inventory_snapshot() -> void:
 	_inventory_before_battle.clear()
 	_inventory_snapshot_valid = false
+	_hp_before_battle = 0
 
 
 func _is_supported_effect(effect: Dictionary) -> bool:

@@ -200,7 +200,22 @@ func _schedule_respawn() -> void:
 
 
 func _on_respawn_timer_timeout() -> void:
-	_respawn_at_last_save_point()
+	_respawn_after_death()
+
+
+## Resets the player pose and state after the death animation finishes without
+## teleporting to a save point, allowing the battle to restart in place.
+func _respawn_after_death() -> void:
+	_is_dead = false
+	_is_hurting = false
+	_cutscene_locked = false
+	velocity = Vector2.ZERO
+
+	if animated_sprite != null:
+		animated_sprite.modulate = Color.WHITE
+		_update_idle_animation()
+
+	respawned.emit()
 
 
 ## Puts the player back at the last save point with full HP. The pre-battle

@@ -16,7 +16,11 @@ func _ready() -> void:
 	battle_ui.battle_finished.connect(_on_battle_finished)
 
 
-func _on_start_cutscene_body_entered(_body: Node2D) -> void:
+func _on_start_cutscene_body_entered(body: Node2D) -> void:
+	if not (body is CharacterBody2D):
+		return
+	if DialogueManager.is_active:
+		return
 	DialogueManager.start_dialogue(MONKEY_INTRO_DIALOGUE)
 
 
@@ -28,11 +32,15 @@ func _on_dialogue_finished(file_path: String, _last_node_id: String) -> void:
 	if file_path != MONKEY_INTRO_DIALOGUE:
 		return
 	animation_player.play("monkey_jumps")
-	$"Start Cutscene".queue_free()
+	var intro_trigger := get_node_or_null("Start Cutscene")
+	if intro_trigger != null:
+		intro_trigger.queue_free()
 
 
 func _on_start_cutscene_2_body_entered(body: Node2D) -> void:
 	if _monkey_fight_started or not (body is CharacterBody2D):
+		return
+	if DialogueManager.is_active:
 		return
 
 	_monkey_fight_started = true
@@ -41,25 +49,25 @@ func _on_start_cutscene_2_body_entered(body: Node2D) -> void:
 
 
 func _start_monkey_battle() -> void:
-	# Remove the trigger while the battle plays so it cannot fire again.
-	var trigger := get_node_or_null("Start Cutscene2")
-	if trigger != null:
-		trigger.queue_free()
-
 	_monkey_battle_started = true
 	if not battle_ui.begin_battle(MONKEY_ENEMY):
 		_monkey_battle_started = false
+		_monkey_fight_started = false
 
 
 func _on_battle_finished(victory: bool) -> void:
 	if not _monkey_battle_started:
 		return
 	_monkey_battle_started = false
+	_monkey_fight_started = false
 
 	if victory:
 		var monkey := get_node_or_null("Monkey2")
 		if monkey != null:
 			monkey.queue_free()
+		var trigger := get_node_or_null("Start Cutscene2")
+		if trigger != null:
+			trigger.queue_free()
 
 
 func _on_button_body_entered(_body: Node2D) -> void:

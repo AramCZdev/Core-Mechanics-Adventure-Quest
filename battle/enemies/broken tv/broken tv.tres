@@ -6,7 +6,7 @@
 script = ExtResource("1_ihpqu")
 display_name = "Broken TV"
 max_hp = 500
-attack_damage = 10
+attack_damage = 20
 damage_variance = 0
 talk_lines = null
 no_talk_lines_text = "You tried to cry but you have no eyes."

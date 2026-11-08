@@ -20,6 +20,45 @@ size = Vector2(142, 111)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5d2y"]
 size = Vector2(117, 30)
 
+[sub_resource type="Animation" id="Animation_nw4ue"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_5gt7p"]
+resource_name = "door"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ujmjr"]
+_data = {
+&"RESET": SubResource("Animation_nw4ue"),
+&"door": SubResource("Animation_5gt7p")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jkn65"]
+size = Vector2(54, 116)
+
 [node name="Node2D" type="Node2D" unique_id=599027283]
 script = ExtResource("1_nw4ue")
 
@@ -67,12 +106,6 @@ offset_right = 61.0
 offset_bottom = -633.0
 color = Color(0.47, 0.47, 0.47, 1)
 
-[node name="Door" type="ColorRect" parent="Ground" unique_id=800040447]
-offset_left = -29.0
-offset_top = -749.0
-offset_right = 25.0
-offset_bottom = -633.0
-
 [node name="Barrier" type="StaticBody2D" parent="." unique_id=183651724]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Barrier" unique_id=479942805]
@@ -107,6 +140,31 @@ position = Vector2(-1, -559)
 scale = Vector2(1.40625, 1.40625)
 texture = ExtResource("7_5gt7p")
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=956338985]
+libraries/ = SubResource("AnimationLibrary_ujmjr")
+
+[node name="Door" type="Area2D" parent="." unique_id=1722837663]
+z_index = 1
+position = Vector2(-29, -749)
+
+[node name="Door" type="ColorRect" parent="Door" unique_id=800040447]
+offset_right = 54.0
+offset_bottom = 116.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=486051960]
+position = Vector2(27, 58)
+shape = SubResource("RectangleShape2D_jkn65")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2032994747]
+modulate = Color(1, 1, 1, 0)
+z_index = 10
+offset_left = -914.0
+offset_top = -830.0
+offset_right = 1076.0
+offset_bottom = 411.0
+
 [connection signal="body_entered" from="tv" to="." method="_on_tv_body_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="body_entered" from="Door" to="." method="_on_door_body_entered"]
 
 [editable path="Player"]

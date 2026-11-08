@@ -124,7 +124,6 @@ scale = Vector2(2.078719, 2.078719)
 texture = ExtResource("3_3vvtq")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=894997545]
-visible = false
 modulate = Color(1, 1, 1, 0)
 z_index = 10
 layout_mode = 0

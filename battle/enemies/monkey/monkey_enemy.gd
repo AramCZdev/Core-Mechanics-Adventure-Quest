@@ -25,5 +25,5 @@ func _init() -> void:
 		"The Monkey looks like it is enjoying this.",
 	])
 	survive_turns_to_win = SURVIVE_TURNS
-	survival_victory_text = "You survived %d turns. The Monkey grows bored and lets you pass." % SURVIVE_TURNS
+	survival_victory_text = "Monkey gets an email from their mom saying that humans are out of meat."
 	texture = MONKEY_TEXTURE

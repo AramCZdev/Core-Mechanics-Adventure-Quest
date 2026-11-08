@@ -1,0 +1,17 @@
+{
+  "start_node": "monkey_intro",
+  "nodes": {
+	"monkey_intro": {
+	  "speaker": "Monkey",
+	  "portrait": "res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png",
+	  "text": "So humans aren't made of bananas.",
+	  "next": "die",
+	  "typing_speed": 40
+	},
+	"die": {
+	  "speaker": "Monkey",
+	  "portrait": "res://assets/Free Asset Packs/Monkey Forest Asset Pack/Player/Monkey Idle 1.png",
+	  "text": "SORRY! My bad you can now continue",
+	}
+  }
+}

@@ -25,7 +25,7 @@ func _on_battle_started(started_enemy: BattleEnemy) -> void:
 	var talk_label: String = started_enemy.talk_action_label
 	_talk_button.text = talk_label if not talk_label.is_empty() else "Talk"
 
-	if started_enemy.is_glitching:
+	if false and started_enemy.is_glitching:
 		_activate_glitch()
 
 	# BattleManager emits player_stats_changed right after battle_started, which

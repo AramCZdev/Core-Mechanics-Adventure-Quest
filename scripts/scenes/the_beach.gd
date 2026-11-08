@@ -15,6 +15,7 @@ var _old_man_last_position: Vector2
 var _dummy_battle_started: bool = false
 var _dummy_battle_completed: bool = false
 var _path_shown: bool = false
+var _transitioning: bool = false
 
 func _ready() -> void:
 	_dummy_battle_completed = SaveManager.has_defeated_dummy_boss()
@@ -22,9 +23,11 @@ func _ready() -> void:
 		dummy.queue_free()
 		barrier_collision.disabled = true
 	_old_man_last_position = old_man.global_position
+	# Always listen for animation completion so the entrance still works when the
+	# player continues from a save where the dummy was already defeated.
+	animation_player.animation_finished.connect(_on_animation_finished)
 	if not _dummy_battle_completed:
 		player.begin_hurt_cutscene()
-		animation_player.animation_finished.connect(_on_animation_finished)
 		DialogueManager.dialogue_finished.connect(_on_dialogue_finished)
 		battle_ui.battle_exited.connect(_on_battle_exited)
 		animation_player.play("start")
@@ -45,7 +48,10 @@ func _on_animation_finished(anim_name: StringName) -> void:
 		player.end_hurt_cutscene()
 		DialogueManager.start_dialogue("res://dialogue/oldman.json")
 	if anim_name == "entrance":
-		get_tree().change_scene_to_file("res://scenes/Gameplay/Rooms/Forest.tscn")
+		var error := get_tree().change_scene_to_file("res://scenes/Gameplay/Rooms/Forest.tscn")
+		if error != OK:
+			push_error("TheBeach: could not load Forest scene (error %d)." % error)
+			_transitioning = false
 
 func _on_dummy_body_entered(body: Node2D) -> void:
 	if _dummy_battle_started or body != player:
@@ -78,5 +84,8 @@ func _on_dialogue_finished(file_path: String, _last_node_id: String) -> void:
 	animation_player.play("training_done")
 
 
-func _on_entrance_body_entered(_body: Node2D) -> void:
+func _on_entrance_body_entered(body: Node2D) -> void:
+	if _transitioning or body != player:
+		return
+	_transitioning = true
 	animation_player.play("entrance")

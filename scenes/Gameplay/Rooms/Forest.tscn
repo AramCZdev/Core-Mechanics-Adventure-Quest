@@ -85,9 +85,57 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Monkey2:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_lfryq")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Monkey2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(5895.9995, -1794)]
+}
 
 [sub_resource type="Animation" id="Animation_ixn8a"]
 resource_name = "after_battle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Monkey2:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.12),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("8_lfryq"), ExtResource("10_x2bre")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Monkey2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.12, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(5895.9995, -1794), Vector2(5895.9995, -1794), Vector2(5679, -1921), Vector2(5045, -898)]
+}
 
 [sub_resource type="Animation" id="Animation_glmur"]
 resource_name = "monkey_jumps"
@@ -1278,7 +1326,7 @@ position = Vector2(5043, -3296)
 shape = SubResource("RectangleShape2D_mq66y")
 
 [node name="CollisionShape2D12" type="CollisionShape2D" parent="Barrier" unique_id=1963124787]
-position = Vector2(10376, -1524)
+position = Vector2(10559, -1524)
 shape = SubResource("RectangleShape2D_d03v7")
 
 [node name="Monkey" type="Sprite2D" parent="." unique_id=248307242]

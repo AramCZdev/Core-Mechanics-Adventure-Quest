@@ -207,7 +207,7 @@ script = ExtResource("1_ammgf")
 script = ExtResource("3_random")
 enemies = Array[ExtResource("2_inb7v")]([ExtResource("3_cfxgj"), ExtResource("5_ixn8a")])
 min_distance = 500.0
-max_distance = 3000.0
+max_distance = 2500.0
 
 [node name="Forest" type="Node2D" parent="." unique_id=1629896592]
 

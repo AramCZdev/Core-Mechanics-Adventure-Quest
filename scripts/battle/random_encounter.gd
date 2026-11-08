@@ -112,12 +112,18 @@ func _start_encounter() -> void:
 		return
 
 	var chosen_enemy: BattleEnemy = pool[_rng.randi_range(0, pool.size() - 1)]
-	_battle_in_progress = true
+	var player_audio := get_parent().get_node_or_null("Player/AudioStreamPlayer2D") as AudioStreamPlayer2D
+	if player_audio != null:
+		player_audio.stop()
 	await _play_encounter_warning()
 	if not is_inside_tree():
 		return
 	if not _battle_ui.begin_battle(chosen_enemy):
 		_battle_in_progress = false
+	else:
+		var player := _battle_ui.get_node_or_null("AudioStreamPlayer2D") as AudioStreamPlayer2D
+		if player != null:
+			player.play()
 
 
 func _play_encounter_warning() -> void:
@@ -156,6 +162,9 @@ func _on_battle_finished(_victory: bool) -> void:
 	_battle_in_progress = false
 	_last_position = _player.global_position
 	_roll_next_check(post_battle_distance)
+	var player_audio := get_parent().get_node_or_null("Player/AudioStreamPlayer2D") as AudioStreamPlayer2D
+	if player_audio != null:
+		player_audio.play()
 
 
 ## Respawn can teleport the player a long way from where the battle ended.

@@ -66,7 +66,7 @@ func _on_attack_timing_finished(zone: String, multiplier: float) -> void:
 
 ## Stops glitching when the battle ends so other fights are unaffected.
 func _on_battle_ended(victory: bool) -> void:
-	$AudioStreamPlayer2D.play()
+	$AudioStreamPlayer2D.stop()
 	super._on_battle_ended(victory)
 	if _glitch_active:
 		_deactivate_glitch()
@@ -107,7 +107,7 @@ func _process(delta: float) -> void:
 
 	# Flash the full-screen backdrop like signal static.
 	if _backdrop != null:
-		_backdrop.color = Color(1, 1, 1, 1) if randf() < 0.45 else _glitch_backdrop_color
+		_backdrop.color = Color(0.2, 0.2, 0.8, 1) if randf() < 0.45 else _glitch_backdrop_color
 
 	# Flicker the message text between a bad-signal tint and its normal color.
 	if _message_label != null:

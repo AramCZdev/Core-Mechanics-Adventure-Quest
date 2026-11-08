@@ -81,4 +81,4 @@ func _on_button_body_entered(_body: Node2D) -> void:
 
 
 func _on_theend_body_entered(_body: Node2D) -> void:
-	pass # Replace with function body.
+	get_tree().change_scene_to_file("res://scenes/Gameplay/Rooms/TheEnd.tscn")

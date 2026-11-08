@@ -342,5 +342,7 @@ vertical_alignment = 1
 script = ExtResource("2_manager")
 enemy = ExtResource("5_enemy")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1451798908]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="." unique_id=1451798908]
+process_mode = 3
 stream = ExtResource("6_keo60")
+autoplay = false
